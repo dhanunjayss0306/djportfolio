@@ -43,6 +43,7 @@ function App() {
         <section className="hero" id="top">
           <div className="hero__aside">B.Tech CSE (Core)<br />Software developer<br /><span>Andhra University / 2029</span></div>
           <div className="hero__heading"><p className="eyebrow">Hello, I&apos;m Dhanunjay.</p><h1>I build <em>bright</em><br />ideas into <span>products.</span></h1><p className="hero__role">AI & product builder · creative technologist</p></div>
+          <figure className="hero__portrait"><img src={profilePhoto} alt="Dhanunjay at a university event in Visakhapatnam" /><figcaption>the person behind the build</figcaption></figure>
           <div className="hero__stamp">✳<br /><small>curious mind<br />serious maker</small></div>
           <a className="scroll-cue" href="#about"><span>Scroll to explore</span><b>↓</b></a>
         </section>
