@@ -4,6 +4,10 @@ import profilePhoto from './assets/20251129_170634.jpg'
 import heroPhoto from './assets/image.png'
 import quizCertificate from './assets/WhatsApp Image 2026-08-06 at 19.13.23.jpeg'
 import googleCertificate from './assets/Screenshot 2026-09-06 220049.png'
+import hackapCertificate from './assets/WhatsApp Image 2026-09-06 at 22.15.57.jpeg'
+import smartNationCertificate from './assets/WhatsApp Image 2026-09-06 at 22.28.26.jpeg'
+import basicsCertificate from './assets/WhatsApp Image 2026-09-06 at 22.28.56.jpeg'
+import aiExamsCertificate from './assets/WhatsApp Image 2026-09-06 at 22.29.10.jpeg'
 
 const skills = [
   ['Programming', 'Java · Python'],
@@ -15,11 +19,10 @@ const skills = [
 const certificates = [
   ['QuizOff 2026', quizCertificate, 'QuizOff 2026 certificate presented to Dhanunjay Reddy'],
   ['Google Student Ambassador Program', googleCertificate, 'Google Student Ambassador Program certificate presented to Dhanunjay Reddy'],
-  ['HackAP Hackathon', googleCertificate, 'HackAP Hackathon Special Mention certificate presented to Dhanunjay Reddy'],
-  ['Let AI Take Your Exams', googleCertificate, 'IIT Madras Paradox 2026 workshop certificate for Let AI Take Your Exams'],
-  ['8 Things You Wish You Had Known About LLMs', googleCertificate, 'IIT Madras Paradox 2026 workshop certificate about LLMs'],
-  ['Back To Basics', googleCertificate, 'IIT Madras Paradox 2026 workshop certificate for building an LLM from scratch'],
-  ['Towards Building a Smart Nation', googleCertificate, 'Internal Hackathon certificate for Towards Building a Smart Nation'],
+  ['HackAP Hackathon', hackapCertificate, 'HackAP Hackathon Special Mention certificate presented to Dhanunjay Reddy'],
+  ['Towards Building a Smart Nation', smartNationCertificate, 'Internal Hackathon certificate for Towards Building a Smart Nation'],
+  ['Back To Basics', basicsCertificate, 'IIT Madras Paradox 2026 workshop certificate for building an LLM from scratch'],
+  ['Let AI Take Your Exams', aiExamsCertificate, 'IIT Madras Paradox 2026 workshop certificate for Let AI Take Your Exams'],
 ]
 
 function Certificates() {
