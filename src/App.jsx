@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import profilePhoto from './assets/20251129_170634.jpg'
 import heroPhoto from './assets/image.png'
+import quizCertificate from './assets/WhatsApp Image 2026-08-06 at 19.13.23.jpeg'
+import googleCertificate from './assets/Screenshot 2026-09-06 220049.png'
 
 const skills = [
   ['Programming', 'Java · Python'],
@@ -10,16 +12,57 @@ const skills = [
   ['Product & design', 'UI/UX · Interactive web experiences · Product architecture · Rapid prototyping · Startup ideation'],
 ]
 
+function Certificates() {
+  return (
+    <main className="certificates-page">
+      <header className="site-header">
+        <a className="wordmark" href="#top">DR<span>/</span>26</a>
+        <a className="certificates-back" href="#top"><span>←</span> Back to portfolio</a>
+      </header>
+
+      <section className="certificates-hero">
+        <p className="section-label">A record of the journey <span>— 05</span></p>
+        <div className="certificates-hero__content">
+          <h1>My <em>certificates.</em></h1>
+          <p>These are a few of my achievements, certificates, and moments worth remembering.</p>
+        </div>
+      </section>
+
+      <section className="certificate-list" aria-label="Certificates and achievements">
+        <article className="certificate-card">
+          <div className="certificate-card__meta"><span>01</span><span>QuizOff 2026</span></div>
+          <img src={quizCertificate} alt="QuizOff 2026 certificate presented to Dhanunjay Reddy" />
+        </article>
+        <article className="certificate-card certificate-card--blue">
+          <div className="certificate-card__meta"><span>02</span><span>Google Student Ambassador Program</span></div>
+          <img src={googleCertificate} alt="Google Student Ambassador Program certificate presented to Dhanunjay Reddy" />
+        </article>
+      </section>
+
+      <footer className="certificates-footer"><span>More milestones ahead.</span><a href="#top">Return home <span>↗</span></a></footer>
+    </main>
+  )
+}
+
 function App() {
   const [isLoading, setIsLoading] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [showCertificates, setShowCertificates] = useState(() => window.location.hash === '#certificates')
 
   useEffect(() => {
     const timer = window.setTimeout(() => setIsLoading(false), 1500)
     return () => window.clearTimeout(timer)
   }, [])
 
+  useEffect(() => {
+    const handleHashChange = () => setShowCertificates(window.location.hash === '#certificates')
+    window.addEventListener('hashchange', handleHashChange)
+    return () => window.removeEventListener('hashchange', handleHashChange)
+  }, [])
+
   const closeMenu = () => setMenuOpen(false)
+
+  if (showCertificates) return <Certificates />
 
   return (
     <>
@@ -36,6 +79,7 @@ function App() {
             <a href="#about" onClick={closeMenu}>About</a>
             <a href="#skills" onClick={closeMenu}>Skills</a>
             <a href="#work" onClick={closeMenu}>Featured build</a>
+            <a href="#certificates" onClick={closeMenu}>Certificates <span className="arrow">↗</span></a>
             <a href="#contact" onClick={closeMenu}>Contact <span className="arrow">↗</span></a>
           </nav>
           <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Toggle navigation"><span /><span /></button>
