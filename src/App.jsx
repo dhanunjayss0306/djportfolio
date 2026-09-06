@@ -8,6 +8,9 @@ import hackapCertificate from './assets/WhatsApp Image 2026-09-06 at 22.15.57.jp
 import smartNationCertificate from './assets/WhatsApp Image 2026-09-06 at 22.28.26.jpeg'
 import basicsCertificate from './assets/WhatsApp Image 2026-09-06 at 22.28.56.jpeg'
 import aiExamsCertificate from './assets/WhatsApp Image 2026-09-06 at 22.29.10.jpeg'
+import schoolPhoto from './assets/images.jpg'
+import collegePhoto from './assets/mayuri-bhavan-sri-chaitanya-college--100-feet-road-vijayawada-colleges-11wdyb1zpq.avif'
+import journeyVideo from './assets/Web_Video_new.mp4'
 
 const skills = [
   ['Programming', 'Java · Python'],
@@ -55,10 +58,73 @@ function Certificates() {
   )
 }
 
+function Journey() {
+  return (
+    <main className="journey-page">
+      <header className="site-header">
+        <a className="wordmark" href="#top">DR<span>/</span>26</a>
+        <a className="certificates-back" href="#top"><span>←</span> Back to portfolio</a>
+      </header>
+
+      <section className="journey-hero">
+        <p className="section-label">The long way around <span>— 05</span></p>
+        <div className="journey-hero__content">
+          <h1>My <em>journey.</em></h1>
+          <p>Yeah, that&apos;s my schooling journey, from 2007 to the things I&apos;m building today.</p>
+        </div>
+      </section>
+
+      <section className="journey-timeline">
+        <article className="journey-step journey-step--school">
+          <div className="journey-step__year">2007<br /><em>→</em><br />2022</div>
+          <div className="journey-step__copy">
+            <p className="section-label">01 / Early years</p>
+            <h2>DePaul School<br /><em>Ukkunagaram</em></h2>
+            <p>I was born in 2007 and studied from second class through tenth class at DePaul School, Sector 8, Ukkunagaram, Visakhapatnam.</p>
+            <a className="journey-link" href="https://depaulsvizag.com" target="_blank" rel="noreferrer">Visit DePaul School <span>↗</span></a>
+          </div>
+          <img src={schoolPhoto} alt="DePaul School campus in Visakhapatnam" />
+        </article>
+
+        <article className="journey-step journey-step--college">
+          <img src={collegePhoto} alt="Mayuri Bhavan, Sri Chaitanya College in Vijayawada" />
+          <div className="journey-step__copy">
+            <p className="section-label">02 / Next chapter</p>
+            <h2>Sree Chaitanya<br /><em>Vijayawada</em></h2>
+            <p>After completing my tenth in 2022, I studied at Sree Chaitanya, Mayuri Bhavan, 100 Feet Road, Ganavaram, Vijayawada.</p>
+          </div>
+        </article>
+
+        <article className="journey-step journey-step--university">
+          <div className="journey-step__copy">
+            <p className="section-label">03 / Right now</p>
+            <h2>Andhra University<br /><em>CSE branch</em></h2>
+            <p>I completed my B.Tech first year and now I&apos;m studying my second year in Computer Science and Engineering at Andhra University.</p>
+            <a className="journey-link" href="https://www.andhrauniversity.edu.in" target="_blank" rel="noreferrer">Visit Andhra University <span>↗</span></a>
+          </div>
+          <div className="journey-video"><video controls preload="metadata" poster={schoolPhoto}><source src={journeyVideo} type="video/mp4" />Your browser does not support video playback.</video></div>
+        </article>
+
+        <article className="journey-step journey-step--iit">
+          <div className="journey-step__year">BS<br /><em>→</em><br />Online</div>
+          <div className="journey-step__copy">
+            <p className="section-label">04 / Alongside</p>
+            <h2>IIT Madras<br /><em>BS degree</em></h2>
+            <p>Alongside university, I&apos;m pursuing a BS online degree at IIT Madras, which I&apos;m about to complete.</p>
+          </div>
+        </article>
+      </section>
+
+      <footer className="certificates-footer"><span>Still learning. Still moving.</span><a href="#top">Return home <span>↗</span></a></footer>
+    </main>
+  )
+}
+
 function App() {
   const [isLoading, setIsLoading] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
   const [showCertificates, setShowCertificates] = useState(() => window.location.hash === '#certificates')
+  const [showJourney, setShowJourney] = useState(() => window.location.hash === '#journey')
 
   useEffect(() => {
     const timer = window.setTimeout(() => setIsLoading(false), 1500)
@@ -66,7 +132,10 @@ function App() {
   }, [])
 
   useEffect(() => {
-    const handleHashChange = () => setShowCertificates(window.location.hash === '#certificates')
+    const handleHashChange = () => {
+      setShowCertificates(window.location.hash === '#certificates')
+      setShowJourney(window.location.hash === '#journey')
+    }
     window.addEventListener('hashchange', handleHashChange)
     return () => window.removeEventListener('hashchange', handleHashChange)
   }, [])
@@ -74,6 +143,7 @@ function App() {
   const closeMenu = () => setMenuOpen(false)
 
   if (showCertificates) return <Certificates />
+  if (showJourney) return <Journey />
 
   return (
     <>
@@ -91,6 +161,7 @@ function App() {
             <a href="#skills" onClick={closeMenu}>Skills</a>
             <a href="#work" onClick={closeMenu}>Build</a>
             <a href="#certificates" onClick={closeMenu}>Certificates <span className="arrow">↗</span></a>
+            <a href="#journey" onClick={closeMenu}>My Journey <span className="arrow">↗</span></a>
             <a href="#contact" onClick={closeMenu}>Contact <span className="arrow">↗</span></a>
           </nav>
           <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Toggle navigation"><span /><span /></button>
