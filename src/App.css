@@ -10,7 +10,7 @@
 .arrow { font-size: 1.1rem; }
 .menu-button { display: none; border: 0; background: transparent; padding: 8px 0 8px 8px; }
 .menu-button span { display: block; width: 26px; height: 2px; background: var(--ink); margin: 5px 0; }
-.hero { position: relative; min-height: min(760px, calc(100vh - 84px)); padding: 8.5vw 8.5vw 4vw; background: var(--acid); display: grid; grid-template-columns: 1fr 3fr 1fr; align-items: center; }
+.hero { position: relative; min-height: min(760px, calc(100vh - 84px)); padding: 8.5vw 8.5vw 4vw; background: var(--acid); display: grid; grid-template-columns: 1fr 2.4fr 1.6fr; align-items: center; }
 .hero__aside, .hero__stamp, .section-label, .work__note, .project__type, .loader__caption { font: .69rem/1.35 var(--mono); letter-spacing: .02em; text-transform: uppercase; }
 .hero__aside { align-self: start; padding-top: 1rem; }
 .hero__aside span { opacity: .55; }
@@ -23,9 +23,9 @@ h1 span { position: relative; z-index: 1; display: inline-block; padding-bottom:
 h1 span::after { content: ''; position: absolute; height: .12em; width: 105%; background: #fff3c7; z-index: -1; left: -2%; bottom: .1em; transform: rotate(-2deg); }
 .hero__stamp { text-align: center; transform: rotate(9deg); font-size: 4rem; line-height: .8; }
 .hero__stamp small { display: block; font: .64rem/1.2 var(--mono); text-transform: uppercase; margin-top: .5rem; }
-.hero__portrait { grid-column: 3; grid-row: 1 / span 2; align-self: center; justify-self: end; width: min(17vw, 230px); aspect-ratio: .78; position: relative; overflow: hidden; margin: 0; background: var(--coral); transform: rotate(4deg); }
+.hero__portrait { grid-column: 3; grid-row: 1 / span 2; align-self: center; justify-self: end; width: min(26vw, 360px); aspect-ratio: 2.17 / 1; position: relative; overflow: hidden; margin: 0; background: var(--coral); transform: rotate(4deg); }
 .hero__portrait::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 52%, rgba(25,32,27,.74)); }
-.hero__portrait img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center 30%; filter: saturate(.9) contrast(1.05); }
+.hero__portrait img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center; filter: saturate(.9) contrast(1.05); }
 .hero__portrait figcaption { position: absolute; z-index: 1; inset: auto .8rem .8rem; color: #fffdf7; font: .52rem/1.35 var(--mono); text-transform: uppercase; }
 .scroll-cue { grid-column: 2; display: flex; justify-content: space-between; align-items: center; font: .67rem var(--mono); text-transform: uppercase; border-top: 1px solid var(--ink); padding-top: .75rem; }
 .scroll-cue b { font-size: 1.5rem; font-weight: 400; }
@@ -87,8 +87,8 @@ h1 span::after { content: ''; position: absolute; height: .12em; width: 105%; ba
   .hero { min-height: calc(100vh - 68px); padding: 16vw 7vw 10vw; display: flex; flex-direction: column; align-items: stretch; justify-content: center; }
   .hero__aside { order: 2; padding-top: 5rem; }
   .hero__heading { order: 1; padding: 0; }
-  .hero__stamp { position: absolute; right: 7vw; top: 14vw; font-size: 2.8rem; }
-  .hero__portrait { order: 2; width: 42%; margin: 3.5rem 0 0 auto; transform: rotate(3deg); }
+  .hero__stamp { position: absolute; top: 1rem; right: 7vw; z-index: 1; font-size: 2.8rem; }
+  .hero__portrait { order: 2; width: 82%; aspect-ratio: 2.17 / 1; margin: 3.5rem 0 0 auto; transform: rotate(3deg); }
   .scroll-cue { order: 3; margin-top: 3.5rem; }
   .intro, .work, .services { padding: 5.5rem 7vw; display: block; }
   .intro__copy { display: block; margin-top: 3rem; }
