@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import profilePhoto from './assets/20251129_170634.jpg'
 
 const skills = [
   ['Programming', 'Java · Python'],
@@ -49,7 +50,7 @@ function App() {
         <section className="intro" id="about">
           <p className="section-label">A little context <span>— 01</span></p>
           <div className="intro__copy">
-            <div className="intro__lead-wrap"><p className="intro__lead">I turn ambitious ideas into polished, real-world experiences.</p><div className="portrait-card"><div className="portrait-card__initials">DR</div><span>creative technologist<br />visakhapatnam, india</span></div></div>
+            <div className="intro__lead-wrap"><p className="intro__lead">I turn ambitious ideas into polished, real-world experiences.</p><figure className="portrait-card"><img src={profilePhoto} alt="Dhanunjay at a university event in Visakhapatnam" /><figcaption>creative technologist<br />visakhapatnam, india</figcaption></figure></div>
             <div className="intro__details"><p>I&apos;m a 2nd-year Computer Science student at Andhra University College of Engineering, exploring the space where AI, product thinking, and expressive interfaces meet.</p><p>I like shipping things that feel as good to use as they are clever under the hood.</p></div>
           </div>
         </section>
