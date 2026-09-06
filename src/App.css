@@ -82,7 +82,7 @@ h1 span::after { content: ''; position: absolute; height: .12em; width: 105%; ba
 @media (max-width: 720px) {
   .site-header { height: 68px; padding: 0 7vw; }
   .menu-button { display: block; z-index: 3; }
-  .nav { position: absolute; z-index: 2; top: 68px; left: 0; right: 0; padding: 2rem 7vw; background: var(--acid); flex-direction: column; gap: 1.3rem; transform: translateY(-140%); transition: transform .4s ease; }
+  .nav { position: absolute; z-index: 2; top: 68px; left: 0; right: 0; display: flex; padding: 2rem 7vw; background: var(--acid); flex-direction: column; gap: 1.3rem; transform: translateY(-140%); transition: transform .4s ease; }
   .nav--open { transform: translateY(0); }
   .hero { min-height: calc(100vh - 68px); padding: 16vw 7vw 10vw; display: flex; flex-direction: column; align-items: stretch; justify-content: center; }
   .hero__aside { order: 2; padding-top: 5rem; }
@@ -162,7 +162,7 @@ h1 span::after { content: ''; position: absolute; height: .12em; width: 105%; ba
 .journey-step { display: grid; grid-template-columns: .7fr 1fr 1fr; gap: 5vw; align-items: center; padding: 5rem 0; border-top: 1px solid var(--ink); }
 .journey-step--college { grid-template-columns: 1fr 1fr; }
 .journey-step--university { grid-template-columns: 1fr 1.2fr; }
-.journey-step--iit { background: var(--blue); margin: 0 -8.5vw; padding: 5rem 8.5vw; }
+.journey-step--iit { grid-template-columns: .7fr 1fr 1fr; margin: 0 -8.5vw; padding: 5rem 8.5vw; background: var(--paper); }
 .journey-step img, .journey-video { display: block; width: 100%; aspect-ratio: 1.35; object-fit: cover; border: 1px solid var(--ink); }
 .journey-step--school img { transform: rotate(2deg); }
 .journey-step--college img { transform: rotate(-2deg); }
@@ -175,6 +175,14 @@ h1 span::after { content: ''; position: absolute; height: .12em; width: 105%; ba
 .journey-link span { margin-left: 1.5rem; font-size: 1.1rem; }
 .journey-video { overflow: hidden; background: var(--ink); }
 .journey-video video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.journey-cursor { position: fixed; z-index: 20; top: 0; left: 0; width: 18px; height: 18px; border: 1px solid var(--ink); border-radius: 50%; pointer-events: none; transform: translate3d(calc(var(--cursor-x, -100px) - 50%), calc(var(--cursor-y, -100px) - 50%), 0); transition: width .2s ease, height .2s ease, background-color .2s ease; }
+.journey-page:has(a:hover) .journey-cursor { width: 34px; height: 34px; background: var(--coral); mix-blend-mode: multiply; }
+.journey-step { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
+.journey-step--visible { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .journey-step { opacity: 1; transform: none; transition: none; }
+  .journey-cursor { display: none; }
+}
 @media (max-width: 720px) {
   .intro__lead-wrap { display: block; }
   .portrait-card { width: 52%; margin: 3rem 0 0 auto; }
@@ -197,9 +205,12 @@ h1 span::after { content: ''; position: absolute; height: .12em; width: 105%; ba
   .journey-hero h1 { font-size: clamp(3.8rem, 18vw, 7rem); }
   .journey-hero__content > p { margin-top: 2rem; }
   .journey-timeline { padding: 4rem 7vw 6rem; }
-  .journey-step, .journey-step--college, .journey-step--university { display: flex; flex-direction: column; align-items: stretch; gap: 2.5rem; padding: 4rem 0; }
+  .journey-step, .journey-step--college, .journey-step--university, .journey-step--iit { display: flex; flex-direction: column; align-items: stretch; gap: 2.5rem; padding: 4rem 0; }
   .journey-step--iit { margin: 0 -7vw; padding: 4rem 7vw; }
   .journey-step--school img, .journey-step--college img { transform: none; }
   .journey-step__year { order: -1; }
   .journey-step h2 { margin-top: 1rem; }
+}
+@media (hover: none), (pointer: coarse) {
+  .journey-cursor { display: none; }
 }

@@ -11,6 +11,8 @@ import aiExamsCertificate from './assets/WhatsApp Image 2026-09-06 at 22.29.10.j
 import schoolPhoto from './assets/images.jpg'
 import collegePhoto from './assets/mayuri-bhavan-sri-chaitanya-college--100-feet-road-vijayawada-colleges-11wdyb1zpq.avif'
 import journeyVideo from './assets/Web_Video_new.mp4'
+import andhraPhoto from './assets/main.jpg'
+import iitPhoto from './assets/pressrelease01_09_2026_11_31.jpg'
 
 const skills = [
   ['Programming', 'Java · Python'],
@@ -59,8 +61,32 @@ function Certificates() {
 }
 
 function Journey() {
+  useEffect(() => {
+    const revealItems = document.querySelectorAll('.journey-page .journey-step')
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('journey-step--visible')
+          observer.unobserve(entry.target)
+        }
+      })
+    }, { threshold: .16 })
+    revealItems.forEach((item) => observer.observe(item))
+
+    const handlePointerMove = (event) => {
+      document.documentElement.style.setProperty('--cursor-x', `${event.clientX}px`)
+      document.documentElement.style.setProperty('--cursor-y', `${event.clientY}px`)
+    }
+    window.addEventListener('pointermove', handlePointerMove)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('pointermove', handlePointerMove)
+    }
+  }, [])
+
   return (
     <main className="journey-page">
+      <span className="journey-cursor" aria-hidden="true" />
       <header className="site-header">
         <a className="wordmark" href="#top">DR<span>/</span>26</a>
         <a className="certificates-back" href="#top"><span>←</span> Back to portfolio</a>
@@ -102,7 +128,7 @@ function Journey() {
             <p>I completed my B.Tech first year and now I&apos;m studying my second year in Computer Science and Engineering at Andhra University.</p>
             <a className="journey-link" href="https://www.andhrauniversity.edu.in" target="_blank" rel="noreferrer">Visit Andhra University <span>↗</span></a>
           </div>
-          <div className="journey-video"><video controls preload="metadata" poster={schoolPhoto}><source src={journeyVideo} type="video/mp4" />Your browser does not support video playback.</video></div>
+          <div className="journey-video"><video controls preload="metadata" poster={andhraPhoto}><source src={journeyVideo} type="video/mp4" />Your browser does not support video playback.</video></div>
         </article>
 
         <article className="journey-step journey-step--iit">
@@ -112,6 +138,7 @@ function Journey() {
             <h2>IIT Madras<br /><em>BS degree</em></h2>
             <p>Alongside university, I&apos;m pursuing a BS online degree at IIT Madras, which I&apos;m about to complete.</p>
           </div>
+          <img src={iitPhoto} alt="Indian Institute of Technology Madras campus sign" />
         </article>
       </section>
 
