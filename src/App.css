@@ -4,7 +4,7 @@
 .site-header { height: 84px; padding: 0 5.5vw; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
 .wordmark { font-weight: 700; font-size: 1.35rem; letter-spacing: -.08em; }
 .wordmark span, .loader__mark span { color: #f26f52; }
-.nav { display: flex; gap: clamp(1.4rem, 3.5vw, 3.8rem); font-size: .86rem; }
+.nav { display: grid; grid-template-columns: repeat(5, max-content); gap: clamp(1rem, 2.5vw, 2.8rem); align-items: center; font-size: .86rem; }
 .nav a, .text-link, .footer__email { transition: color .25s ease; }
 .nav a:hover, .text-link:hover, .footer__email:hover { color: #eb684d; }
 .arrow { font-size: 1.1rem; }

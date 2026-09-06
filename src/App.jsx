@@ -12,6 +12,16 @@ const skills = [
   ['Product & design', 'UI/UX · Interactive web experiences · Product architecture · Rapid prototyping · Startup ideation'],
 ]
 
+const certificates = [
+  ['QuizOff 2026', quizCertificate, 'QuizOff 2026 certificate presented to Dhanunjay Reddy'],
+  ['Google Student Ambassador Program', googleCertificate, 'Google Student Ambassador Program certificate presented to Dhanunjay Reddy'],
+  ['HackAP Hackathon', googleCertificate, 'HackAP Hackathon Special Mention certificate presented to Dhanunjay Reddy'],
+  ['Let AI Take Your Exams', googleCertificate, 'IIT Madras Paradox 2026 workshop certificate for Let AI Take Your Exams'],
+  ['8 Things You Wish You Had Known About LLMs', googleCertificate, 'IIT Madras Paradox 2026 workshop certificate about LLMs'],
+  ['Back To Basics', googleCertificate, 'IIT Madras Paradox 2026 workshop certificate for building an LLM from scratch'],
+  ['Towards Building a Smart Nation', googleCertificate, 'Internal Hackathon certificate for Towards Building a Smart Nation'],
+]
+
 function Certificates() {
   return (
     <main className="certificates-page">
@@ -29,14 +39,12 @@ function Certificates() {
       </section>
 
       <section className="certificate-list" aria-label="Certificates and achievements">
-        <article className="certificate-card">
-          <div className="certificate-card__meta"><span>01</span><span>QuizOff 2026</span></div>
-          <img src={quizCertificate} alt="QuizOff 2026 certificate presented to Dhanunjay Reddy" />
-        </article>
-        <article className="certificate-card certificate-card--blue">
-          <div className="certificate-card__meta"><span>02</span><span>Google Student Ambassador Program</span></div>
-          <img src={googleCertificate} alt="Google Student Ambassador Program certificate presented to Dhanunjay Reddy" />
-        </article>
+        {certificates.map(([title, image, alt], index) => (
+          <article className={`certificate-card ${index % 2 ? 'certificate-card--blue' : ''}`} key={title}>
+            <div className="certificate-card__meta"><span>{String(index + 1).padStart(2, '0')}</span><span>{title}</span></div>
+            <img src={image} alt={alt} />
+          </article>
+        ))}
       </section>
 
       <footer className="certificates-footer"><span>More milestones ahead.</span><a href="#top">Return home <span>↗</span></a></footer>
@@ -78,7 +86,7 @@ function App() {
           <nav className={menuOpen ? 'nav nav--open' : 'nav'} aria-label="Main navigation">
             <a href="#about" onClick={closeMenu}>About</a>
             <a href="#skills" onClick={closeMenu}>Skills</a>
-            <a href="#work" onClick={closeMenu}>Featured build</a>
+            <a href="#work" onClick={closeMenu}>Build</a>
             <a href="#certificates" onClick={closeMenu}>Certificates <span className="arrow">↗</span></a>
             <a href="#contact" onClick={closeMenu}>Contact <span className="arrow">↗</span></a>
           </nav>
