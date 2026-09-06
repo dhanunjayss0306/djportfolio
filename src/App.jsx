@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import '@designcodeio/threeui/style.css'
+import { StructureFlowCollection } from '@designcodeio/threeui'
 import './App.css'
 import profilePhoto from './assets/20251129_170634.jpg'
 import heroPhoto from './assets/image.png'
@@ -30,15 +32,39 @@ const certificates = [
   ['Let AI Take Your Exams', aiExamsCertificate, 'IIT Madras Paradox 2026 workshop certificate for Let AI Take Your Exams'],
 ]
 
-function Certificates() {
+function ThemeToggle({ mode, onToggle }) {
+  return <button className="theme-toggle" type="button" onClick={onToggle} aria-label={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}><span className="theme-toggle__icon">{mode === 'dark' ? '☼' : '☾'}</span><span>{mode === 'dark' ? 'Light mode' : 'Dark mode'}</span></button>
+}
+
+function VisualField({ mode }) {
+  return <div className={`visual-field visual-field--${mode}`} aria-hidden="true">{mode === 'dark' ? <StructureFlowCollection variant="topology-field" hue={0} saturation={1.00} brightness={1.00} /> : <div className="light-field__rings"><i /><i /><i /></div>}</div>
+}
+
+function CursorEffect() {
+  useEffect(() => {
+    const moveCursor = (event) => {
+      document.documentElement.style.setProperty('--cursor-x', `${event.clientX}px`)
+      document.documentElement.style.setProperty('--cursor-y', `${event.clientY}px`)
+    }
+    window.addEventListener('pointermove', moveCursor)
+    return () => window.removeEventListener('pointermove', moveCursor)
+  }, [])
+
+  return <span className="page-cursor" aria-hidden="true" />
+}
+
+function PageHeader({ mode, onToggle }) {
+  return <><CursorEffect /><header className="site-header"><a className="wordmark" href="#top">DR<span>/</span>26</a><ThemeToggle mode={mode} onToggle={onToggle} /></header></>
+}
+
+function Certificates({ mode, onToggle }) {
   return (
-    <main className="certificates-page">
-      <header className="site-header">
-        <a className="wordmark" href="#top">DR<span>/</span>26</a>
-        <a className="certificates-back" href="#top"><span>←</span> Back to portfolio</a>
-      </header>
+    <main className={`certificates-page page-theme--${mode}`}>
+      <PageHeader mode={mode} onToggle={onToggle} />
+      <a className="certificates-back certificates-back--floating" href="#top"><span>←</span> Back to portfolio</a>
 
       <section className="certificates-hero">
+        <VisualField mode={mode} />
         <p className="section-label">A record of the journey <span>— 05</span></p>
         <div className="certificates-hero__content">
           <h1>My <em>certificates.</em></h1>
@@ -60,7 +86,7 @@ function Certificates() {
   )
 }
 
-function Journey() {
+function Journey({ mode, onToggle }) {
   useEffect(() => {
     const revealItems = document.querySelectorAll('.journey-page .journey-step')
     const observer = new IntersectionObserver((entries) => {
@@ -73,26 +99,18 @@ function Journey() {
     }, { threshold: .16 })
     revealItems.forEach((item) => observer.observe(item))
 
-    const handlePointerMove = (event) => {
-      document.documentElement.style.setProperty('--cursor-x', `${event.clientX}px`)
-      document.documentElement.style.setProperty('--cursor-y', `${event.clientY}px`)
-    }
-    window.addEventListener('pointermove', handlePointerMove)
     return () => {
       observer.disconnect()
-      window.removeEventListener('pointermove', handlePointerMove)
     }
   }, [])
 
   return (
-    <main className="journey-page">
-      <span className="journey-cursor" aria-hidden="true" />
-      <header className="site-header">
-        <a className="wordmark" href="#top">DR<span>/</span>26</a>
-        <a className="certificates-back" href="#top"><span>←</span> Back to portfolio</a>
-      </header>
+    <main className={`journey-page page-theme--${mode}`}>
+      <PageHeader mode={mode} onToggle={onToggle} />
+      <a className="certificates-back certificates-back--floating" href="#top"><span>←</span> Back to portfolio</a>
 
       <section className="journey-hero">
+        <VisualField mode={mode} />
         <p className="section-label">The long way around <span>— 05</span></p>
         <div className="journey-hero__content">
           <h1>My <em>journey.</em></h1>
@@ -150,6 +168,7 @@ function Journey() {
 function App() {
   const [isLoading, setIsLoading] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [mode, setMode] = useState(() => window.localStorage.getItem('portfolio-theme') === 'dark' ? 'dark' : 'light')
   const [showCertificates, setShowCertificates] = useState(() => window.location.hash === '#certificates')
   const [showJourney, setShowJourney] = useState(() => window.location.hash === '#journey')
 
@@ -157,6 +176,11 @@ function App() {
     const timer = window.setTimeout(() => setIsLoading(false), 1500)
     return () => window.clearTimeout(timer)
   }, [])
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = mode
+    window.localStorage.setItem('portfolio-theme', mode)
+  }, [mode])
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -169,8 +193,10 @@ function App() {
 
   const closeMenu = () => setMenuOpen(false)
 
-  if (showCertificates) return <Certificates />
-  if (showJourney) return <Journey />
+  const toggleTheme = () => setMode((currentMode) => currentMode === 'dark' ? 'light' : 'dark')
+
+  if (showCertificates) return <Certificates mode={mode} onToggle={toggleTheme} />
+  if (showJourney) return <Journey mode={mode} onToggle={toggleTheme} />
 
   return (
     <>
@@ -180,7 +206,7 @@ function App() {
         <span className="loader__caption">building something useful</span>
       </div>
 
-      <main className={`portfolio ${isLoading ? 'portfolio--waiting' : ''}`}>
+      <main className={`portfolio page-theme--${mode} ${isLoading ? 'portfolio--waiting' : ''}`}>
         <header className="site-header">
           <a className="wordmark" href="#top" onClick={closeMenu}>DR<span>/</span>26</a>
           <nav className={menuOpen ? 'nav nav--open' : 'nav'} aria-label="Main navigation">
@@ -191,10 +217,12 @@ function App() {
             <a href="#journey" onClick={closeMenu}>My Journey <span className="arrow">↗</span></a>
             <a href="#contact" onClick={closeMenu}>Contact <span className="arrow">↗</span></a>
           </nav>
+          <ThemeToggle mode={mode} onToggle={toggleTheme} />
           <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Toggle navigation"><span /><span /></button>
         </header>
 
         <section className="hero" id="top">
+          <VisualField mode={mode} />
           <div className="hero__aside">B.Tech CSE (Core)<br />Software developer<br /><span>Andhra University / 2029</span></div>
           <div className="hero__heading"><p className="eyebrow">Hello, I&apos;m Dhanunjay.</p><h1>I build <em>bright</em><br />ideas into <span>products.</span></h1><p className="hero__role">AI & product builder · creative technologist</p></div>
           <figure className="hero__portrait"><img src={heroPhoto} alt="Dhanunjay at a university event" /><figcaption>the person behind the build</figcaption></figure>

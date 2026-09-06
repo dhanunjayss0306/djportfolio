@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@designcodeio/threeui": "^1.2.0",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "three": "^0.160.1"
   },
   "devDependencies": {
     "@types/react": "^19.2.18",
