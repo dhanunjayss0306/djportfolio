@@ -30,6 +30,41 @@ const certificates = [
   ['Let AI Take Your Exams', aiExamsCertificate, 'IIT Madras Paradox 2026 workshop certificate for Let AI Take Your Exams'],
 ]
 
+const defaultJourney = {
+  intro: "Yeah, that's my schooling journey, from 2007 to the things I'm building today.",
+  schoolTitle: 'DePaul School',
+  schoolSubtitle: 'Ukkunagaram',
+  schoolText: 'I was born in 2007 and studied from second class through tenth class at DePaul School, Sector 8, Ukkunagaram, Visakhapatnam.',
+  collegeTitle: 'Sree Chaitanya',
+  collegeSubtitle: 'Vijayawada',
+  collegeText: 'After completing my tenth in 2022, I studied at Sree Chaitanya, Mayuri Bhavan, 100 Feet Road, Ganavaram, Vijayawada.',
+  universityTitle: 'Andhra University',
+  universitySubtitle: 'CSE branch',
+  universityText: "I completed my B.Tech first year and now I'm studying my second year in Computer Science and Engineering at Andhra University.",
+  iitTitle: 'IIT Madras',
+  iitSubtitle: 'BS degree',
+  iitText: "Alongside university, I'm pursuing a BS online degree at IIT Madras, which I'm about to complete.",
+  schoolImage: schoolPhoto,
+  collegeImage: collegePhoto,
+  universityImage: andhraPhoto,
+  iitImage: iitPhoto,
+}
+
+const defaultCertificateCopy = certificates.map(([title, image, alt]) => ({ title, image, alt }))
+
+function readAdminStore(key, fallback) {
+  try {
+    const saved = window.localStorage.getItem(key)
+    return saved ? JSON.parse(saved) : fallback
+  } catch {
+    return fallback
+  }
+}
+
+function AdminIcon() {
+  return <a className="admin-icon" href="#admin" aria-label="Open admin portal" title="Admin portal"><span>✦</span></a>
+}
+
 function ThemeToggle({ mode, onToggle }) {
   return <button className="theme-toggle" type="button" onClick={onToggle} aria-label={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}><span className="theme-toggle__icon">{mode === 'dark' ? '☼' : '☾'}</span><span>{mode === 'dark' ? 'Light mode' : 'Dark mode'}</span></button>
 }
@@ -52,10 +87,10 @@ function CursorEffect() {
 }
 
 function PageHeader({ mode, onToggle }) {
-  return <><CursorEffect /><header className="site-header"><a className="wordmark" href="#top">DR<span>/</span>26</a><ThemeToggle mode={mode} onToggle={onToggle} /></header></>
+  return <><CursorEffect /><header className="site-header"><a className="wordmark" href="#top">DR<span>/</span>26</a><div className="header-tools"><ThemeToggle mode={mode} onToggle={onToggle} /><AdminIcon /></div></header></>
 }
 
-function Certificates({ mode, onToggle }) {
+function Certificates({ mode, onToggle, certificateCopy }) {
   return (
     <main className={`certificates-page page-theme--${mode}`}>
       <PageHeader mode={mode} onToggle={onToggle} />
@@ -71,7 +106,7 @@ function Certificates({ mode, onToggle }) {
       </section>
 
       <section className="certificate-list" aria-label="Certificates and achievements">
-        {certificates.map(([title, image, alt], index) => (
+        {certificateCopy.map(({ title, image, alt }, index) => (
           <article className={`certificate-card ${index % 2 ? 'certificate-card--blue' : ''}`} key={title}>
             <div className="certificate-card__meta"><span>{String(index + 1).padStart(2, '0')}</span><span>{title}</span></div>
             <img src={image} alt={alt} />
@@ -84,7 +119,7 @@ function Certificates({ mode, onToggle }) {
   )
 }
 
-function Journey({ mode, onToggle }) {
+function Journey({ mode, onToggle, journey }) {
   useEffect(() => {
     const revealItems = document.querySelectorAll('.journey-page .journey-step')
     const observer = new IntersectionObserver((entries) => {
@@ -112,7 +147,7 @@ function Journey({ mode, onToggle }) {
         <p className="section-label">The long way around <span>— 05</span></p>
         <div className="journey-hero__content">
           <h1>My <em>journey.</em></h1>
-          <p>Yeah, that&apos;s my schooling journey, from 2007 to the things I&apos;m building today.</p>
+          <p>{journey.intro}</p>
         </div>
       </section>
 
@@ -121,41 +156,41 @@ function Journey({ mode, onToggle }) {
           <div className="journey-step__year">2007<br /><em>→</em><br />2022</div>
           <div className="journey-step__copy">
             <p className="section-label">01 / Early years</p>
-            <h2>DePaul School<br /><em>Ukkunagaram</em></h2>
-            <p>I was born in 2007 and studied from second class through tenth class at DePaul School, Sector 8, Ukkunagaram, Visakhapatnam.</p>
+            <h2>{journey.schoolTitle}<br /><em>{journey.schoolSubtitle}</em></h2>
+            <p>{journey.schoolText}</p>
             <a className="journey-link" href="https://depaulsvizag.com" target="_blank" rel="noreferrer">Visit DePaul School <span>↗</span></a>
           </div>
-          <img src={schoolPhoto} alt="DePaul School campus in Visakhapatnam" />
+          <img src={journey.schoolImage} alt="DePaul School campus in Visakhapatnam" />
         </article>
 
         <article className="journey-step journey-step--college">
-          <img src={collegePhoto} alt="Mayuri Bhavan, Sri Chaitanya College in Vijayawada" />
+          <img src={journey.collegeImage} alt="Mayuri Bhavan, Sri Chaitanya College in Vijayawada" />
           <div className="journey-step__copy">
             <p className="section-label">02 / Next chapter</p>
-            <h2>Sree Chaitanya<br /><em>Vijayawada</em></h2>
-            <p>After completing my tenth in 2022, I studied at Sree Chaitanya, Mayuri Bhavan, 100 Feet Road, Ganavaram, Vijayawada.</p>
+            <h2>{journey.collegeTitle}<br /><em>{journey.collegeSubtitle}</em></h2>
+            <p>{journey.collegeText}</p>
           </div>
         </article>
 
         <article className="journey-step journey-step--university">
           <div className="journey-step__copy">
             <p className="section-label">03 / Right now</p>
-            <h2>Andhra University<br /><em>CSE branch</em></h2>
-            <p>I completed my B.Tech first year and now I&apos;m studying my second year in Computer Science and Engineering at Andhra University.</p>
+            <h2>{journey.universityTitle}<br /><em>{journey.universitySubtitle}</em></h2>
+            <p>{journey.universityText}</p>
             <a className="journey-link" href="https://www.andhrauniversity.edu.in" target="_blank" rel="noreferrer">Visit Andhra University <span>↗</span></a>
           </div>
-          <div className="journey-video"><video controls preload="metadata" poster={andhraPhoto}><source src={journeyVideo} type="video/mp4" />Your browser does not support video playback.</video></div>
+          <div className="journey-video"><video controls preload="metadata" poster={journey.universityImage}><source src={journeyVideo} type="video/mp4" />Your browser does not support video playback.</video></div>
         </article>
 
         <article className="journey-step journey-step--iit">
           <div className="journey-step__year">BS<br /><em>→</em><br />Online</div>
           <div className="journey-step__copy">
             <p className="section-label">04 / Alongside</p>
-            <h2>IIT Madras<br /><em>BS degree</em></h2>
-            <p>Alongside university, I&apos;m pursuing a BS online degree at IIT Madras, which I&apos;m about to complete.</p>
+            <h2>{journey.iitTitle}<br /><em>{journey.iitSubtitle}</em></h2>
+            <p>{journey.iitText}</p>
             <a className="journey-link" href="https://study.iitm.ac.in/ds/" target="_blank" rel="noreferrer">Visit IIT Madras BS program <span>↗</span></a>
           </div>
-          <img src={iitPhoto} alt="Indian Institute of Technology Madras campus sign" />
+          <img src={journey.iitImage} alt="Indian Institute of Technology Madras campus sign" />
         </article>
       </section>
 
@@ -164,12 +199,73 @@ function Journey({ mode, onToggle }) {
   )
 }
 
+function AdminField({ label, value, onChange, multiline = false }) {
+  const Input = multiline ? 'textarea' : 'input'
+  return <label className="admin-field"><span>{label}</span><Input value={value} onChange={(event) => onChange(event.target.value)} rows={multiline ? 4 : undefined} /></label>
+}
+
+function AdminPortal({ mode, onToggle, journey, setJourney, certificateCopy, setCertificateCopy }) {
+  const [authenticated, setAuthenticated] = useState(() => window.sessionStorage.getItem('portfolio-admin-auth') === 'true')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [activeTab, setActiveTab] = useState('journey')
+  const [notice, setNotice] = useState('')
+
+  const login = (event) => {
+    event.preventDefault()
+    if (username === 'dhanunjay' && password === 'admin2026') {
+      window.sessionStorage.setItem('portfolio-admin-auth', 'true')
+      setAuthenticated(true)
+      setNotice('Welcome back. Your editable content is ready.')
+    } else {
+      setNotice('That username or password does not match.')
+    }
+  }
+
+  const saveJourney = () => {
+    window.localStorage.setItem('portfolio-journey', JSON.stringify(journey))
+    setNotice('Journey changes saved on this device.')
+  }
+
+  const saveCertificates = () => {
+    window.localStorage.setItem('portfolio-certificates', JSON.stringify(certificateCopy))
+    setNotice('Certificate changes saved on this device.')
+  }
+
+  const updateCertificate = (index, field, value) => {
+    setCertificateCopy((current) => current.map((certificate, certificateIndex) => certificateIndex === index ? { ...certificate, [field]: value } : certificate))
+  }
+
+  const uploadCertificate = (index, file) => {
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => updateCertificate(index, 'image', reader.result)
+    reader.readAsDataURL(file)
+  }
+
+  const uploadJourneyImage = (key, file) => {
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => setJourney((current) => ({ ...current, [`${key}Image`]: reader.result }))
+    reader.readAsDataURL(file)
+  }
+
+  if (!authenticated) {
+    return <main className={`admin-page page-theme--${mode}`}><PageHeader mode={mode} onToggle={onToggle} /><section className="admin-login"><div className="admin-login__mark">DR<span>/</span>26</div><p className="section-label">Private workspace</p><h1>Admin <em>portal.</em></h1><p>Update the parts of your portfolio that people see. Changes stay in this browser until you publish them to your live data source.</p><form onSubmit={login}><AdminField label="Username" value={username} onChange={setUsername} /><AdminField label="Password" value={password} onChange={setPassword} /><button className="admin-submit" type="submit">Enter portal <span>↗</span></button></form>{notice && <p className="admin-notice">{notice}</p>}</section></main>
+  }
+
+  return <main className={`admin-page page-theme--${mode}`}><PageHeader mode={mode} onToggle={onToggle} /><section className="admin-shell"><div className="admin-shell__top"><div><p className="section-label">Content control room</p><h1>Admin <em>portal.</em></h1></div><button className="admin-logout" onClick={() => { window.sessionStorage.removeItem('portfolio-admin-auth'); setAuthenticated(false) }}>Log out</button></div><p className="admin-intro">Only the editable content is here. Update a field, save it, and refresh the public page to see the result.</p><div className="admin-tabs"><button className={activeTab === 'journey' ? 'is-active' : ''} onClick={() => setActiveTab('journey')}>My Journey</button><button className={activeTab === 'certificates' ? 'is-active' : ''} onClick={() => setActiveTab('certificates')}>My Certificates</button></div>{activeTab === 'journey' ? <div className="admin-panel"><div className="admin-panel__heading"><div><p className="section-label">Journey editor</p><h2>Shape the story.</h2></div><button className="admin-save" onClick={saveJourney}>Save journey</button></div><AdminField label="Intro text" value={journey.intro} onChange={(value) => setJourney({ ...journey, intro: value })} multiline /><div className="admin-editor-grid">{[['school', 'Early years'], ['college', 'Next chapter'], ['university', 'Right now'], ['iit', 'Alongside']].map(([key, label]) => <div className="admin-card" key={key}><p className="admin-card__label">{label}</p><img className="admin-journey-image" src={journey[`${key}Image`]} alt="" /><label className="admin-upload">Change photo<input type="file" accept="image/*" onChange={(event) => uploadJourneyImage(key, event.target.files[0])} /></label><AdminField label="Title" value={journey[`${key}Title`]} onChange={(value) => setJourney({ ...journey, [`${key}Title`]: value })} /><AdminField label="Subtitle" value={journey[`${key}Subtitle`]} onChange={(value) => setJourney({ ...journey, [`${key}Subtitle`]: value })} /><AdminField label="Story" value={journey[`${key}Text`]} onChange={(value) => setJourney({ ...journey, [`${key}Text`]: value })} multiline /></div>)}</div></div> : <div className="admin-panel"><div className="admin-panel__heading"><div><p className="section-label">Certificate editor</p><h2>Keep the proof.</h2></div><button className="admin-save" onClick={saveCertificates}>Save certificates</button></div><div className="admin-certificate-grid">{certificateCopy.map((certificate, index) => <div className="admin-card admin-certificate-card" key={`${certificate.title}-${index}`}><img src={certificate.image} alt="" /><label className="admin-upload">Change photo<input type="file" accept="image/*" onChange={(event) => uploadCertificate(index, event.target.files[0])} /></label><AdminField label="Certificate title" value={certificate.title} onChange={(value) => updateCertificate(index, 'title', value)} /><AdminField label="Accessible description" value={certificate.alt} onChange={(value) => updateCertificate(index, 'alt', value)} multiline /></div>)}</div></div>}{notice && <p className="admin-notice">{notice}</p>}</section></main>
+}
+
 function App() {
   const [isLoading, setIsLoading] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
   const [mode, setMode] = useState(() => window.localStorage.getItem('portfolio-theme') === 'dark' ? 'dark' : 'light')
   const [showCertificates, setShowCertificates] = useState(() => window.location.hash === '#certificates')
   const [showJourney, setShowJourney] = useState(() => window.location.hash === '#journey')
+  const [showAdmin, setShowAdmin] = useState(() => window.location.hash === '#admin')
+  const [journey, setJourney] = useState(() => ({ ...defaultJourney, ...readAdminStore('portfolio-journey', {}) }))
+  const [certificateCopy, setCertificateCopy] = useState(() => readAdminStore('portfolio-certificates', defaultCertificateCopy))
 
   useEffect(() => {
     const timer = window.setTimeout(() => setIsLoading(false), 1500)
@@ -185,6 +281,7 @@ function App() {
     const handleHashChange = () => {
       setShowCertificates(window.location.hash === '#certificates')
       setShowJourney(window.location.hash === '#journey')
+      setShowAdmin(window.location.hash === '#admin')
     }
     window.addEventListener('hashchange', handleHashChange)
     return () => window.removeEventListener('hashchange', handleHashChange)
@@ -194,8 +291,9 @@ function App() {
 
   const toggleTheme = () => setMode((currentMode) => currentMode === 'dark' ? 'light' : 'dark')
 
-  if (showCertificates) return <Certificates mode={mode} onToggle={toggleTheme} />
-  if (showJourney) return <Journey mode={mode} onToggle={toggleTheme} />
+  if (showCertificates) return <Certificates mode={mode} onToggle={toggleTheme} certificateCopy={certificateCopy} />
+  if (showJourney) return <Journey mode={mode} onToggle={toggleTheme} journey={journey} />
+  if (showAdmin) return <AdminPortal mode={mode} onToggle={toggleTheme} journey={journey} setJourney={setJourney} certificateCopy={certificateCopy} setCertificateCopy={setCertificateCopy} />
 
   return (
     <>
@@ -218,6 +316,7 @@ function App() {
             <a href="#contact" onClick={closeMenu}>Contact <span className="arrow">↗</span></a>
           </nav>
           <ThemeToggle mode={mode} onToggle={toggleTheme} />
+          <AdminIcon />
           <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Toggle navigation"><span /><span /></button>
         </header>
 
