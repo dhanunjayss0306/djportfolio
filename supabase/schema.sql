@@ -44,6 +44,14 @@ create table if not exists public.work_items (
   updated_at timestamptz not null default now()
 );
 
+insert into public.work_items (id, title, description, github_url, live_url, sort_order)
+values
+  ('00000000-0000-0000-0000-000000000001', 'Dhanunjay Reddy Portfolio', 'A playful portfolio and content system for documenting AI, product, and creative technology work.', 'https://github.com/dhanunjayss0306/djportfolio', null, 0),
+  ('00000000-0000-0000-0000-000000000002', 'Virun / YatraSetu', 'A startup presentation for a Smart India Hackathon project: AI-powered tourism combining personalized itineraries with verified local expertise.', null, 'https://dhanunjayss0306.github.io/virun-pitch/', 1),
+  ('00000000-0000-0000-0000-000000000003', 'Suren Pastries', 'A completed pastry ordering website with accounts and ordering flows. Security checks, deployment, and payment integration are still being finalized while testing continues.', null, 'https://suren-pastries-754v.onrender.com/home', 2),
+  ('00000000-0000-0000-0000-000000000004', 'Swayansh Birthday Surprise', 'A playful HTML-only surprise website made for a friend''s birthday, designed as a small interactive experience.', null, 'https://dhanunjayss0306.github.io/swayansh-birthday/', 3)
+on conflict (id) do update set title = excluded.title, description = excluded.description, github_url = excluded.github_url, live_url = excluded.live_url, sort_order = excluded.sort_order;
+
 create table if not exists public.contact_submissions (
   id uuid primary key default gen_random_uuid(),
   name text not null,
