@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import profilePhoto from './assets/20251129_170634.jpg'
 import heroPhoto from './assets/image.png'
@@ -13,8 +13,6 @@ import collegePhoto from './assets/mayuri-bhavan-sri-chaitanya-college--100-feet
 import journeyVideo from './assets/Web_Video_new.mp4'
 import andhraPhoto from './assets/main.jpg'
 import iitPhoto from './assets/pressrelease01_09_2026_11_31.jpg'
-
-const ThreeTopology = lazy(() => import('./ThreeTopology.jsx'))
 
 const skills = [
   ['Programming', 'Java · Python'],
@@ -37,7 +35,7 @@ function ThemeToggle({ mode, onToggle }) {
 }
 
 function VisualField({ mode }) {
-  return <div className={`visual-field visual-field--${mode}`} aria-hidden="true">{mode === 'dark' ? <Suspense fallback={null}><ThreeTopology /></Suspense> : <div className="light-field__rings"><i /><i /><i /></div>}</div>
+  return <div className={`visual-field visual-field--${mode}`} aria-hidden="true">{mode === 'dark' ? <div className="dark-field" /> : <div className="light-field__rings"><i /><i /><i /></div>}</div>
 }
 
 function CursorEffect() {

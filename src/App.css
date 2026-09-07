@@ -25,6 +25,7 @@ html[data-theme="dark"] .hero { background: #142331; }
 .visual-field { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; opacity: .78; }
 .visual-field > * { width: 100%; height: 100%; }
 .visual-field--dark { opacity: .7; mix-blend-mode: screen; }
+.dark-field { width: 100%; height: 100%; background: transparent; }
 .light-field__rings { position: absolute; inset: -20%; overflow: hidden; background: radial-gradient(circle at 70% 30%, rgba(255,255,255,.56), transparent 26%), linear-gradient(135deg, rgba(255,255,255,.3), transparent 54%); }
 .light-field__rings i { position: absolute; left: 62%; top: 50%; width: 32vw; aspect-ratio: 1; border: 1px solid rgba(242,111,82,.38); border-radius: 50%; transform: translate(-50%, -50%); animation: orbit-ring 12s linear infinite; }
 .light-field__rings i:nth-child(2) { width: 48vw; border-color: rgba(25,32,27,.16); animation-duration: 18s; animation-direction: reverse; }
@@ -193,7 +194,7 @@ h1 span::after { content: ''; position: absolute; height: .12em; width: 105%; ba
 .journey-step__copy > p:not(.section-label) { max-width: 390px; font-size: .98rem; line-height: 1.5; }
 .journey-link { display: inline-block; margin-top: 1.5rem; border-bottom: 1px solid var(--ink); padding-bottom: .35rem; font-size: .88rem; }
 .journey-link span { margin-left: 1.5rem; font-size: 1.1rem; }
-.journey-video { overflow: hidden; background: var(--ink); }
+.journey-video { overflow: hidden; background: var(--paper); }
 .journey-video video { display: block; width: 100%; height: 100%; object-fit: cover; }
 .page-cursor { position: fixed; z-index: 50; top: 0; left: 0; width: 16px; height: 16px; border: 1px solid var(--coral); border-radius: 50%; pointer-events: none; transform: translate3d(calc(var(--cursor-x, -100px) - 50%), calc(var(--cursor-y, -100px) - 50%), 0); transition: width .2s ease, height .2s ease, background-color .2s ease; }
 .page-theme--dark:has(a:hover) .page-cursor, .page-theme--dark:has(button:hover) .page-cursor { width: 34px; height: 34px; background: var(--coral); mix-blend-mode: screen; }
