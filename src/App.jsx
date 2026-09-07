@@ -153,6 +153,7 @@ function Journey({ mode, onToggle }) {
             <p className="section-label">04 / Alongside</p>
             <h2>IIT Madras<br /><em>BS degree</em></h2>
             <p>Alongside university, I&apos;m pursuing a BS online degree at IIT Madras, which I&apos;m about to complete.</p>
+            <a className="journey-link" href="https://study.iitm.ac.in/ds/" target="_blank" rel="noreferrer">Visit IIT Madras BS program <span>↗</span></a>
           </div>
           <img src={iitPhoto} alt="Indian Institute of Technology Madras campus sign" />
         </article>
