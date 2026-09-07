@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import { supabase } from './lib/supabase'
 import profilePhoto from './assets/20251129_170634.jpg'
 import heroPhoto from './assets/image.png'
 import quizCertificate from './assets/WhatsApp Image 2026-08-06 at 19.13.23.jpeg'
@@ -50,7 +51,12 @@ const defaultJourney = {
   iitImage: iitPhoto,
 }
 
-const defaultCertificateCopy = certificates.map(([title, image, alt]) => ({ title, image, alt }))
+const defaultCertificateCopy = certificates.map(([title, image, alt], index) => ({ id: `certificate-${index + 1}`, title, image, alt }))
+
+const defaultWork = [
+  { id: 'portfolio', title: 'Dhanunjay Reddy Portfolio', description: 'A playful portfolio and content system for documenting AI, product, and creative technology work.', github_url: 'https://github.com/dhanunjayss0306/djportfolio', live_url: '', image_url: '', sort_order: 0 },
+  { id: 'virun-yatasetu', title: 'Virun / YatraSetu', description: 'AI-powered tourism platform combining personalized itinerary generation with verified local expertise.', github_url: '', live_url: '', image_url: '', sort_order: 1 },
+]
 
 function readAdminStore(key, fallback) {
   try {
@@ -199,6 +205,38 @@ function Journey({ mode, onToggle, journey }) {
   )
 }
 
+function ContactForm() {
+  const [form, setForm] = useState({ name: '', email: '', phone: '', service: '', message: '' })
+  const [status, setStatus] = useState('')
+  const [sending, setSending] = useState(false)
+
+  const update = (field, value) => setForm((current) => ({ ...current, [field]: value }))
+
+  const submit = async (event) => {
+    event.preventDefault()
+    if (!supabase) {
+      setStatus('Supabase is not configured yet.')
+      return
+    }
+    setSending(true)
+    const { error } = await supabase.from('contact_submissions').insert(form)
+    setSending(false)
+    if (error) {
+      setStatus('Could not send this yet. Please try again.')
+      return
+    }
+    await supabase.functions.invoke('notify-contact', { body: form })
+    setForm({ name: '', email: '', phone: '', service: '', message: '' })
+    setStatus('Message received. I’ll get back to you soon.')
+  }
+
+  return <section className="contact-section" id="contact"><div className="contact-section__heading"><p className="section-label">Contact Dhanunjay <span>— 05</span></p><h2>Tell me what<br /><em>you&apos;re building.</em></h2></div><form className="contact-form" onSubmit={submit}><label><span>Your name</span><input required value={form.name} onChange={(event) => update('name', event.target.value)} /></label><label><span>Email address</span><input required type="email" value={form.email} onChange={(event) => update('email', event.target.value)} /></label><label><span>Phone number</span><input required type="tel" value={form.phone} onChange={(event) => update('phone', event.target.value)} /></label><label><span>What do you need?</span><select required value={form.service} onChange={(event) => update('service', event.target.value)}><option value="">Choose a service</option><option>Website</option><option>AI agent</option><option>AI-powered product</option><option>Creative technology</option><option>Something else</option></select></label><label className="contact-form__message"><span>Briefly tell me about it</span><textarea rows="4" value={form.message} onChange={(event) => update('message', event.target.value)} /></label><button className="admin-submit" type="submit" disabled={sending}>{sending ? 'Sending...' : 'Send enquiry'} <span>↗</span></button>{status && <p className="admin-notice">{status}</p>}</form></section>
+}
+
+function MyWork({ mode, onToggle, work }) {
+  return <main className={`work-page page-theme--${mode}`}><PageHeader mode={mode} onToggle={onToggle} /><a className="certificates-back certificates-back--floating" href="#top"><span>←</span> Back to portfolio</a><section className="work-page__hero"><VisualField mode={mode} /><p className="section-label">Things I&apos;ve shipped <span>— 06</span></p><div className="work-page__content"><h1>My <em>work.</em></h1><p>Experiments, products, and useful things made from a mix of code and curiosity.</p></div></section><section className="work-page__list">{work.map((item, index) => <article className="work-item" key={item.id}><div className="work-item__number">{String(index + 1).padStart(2, '0')}</div><div><p className="project__type">Selected build</p><h2>{item.title}</h2><p>{item.description}</p></div><div className="work-item__links">{item.github_url && <a href={item.github_url} target="_blank" rel="noreferrer">GitHub <span>↗</span></a>}{item.live_url && <a href={item.live_url} target="_blank" rel="noreferrer">Live link <span>↗</span></a>}</div></article>)}</section><ContactForm /></main>
+}
+
 function AdminField({ label, value, onChange, multiline = false }) {
   const Input = multiline ? 'textarea' : 'input'
   return <label className="admin-field"><span>{label}</span><Input value={value} onChange={(event) => onChange(event.target.value)} rows={multiline ? 4 : undefined} /></label>
@@ -211,9 +249,18 @@ function AdminPortal({ mode, onToggle, journey, setJourney, certificateCopy, set
   const [activeTab, setActiveTab] = useState('journey')
   const [notice, setNotice] = useState('')
 
-  const login = (event) => {
+  const login = async (event) => {
     event.preventDefault()
-    if (username === 'dhanunjay' && password === 'admin2026') {
+    if (supabase) {
+      const { error } = await supabase.auth.signInWithPassword({ email: username, password })
+      if (error) {
+        setNotice('Use the admin email and password created in Supabase Auth.')
+        return
+      }
+      window.sessionStorage.setItem('portfolio-admin-auth', 'true')
+      setAuthenticated(true)
+      setNotice('Welcome back. Your editable content is ready.')
+    } else if (username === 'dhanunjay' && password === 'admin2026') {
       window.sessionStorage.setItem('portfolio-admin-auth', 'true')
       setAuthenticated(true)
       setNotice('Welcome back. Your editable content is ready.')
@@ -222,13 +269,23 @@ function AdminPortal({ mode, onToggle, journey, setJourney, certificateCopy, set
     }
   }
 
-  const saveJourney = () => {
+  const saveJourney = async () => {
     window.localStorage.setItem('portfolio-journey', JSON.stringify(journey))
+    if (supabase) {
+      const { error } = await supabase.from('journey_content').upsert({ id: 'main', intro: journey.intro, school_title: journey.schoolTitle, school_subtitle: journey.schoolSubtitle, school_text: journey.schoolText, school_image: journey.schoolImage, college_title: journey.collegeTitle, college_subtitle: journey.collegeSubtitle, college_text: journey.collegeText, college_image: journey.collegeImage, university_title: journey.universityTitle, university_subtitle: journey.universitySubtitle, university_text: journey.universityText, university_image: journey.universityImage, iit_title: journey.iitTitle, iit_subtitle: journey.iitSubtitle, iit_text: journey.iitText, iit_image: journey.iitImage })
+      setNotice(error ? 'Saved locally. Supabase sync needs an authenticated admin.' : 'Journey changes saved to Supabase.')
+      return
+    }
     setNotice('Journey changes saved on this device.')
   }
 
-  const saveCertificates = () => {
+  const saveCertificates = async () => {
     window.localStorage.setItem('portfolio-certificates', JSON.stringify(certificateCopy))
+    if (supabase) {
+      const { error } = await supabase.from('certificates').upsert(certificateCopy.map(({ id, title, image, alt }, index) => ({ id, title, image_url: image, alt_text: alt, sort_order: index, is_published: true })))
+      setNotice(error ? 'Saved locally. Supabase sync needs an authenticated admin.' : 'Certificate changes saved to Supabase.')
+      return
+    }
     setNotice('Certificate changes saved on this device.')
   }
 
@@ -251,7 +308,7 @@ function AdminPortal({ mode, onToggle, journey, setJourney, certificateCopy, set
   }
 
   if (!authenticated) {
-    return <main className={`admin-page page-theme--${mode}`}><PageHeader mode={mode} onToggle={onToggle} /><section className="admin-login"><div className="admin-login__mark">DR<span>/</span>26</div><p className="section-label">Private workspace</p><h1>Admin <em>portal.</em></h1><p>Update the parts of your portfolio that people see. Changes stay in this browser until you publish them to your live data source.</p><form onSubmit={login}><AdminField label="Username" value={username} onChange={setUsername} /><AdminField label="Password" value={password} onChange={setPassword} /><button className="admin-submit" type="submit">Enter portal <span>↗</span></button></form>{notice && <p className="admin-notice">{notice}</p>}</section></main>
+    return <main className={`admin-page page-theme--${mode}`}><PageHeader mode={mode} onToggle={onToggle} /><section className="admin-login"><div className="admin-login__mark">DR<span>/</span>26</div><p className="section-label">Private workspace</p><h1>Admin <em>portal.</em></h1><p>Update the parts of your portfolio that people see. Changes stay in this browser until you publish them to your live data source.</p><form onSubmit={login}><AdminField label="Admin email" value={username} onChange={setUsername} /><AdminField label="Password" value={password} onChange={setPassword} /><button className="admin-submit" type="submit">Enter portal <span>↗</span></button></form>{notice && <p className="admin-notice">{notice}</p>}</section></main>
   }
 
   return <main className={`admin-page page-theme--${mode}`}><PageHeader mode={mode} onToggle={onToggle} /><section className="admin-shell"><div className="admin-shell__top"><div><p className="section-label">Content control room</p><h1>Admin <em>portal.</em></h1></div><button className="admin-logout" onClick={() => { window.sessionStorage.removeItem('portfolio-admin-auth'); setAuthenticated(false) }}>Log out</button></div><p className="admin-intro">Only the editable content is here. Update a field, save it, and refresh the public page to see the result.</p><div className="admin-tabs"><button className={activeTab === 'journey' ? 'is-active' : ''} onClick={() => setActiveTab('journey')}>My Journey</button><button className={activeTab === 'certificates' ? 'is-active' : ''} onClick={() => setActiveTab('certificates')}>My Certificates</button></div>{activeTab === 'journey' ? <div className="admin-panel"><div className="admin-panel__heading"><div><p className="section-label">Journey editor</p><h2>Shape the story.</h2></div><button className="admin-save" onClick={saveJourney}>Save journey</button></div><AdminField label="Intro text" value={journey.intro} onChange={(value) => setJourney({ ...journey, intro: value })} multiline /><div className="admin-editor-grid">{[['school', 'Early years'], ['college', 'Next chapter'], ['university', 'Right now'], ['iit', 'Alongside']].map(([key, label]) => <div className="admin-card" key={key}><p className="admin-card__label">{label}</p><img className="admin-journey-image" src={journey[`${key}Image`]} alt="" /><label className="admin-upload">Change photo<input type="file" accept="image/*" onChange={(event) => uploadJourneyImage(key, event.target.files[0])} /></label><AdminField label="Title" value={journey[`${key}Title`]} onChange={(value) => setJourney({ ...journey, [`${key}Title`]: value })} /><AdminField label="Subtitle" value={journey[`${key}Subtitle`]} onChange={(value) => setJourney({ ...journey, [`${key}Subtitle`]: value })} /><AdminField label="Story" value={journey[`${key}Text`]} onChange={(value) => setJourney({ ...journey, [`${key}Text`]: value })} multiline /></div>)}</div></div> : <div className="admin-panel"><div className="admin-panel__heading"><div><p className="section-label">Certificate editor</p><h2>Keep the proof.</h2></div><button className="admin-save" onClick={saveCertificates}>Save certificates</button></div><div className="admin-certificate-grid">{certificateCopy.map((certificate, index) => <div className="admin-card admin-certificate-card" key={`${certificate.title}-${index}`}><img src={certificate.image} alt="" /><label className="admin-upload">Change photo<input type="file" accept="image/*" onChange={(event) => uploadCertificate(index, event.target.files[0])} /></label><AdminField label="Certificate title" value={certificate.title} onChange={(value) => updateCertificate(index, 'title', value)} /><AdminField label="Accessible description" value={certificate.alt} onChange={(value) => updateCertificate(index, 'alt', value)} multiline /></div>)}</div></div>}{notice && <p className="admin-notice">{notice}</p>}</section></main>
@@ -263,9 +320,11 @@ function App() {
   const [mode, setMode] = useState(() => window.localStorage.getItem('portfolio-theme') === 'dark' ? 'dark' : 'light')
   const [showCertificates, setShowCertificates] = useState(() => window.location.hash === '#certificates')
   const [showJourney, setShowJourney] = useState(() => window.location.hash === '#journey')
+  const [showWork, setShowWork] = useState(() => window.location.hash === '#my-work')
   const [showAdmin, setShowAdmin] = useState(() => window.location.hash === '#admin')
   const [journey, setJourney] = useState(() => ({ ...defaultJourney, ...readAdminStore('portfolio-journey', {}) }))
   const [certificateCopy, setCertificateCopy] = useState(() => readAdminStore('portfolio-certificates', defaultCertificateCopy))
+  const [work, setWork] = useState(() => readAdminStore('portfolio-work', defaultWork))
 
   useEffect(() => {
     const timer = window.setTimeout(() => setIsLoading(false), 1500)
@@ -281,10 +340,26 @@ function App() {
     const handleHashChange = () => {
       setShowCertificates(window.location.hash === '#certificates')
       setShowJourney(window.location.hash === '#journey')
+      setShowWork(window.location.hash === '#my-work')
       setShowAdmin(window.location.hash === '#admin')
     }
     window.addEventListener('hashchange', handleHashChange)
     return () => window.removeEventListener('hashchange', handleHashChange)
+  }, [])
+
+  useEffect(() => {
+    if (!supabase) return
+    const loadRemoteContent = async () => {
+      const [{ data: remoteJourney }, { data: remoteCertificates }, { data: remoteWork }] = await Promise.all([
+        supabase.from('journey_content').select('*').eq('id', 'main').maybeSingle(),
+        supabase.from('certificates').select('*').eq('is_published', true).order('sort_order'),
+        supabase.from('work_items').select('*').eq('is_published', true).order('sort_order'),
+      ])
+      if (remoteJourney) setJourney({ ...defaultJourney, intro: remoteJourney.intro, schoolTitle: remoteJourney.school_title, schoolSubtitle: remoteJourney.school_subtitle, schoolText: remoteJourney.school_text, schoolImage: remoteJourney.school_image || defaultJourney.schoolImage, collegeTitle: remoteJourney.college_title, collegeSubtitle: remoteJourney.college_subtitle, collegeText: remoteJourney.college_text, collegeImage: remoteJourney.college_image || defaultJourney.collegeImage, universityTitle: remoteJourney.university_title, universitySubtitle: remoteJourney.university_subtitle, universityText: remoteJourney.university_text, universityImage: remoteJourney.university_image || defaultJourney.universityImage, iitTitle: remoteJourney.iit_title, iitSubtitle: remoteJourney.iit_subtitle, iitText: remoteJourney.iit_text, iitImage: remoteJourney.iit_image || defaultJourney.iitImage })
+      if (remoteCertificates?.length) setCertificateCopy(remoteCertificates.map(({ id, title, image_url: image, alt_text: alt }) => ({ id, title, image: image || defaultCertificateCopy.find((item) => item.id === id)?.image || '', alt })))
+      if (remoteWork?.length) setWork(remoteWork)
+    }
+    loadRemoteContent()
   }, [])
 
   const closeMenu = () => setMenuOpen(false)
@@ -293,6 +368,7 @@ function App() {
 
   if (showCertificates) return <Certificates mode={mode} onToggle={toggleTheme} certificateCopy={certificateCopy} />
   if (showJourney) return <Journey mode={mode} onToggle={toggleTheme} journey={journey} />
+  if (showWork) return <MyWork mode={mode} onToggle={toggleTheme} work={work} />
   if (showAdmin) return <AdminPortal mode={mode} onToggle={toggleTheme} journey={journey} setJourney={setJourney} certificateCopy={certificateCopy} setCertificateCopy={setCertificateCopy} />
 
   return (
@@ -311,6 +387,7 @@ function App() {
             <a href="#about" onClick={closeMenu}>About</a>
             <a href="#skills" onClick={closeMenu}>Skills</a>
             <a href="#work" onClick={closeMenu}>Build</a>
+            <a href="#my-work" onClick={closeMenu}>My Work <span className="arrow">↗</span></a>
             <a href="#certificates" onClick={closeMenu}>Certificates <span className="arrow">↗</span></a>
             <a href="#journey" onClick={closeMenu}>My Journey <span className="arrow">↗</span></a>
             <a href="#contact" onClick={closeMenu}>Contact <span className="arrow">↗</span></a>
@@ -347,6 +424,8 @@ function App() {
         </section>
 
         <section className="education"><p className="section-label">Currently learning <span>— 04</span></p><div className="education__grid"><div className="education__year">2025<br /><em>→</em><br />2029</div><div><p className="education__degree">Bachelor of Technology<br />Computer Science & Engineering (Core)</p><p className="education__school">Andhra University College of Engineering<br />Visakhapatnam</p></div><div className="education__score"><strong>8.44</strong><span>current CGPA / 10</span><small>2nd year</small></div></div></section>
+
+        <ContactForm />
 
         <footer className="footer" id="contact"><div className="footer__top"><span>Let&apos;s build the next thing.</span><span>© 2026 Dhanunjay Reddy</span></div><h2>Have an idea?<br /><em>Let&apos;s make it <span>real.</span></em></h2><a className="footer__email" href="mailto:dhanunjay905@gmail.com">dhanunjay905@gmail.com <span>↗</span></a><div className="footer__bottom"><span>Java / Python / AI / Product</span><span>Made with curiosity + care</span></div></footer>
       </main>
