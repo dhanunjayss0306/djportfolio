@@ -73,29 +73,12 @@ function AdminIcon() {
   return <a className="admin-icon" href="#admin" aria-label="Open admin portal" title="Admin portal"><span>✦</span></a>
 }
 
-function ThemeToggle({ mode, onToggle }) {
-  return <button className="theme-toggle" type="button" onClick={onToggle} aria-label={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}><span className="theme-toggle__icon">{mode === 'dark' ? '☼' : '☾'}</span><span>{mode === 'dark' ? 'Light mode' : 'Dark mode'}</span></button>
-}
-
 function VisualField({ mode }) {
   return <div className={`visual-field visual-field--${mode}`} aria-hidden="true">{mode === 'dark' ? <div className="dark-field" /> : <div className="light-field__rings"><i /><i /><i /></div>}</div>
 }
 
-function CursorEffect() {
-  useEffect(() => {
-    const moveCursor = (event) => {
-      document.documentElement.style.setProperty('--cursor-x', `${event.clientX}px`)
-      document.documentElement.style.setProperty('--cursor-y', `${event.clientY}px`)
-    }
-    window.addEventListener('pointermove', moveCursor)
-    return () => window.removeEventListener('pointermove', moveCursor)
-  }, [])
-
-  return <span className="page-cursor" aria-hidden="true" />
-}
-
-function PageHeader({ mode, onToggle }) {
-  return <><CursorEffect /><header className="site-header"><a className="wordmark" href="#top">DR<span>/</span>26</a><div className="header-tools"><ThemeToggle mode={mode} onToggle={onToggle} /><AdminIcon /></div></header></>
+function PageHeader() {
+  return <header className="site-header"><a className="wordmark" href="#top">DHANUNJAY</a><div className="header-tools"><SocialLinks /><AdminIcon /></div></header>
 }
 
 function Certificates({ mode, onToggle, certificateCopy }) {
@@ -316,6 +299,24 @@ function AdminPortal({ mode, onToggle, journey, setJourney, certificateCopy, set
   return <main className={`admin-page page-theme--${mode}`}><PageHeader mode={mode} onToggle={onToggle} /><section className="admin-shell"><div className="admin-shell__top"><div><p className="section-label">Content control room</p><h1>Admin <em>portal.</em></h1></div><button className="admin-logout" onClick={() => { window.sessionStorage.removeItem('portfolio-admin-auth'); setAuthenticated(false) }}>Log out</button></div><p className="admin-intro">Only the editable content is here. Update a field, save it, and refresh the public page to see the result.</p><div className="admin-tabs"><button className={activeTab === 'journey' ? 'is-active' : ''} onClick={() => setActiveTab('journey')}>My Journey</button><button className={activeTab === 'certificates' ? 'is-active' : ''} onClick={() => setActiveTab('certificates')}>My Certificates</button></div>{activeTab === 'journey' ? <div className="admin-panel"><div className="admin-panel__heading"><div><p className="section-label">Journey editor</p><h2>Shape the story.</h2></div><button className="admin-save" onClick={saveJourney}>Save journey</button></div><AdminField label="Intro text" value={journey.intro} onChange={(value) => setJourney({ ...journey, intro: value })} multiline /><div className="admin-editor-grid">{[['school', 'Early years'], ['college', 'Next chapter'], ['university', 'Right now'], ['iit', 'Alongside']].map(([key, label]) => <div className="admin-card" key={key}><p className="admin-card__label">{label}</p><img className="admin-journey-image" src={journey[`${key}Image`]} alt="" /><label className="admin-upload">Change photo<input type="file" accept="image/*" onChange={(event) => uploadJourneyImage(key, event.target.files[0])} /></label><AdminField label="Title" value={journey[`${key}Title`]} onChange={(value) => setJourney({ ...journey, [`${key}Title`]: value })} /><AdminField label="Subtitle" value={journey[`${key}Subtitle`]} onChange={(value) => setJourney({ ...journey, [`${key}Subtitle`]: value })} /><AdminField label="Story" value={journey[`${key}Text`]} onChange={(value) => setJourney({ ...journey, [`${key}Text`]: value })} multiline /></div>)}</div></div> : <div className="admin-panel"><div className="admin-panel__heading"><div><p className="section-label">Certificate editor</p><h2>Keep the proof.</h2></div><button className="admin-save" onClick={saveCertificates}>Save certificates</button></div><div className="admin-certificate-grid">{certificateCopy.map((certificate, index) => <div className="admin-card admin-certificate-card" key={`${certificate.title}-${index}`}><img src={certificate.image} alt="" /><label className="admin-upload">Change photo<input type="file" accept="image/*" onChange={(event) => uploadCertificate(index, event.target.files[0])} /></label><AdminField label="Certificate title" value={certificate.title} onChange={(value) => updateCertificate(index, 'title', value)} /><AdminField label="Accessible description" value={certificate.alt} onChange={(value) => updateCertificate(index, 'alt', value)} multiline /></div>)}</div></div>}{notice && <p className="admin-notice">{notice}</p>}</section></main>
 }
 
+const SOCIAL_LINKS = [
+  ['LinkedIn', 'https://www.linkedin.com/in/p-v-n-dhanunjay-reddy-198162365'],
+  ['GitHub', 'https://github.com/dhanunjayss0306'],
+  ['Instagram', 'https://www.instagram.com/dhanunjayss1122'],
+]
+
+function SocialLinks() {
+  return <div className="social-links">{SOCIAL_LINKS.map(([label, url]) => <a key={label} href={url} target="_blank" rel="noreferrer">{label} <span>↗</span></a>)}</div>
+}
+
+function AboutModal({ onClose }) {
+  return <div className="modal" onClick={onClose}><div className="modal__panel" onClick={(event) => event.stopPropagation()}><button className="modal__close" type="button" onClick={onClose} aria-label="Close">×</button><h2>About<em>.</em></h2><img className="modal__photo" src={profilePhoto} alt="Dhanunjay in Visakhapatnam" /><p><strong>I turn ambitious ideas into polished, real-world experiences.</strong></p><p>I&apos;m a 2nd-year Computer Science student at Andhra University College of Engineering, exploring the space where AI, product thinking, and expressive interfaces meet.</p><p>I like shipping things that feel as good to use as they are clever under the hood.</p><p><strong>B.Tech CSE · Andhra University · CGPA 8.44 · 2nd year</strong></p></div></div>
+}
+
+function ContactModal({ onClose }) {
+  return <div className="modal" onClick={onClose}><div className="modal__panel" onClick={(event) => event.stopPropagation()}><button className="modal__close" type="button" onClick={onClose} aria-label="Close">×</button><h2>Contact<em>.</em></h2><p>Tell me what you&apos;re building.</p><a className="modal__email" href="mailto:dhanunjay905@gmail.com">dhanunjay905@gmail.com <span>↗</span></a><SocialLinks /><p className="modal__note"><a href="#contact" onClick={onClose}>Or use the form below ↓</a></p></div></div>
+}
+
 function App() {
   const [isLoading, setIsLoading] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -324,6 +325,8 @@ function App() {
   const [showJourney, setShowJourney] = useState(() => window.location.hash === '#journey')
   const [showWork, setShowWork] = useState(() => window.location.hash === '#my-work')
   const [showAdmin, setShowAdmin] = useState(() => window.location.hash === '#admin')
+  const [showAbout, setShowAbout] = useState(false)
+  const [showContact, setShowContact] = useState(false)
   const [journey, setJourney] = useState(() => ({ ...defaultJourney, ...readAdminStore('portfolio-journey', {}) }))
   const [certificateCopy, setCertificateCopy] = useState(() => readAdminStore('portfolio-certificates', defaultCertificateCopy))
   const [work, setWork] = useState(() => readAdminStore('portfolio-work', defaultWork))
@@ -376,26 +379,24 @@ function App() {
   return (
     <>
       <div className={`loader ${isLoading ? '' : 'loader--done'}`} aria-hidden="true">
-        <div className="loader__mark">D<span>/</span>R</div>
+        <div className="loader__mark">DHANUNJAY<br />REDDY</div>
         <div className="loader__line"><i /></div>
-        <span className="loader__caption">building something useful</span>
+        <span className="loader__caption">PORTFOLIO — © 2026</span>
       </div>
 
       <main className={`portfolio page-theme--${mode} ${isLoading ? 'portfolio--waiting' : ''}`}>
-        <CursorEffect />
         <header className="site-header">
-          <a className="wordmark" href="#top" onClick={closeMenu}>DR<span>/</span>26</a>
+          <a className="wordmark" href="#top" onClick={closeMenu}>DHANUNJAY</a>
           <nav className={menuOpen ? 'nav nav--open' : 'nav'} aria-label="Main navigation">
-            <a href="#about" onClick={closeMenu}>About</a>
+            <button className="nav__link-button" type="button" onClick={() => { closeMenu(); setShowAbout(true) }}>About</button>
             <a href="#skills" onClick={closeMenu}>Skills</a>
             <a href="#work" onClick={closeMenu}>Build</a>
             <a href="#my-work" onClick={closeMenu}>My Work <span className="arrow">↗</span></a>
             <a href="#certificates" onClick={closeMenu}>Certificates <span className="arrow">↗</span></a>
             <a href="#journey" onClick={closeMenu}>My Journey <span className="arrow">↗</span></a>
-            <a href="#contact" onClick={closeMenu}>Contact <span className="arrow">↗</span></a>
+            <button className="nav__link-button" type="button" onClick={() => { closeMenu(); setShowContact(true) }}>Contact</button>
           </nav>
-          <ThemeToggle mode={mode} onToggle={toggleTheme} />
-          <AdminIcon />
+          <div className="header-tools"><SocialLinks /><AdminIcon /></div>
           <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Toggle navigation"><span /><span /></button>
         </header>
 
@@ -422,14 +423,18 @@ function App() {
 
         <section className="work" id="work">
           <div className="work__header"><p className="section-label">Featured build <span>— 03</span></p><p className="work__note">Smart India Hackathon<br />2026 / in progress</p></div>
-          <article className="project project--coral"><div className="project__visual"><div className="project__orb" /><div className="project__label">plan the<br />journey</div><span className="project__number">01</span></div><div className="project__info"><p className="project__type">Virun / YatraSetu</p><h2>AI plans the journey. Locals make it authentic.</h2><p>An AI-powered tourism platform combining personalized itinerary generation with verified local expertise.</p><div className="project__tags"><span>AI product</span><span>Tourism</span><span>Hackathon 2026</span></div></div></article>
+          <article className="project project--coral"><div className="project__visual"><div className="project__orb" /><div className="project__label">plan the<br />journey</div><span className="project__number">01</span></div><div className="project__info"><p className="project__type">Virun / YatraSetu</p><h2>AI plans the journey. Locals make it authentic.</h2><p>An AI-powered tourism platform combining personalized itinerary generation with verified local expertise.</p><div className="project__tags"><span>AI product</span><span>Tourism</span><span>Hackathon 2026</span></div><div className="project__links"><a href="https://dhanunjayss0306.github.io/virun-pitch/" target="_blank" rel="noreferrer">Open pitch <span>↗</span></a></div></div></article>
+          <div className="work__header"><p className="section-label">Selected work <span>— 03</span></p><p className="work__note">Gallery</p></div>
+          <div className="gallery">{work.map((item, index) => <article className="gallery-row" key={item.id}><div className="gallery-row__number">{String(index + 1).padStart(2, '0')}</div><div><p className="project__type">{item.status || 'Selected build'}</p><h2>{item.title}</h2><p>{item.description}</p></div><div className="gallery-row__links">{item.github_url && <a href={item.github_url} target="_blank" rel="noreferrer">GitHub <span>↗</span></a>}{item.live_url && <a href={item.live_url} target="_blank" rel="noreferrer">Open project <span>↗</span></a>}</div></article>)}</div>
         </section>
 
         <section className="education"><p className="section-label">Currently learning <span>— 04</span></p><div className="education__grid"><div className="education__year">2025<br /><em>→</em><br />2029</div><div><p className="education__degree">Bachelor of Technology<br />Computer Science & Engineering (Core)</p><p className="education__school">Andhra University College of Engineering<br />Visakhapatnam</p></div><div className="education__score"><strong>8.44</strong><span>current CGPA / 10</span><small>2nd year</small></div></div></section>
 
         <ContactForm />
 
-        <footer className="footer" id="contact"><div className="footer__top"><span>Let&apos;s build the next thing.</span><span>© 2026 Dhanunjay Reddy</span></div><h2>Have an idea?<br /><em>Let&apos;s make it <span>real.</span></em></h2><a className="footer__email" href="mailto:dhanunjay905@gmail.com">dhanunjay905@gmail.com <span>↗</span></a><div className="footer__bottom"><span>Java / Python / AI / Product</span><span>Made with curiosity + care</span></div></footer>
+        <footer className="footer" id="contact"><div className="footer__top"><span>Let&apos;s build the next thing.</span><span>© 2026 Dhanunjay Reddy</span></div><h2>Have an idea?<br /><em>Let&apos;s make it <span>real.</span></em></h2><a className="footer__email" href="mailto:dhanunjay905@gmail.com">dhanunjay905@gmail.com <span>↗</span></a><div className="footer__socials"><SocialLinks /></div><div className="footer__bottom"><span>Java / Python / AI / Product</span><span>Made with curiosity + care</span></div></footer>
+        {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
+        {showContact && <ContactModal onClose={() => setShowContact(false)} />}
       </main>
     </>
   )
