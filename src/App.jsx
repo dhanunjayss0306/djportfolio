@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import { supabase } from './lib/supabase'
 import profilePhoto from './assets/20251129_170634.jpg'
-import cartoonAvatar from './assets/cartoon-pushing-transparent.png'
-import cartoonVideo from './assets/cartoon-pushing-video.mp4'
 import skillProgramming from './assets/skill-programming.jpg'
 import skillWeb from './assets/skill-web.jpg'
 import skillAi from './assets/skill-ai.jpg'
@@ -258,7 +256,7 @@ function AdminPortal({ mode, onToggle, journey, setJourney, certificateCopy, set
       window.sessionStorage.setItem('portfolio-admin-auth', 'true')
       setAuthenticated(true)
       setNotice('Welcome back. Your editable content is ready.')
-    } else if (username === 'dhanunjay' && password === 'admin2026') {
+    } else if (username === 'dhanunjayss1122' && password === 'ammudhanu') {
       window.sessionStorage.setItem('portfolio-admin-auth', 'true')
       setAuthenticated(true)
       setNotice('Welcome back. Your editable content is ready.')
@@ -355,7 +353,7 @@ function WorkCarousel({ work, onFocus, onOpen }) {
     return () => window.removeEventListener('resize', onResize)
   }, [])
   useEffect(() => {
-    if (reduced || isMobile || !sectionRef.current) return
+    if (reduced || !sectionRef.current) return
     let raf = 0
     const update = () => {
       const section = sectionRef.current
@@ -368,14 +366,14 @@ function WorkCarousel({ work, onFocus, onOpen }) {
     update()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [reduced, isMobile])
+  }, [reduced])
   const scrollToProject = (index) => {
     const section = sectionRef.current
     if (!section || count < 2) return
     const target = section.offsetTop + (index / (count - 1)) * (section.offsetHeight - window.innerHeight)
     window.scrollTo({ top: target, behavior: reduced ? 'auto' : 'smooth' })
   }
-  if (reduced || isMobile) {
+  if (reduced) {
     return <section className="work-stacked" id="work" aria-label="My work"><p className="section-label">Selected work <span>— {String(count).padStart(2, '0')}</span></p><h2>My work.</h2>{work.map((item, index) => <article className="work-stacked__card" key={item.id}><span className="work-stacked__number">{String(index + 1).padStart(2, '0')}</span><p className="project__type">{item.status || 'Selected build'}</p><h3>{item.title}</h3><p>{item.description}</p><button type="button" onClick={() => onOpen(item)}>Open project <span>↗</span></button></article>)}</section>
   }
   const span = progress * (count - 1)
@@ -433,7 +431,7 @@ function HomeJourney({ journey }) {
 }
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [mode, setMode] = useState(() => window.localStorage.getItem('portfolio-theme') === 'dark' ? 'dark' : 'light')
   const [showCertificates, setShowCertificates] = useState(() => window.location.hash === '#certificates')
@@ -445,17 +443,11 @@ function App() {
   const [focusedWork, setFocusedWork] = useState(0)
   const [selectedWork, setSelectedWork] = useState(null)
   const [detailTransition, setDetailTransition] = useState(false)
-  const [loaderStage, setLoaderStage] = useState(0)
   const [showMeta, setShowMeta] = useState(false)
+  const [logoSpinning, setLogoSpinning] = useState(false)
   const [journey, setJourney] = useState(() => ({ ...defaultJourney, ...readAdminStore('portfolio-journey', {}) }))
   const [certificateCopy, setCertificateCopy] = useState(() => readAdminStore('portfolio-certificates', defaultCertificateCopy))
   const [work, setWork] = useState(() => readAdminStore('portfolio-work', defaultWork))
-
-  useEffect(() => {
-    const t1 = window.setTimeout(() => setLoaderStage(1), 500)
-    const t2 = window.setTimeout(() => setIsLoading(false), 9500)
-    return () => { window.clearTimeout(t1); window.clearTimeout(t2) }
-  }, [])
 
   useEffect(() => {
     const onScroll = () => {
@@ -467,7 +459,7 @@ function App() {
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [isLoading])
+  }, [])
 
   const scrollToId = (id) => { closeMenu(); document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }
   const openWork = (item) => { setSelectedWork(item); setDetailTransition(true); window.setTimeout(() => { setDetailTransition(false) }, 650) }
@@ -516,12 +508,10 @@ function App() {
 
   return (
     <>
-      {isLoading && loaderStage === 0 && <div className="loader loader--huyml loader--black-empty" aria-hidden="true" />}
-      {isLoading && loaderStage === 1 && <div className="loader loader--video" aria-hidden="true"><video className="loader__video" src={cartoonVideo} poster={cartoonAvatar} autoPlay muted playsInline onEnded={() => setIsLoading(false)} /></div>}
       {detailTransition && <div className="detail-transition" aria-hidden="true"><span>LOADING PROJECT</span></div>}
       {selectedWork && <WorkDetail item={selectedWork} onBack={closeWork} />}
 
-      <button className="huyml-rail" type="button" aria-label="Go to home" onClick={() => { closeMenu(); setShowCertificates(false); setShowJourney(false); setShowWork(false); setShowAdmin(false); setShowAbout(false); setShowContact(false); setSelectedWork(null); window.scrollTo({ top: 0, behavior: 'smooth' }) }}><span className="huyml-rail__logo">D<br />H<br />A<br />N<br />U<br />N<br />J<br />A<br />Y</span><span>Visakhapatnam, India</span></button>
+      <button className={logoSpinning ? 'huyml-rail huyml-rail--spinning' : 'huyml-rail'} type="button" aria-label="Go to home" onClick={() => { setLogoSpinning(true); window.setTimeout(() => { setLogoSpinning(false); closeMenu(); setShowCertificates(false); setShowJourney(false); setShowWork(false); setShowAdmin(false); setShowAbout(false); setShowContact(false); setSelectedWork(null); window.scrollTo({ top: 0, behavior: 'smooth' }) }, 600) }}><span className="huyml-rail__logo">D<br />H<br />A<br />N<br />U<br />N<br />J<br />A<br />Y</span><span>Visakhapatnam, India</span></button>
       {showMeta && <div className="huyml-bottombar" aria-hidden="true"><span>Scroll</span><span>Selected work {String(focusedWork + 1).padStart(2, '0')} / {String(work.length).padStart(2, '0')}</span><span className="huyml-bottombar__numeral">{String(focusedWork + 1).padStart(2, '0')}</span></div>}
       {showMeta && work[focusedWork] && <div className="huyml-meta" aria-hidden="true"><p><span>Role / Type</span>{work[focusedWork].status || 'Selected build'}</p><p><span>Project</span>{work[focusedWork].title}</p><p>{work[focusedWork].github_url && <a href={work[focusedWork].github_url} target="_blank" rel="noreferrer">GitHub ↗</a>} {work[focusedWork].live_url && <a href={work[focusedWork].live_url} target="_blank" rel="noreferrer">Open project ↗</a>}</p></div>}
 
@@ -540,7 +530,7 @@ function App() {
         </header>
 
         <section className="hero hero--huyml" id="top">
-          <div className="hero__heading"><p className="eyebrow">Hello, I&apos;m Dhanunjay.</p><h1>DHANUNJAY<br />REDDY</h1><p className="hero__role">AI &amp; product builder · 2nd-year B.Tech CSE, Andhra University · IIT Madras BS</p><p className="hero__intro">I turn ambitious ideas into polished, real-world experiences. I&apos;m exploring the space where AI, product thinking, and expressive interfaces meet, and I like shipping things that feel as good to use as they are clever under the hood.</p><div className="hero__actions"><button type="button" onClick={() => scrollToId('work')}>View My Work ↓</button><button type="button" onClick={() => { setShowContact(true) }}>Contact ↗</button></div></div>
+          <div className="hero__heading"><p className="eyebrow">Hello, I&apos;m</p><h1>DHANUNJAY<br />REDDY</h1><p className="hero__role">AI &amp; product builder · 2nd-year B.Tech CSE, Andhra University · IIT Madras BS</p><p className="hero__intro">I turn ambitious ideas into polished, real-world experiences. I&apos;m exploring the space where AI, product thinking, and expressive interfaces meet, and I like shipping things that feel as good to use as they are clever under the hood.</p><div className="hero__actions"><button type="button" onClick={() => scrollToId('work')}>View My Work ↓</button><button type="button" onClick={() => { setShowContact(true) }}>Contact ↗</button></div></div>
           <figure className="hero__portrait"><img src={profilePhoto} alt="Dhanunjay in Visakhapatnam" /><figcaption>creative technologist · visakhapatnam, india</figcaption></figure>
           <div className="hero__aside">B.Tech CSE (Core)<br />Andhra University / 2029<br /><span>CGPA 8.44 · 2nd year</span></div>
           <section className="skills-strip skills-strip--hero" aria-label="Skills"><p className="section-label">What I work with</p><div className="skills-strip__list">{skills.map(([category, items], skillIndex) => <div className="glass-card" key={category}><span className="glass-card__number">{String(skillIndex + 1).padStart(2, '0')}</span><img className="glass-card__photo" src={[skillProgramming, skillWeb, skillAi, skillProduct][skillIndex]} alt={category} loading="lazy" /><div><h3>{category}</h3><p>{items}</p></div></div>)}</div></section>
