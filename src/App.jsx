@@ -475,7 +475,7 @@ function App() {
       return
     }
     setMenuOpen(false)
-    setTransitionText('OPENING PAGE')
+    setTransitionText('')
     setDetailTransition(true)
     window.setTimeout(() => {
       setDetailTransition(false)

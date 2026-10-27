@@ -717,3 +717,11 @@ h1, h2 { font-family: 'Archivo', sans-serif; }
   .hero__top-photo { width: calc(100% + 40px); max-width: none; margin-left: -20px; margin-right: -20px; left: auto; right: auto; top: auto; position: relative; }
   .hero__top-photo img { width: 100%; height: auto; object-fit: contain; clip-path: none; }
 }
+
+/* FINAL mobile loader override, must be last: full black, no person pushing, top-to-bottom, site appears. */
+@media (max-width: 768px) {
+  .start-loader { background: #000; animation: startLoaderExitDown 0.8s ease 1.2s forwards; }
+  .start-loader__panel { left: 0; right: 0; top: 0; bottom: 0; background: #000; animation: startPushDown 1.2s ease forwards; }
+  .start-loader__person { display: none; }
+  .start-loader__mark { left: 0; right: 0; bottom: auto; top: 50%; text-align: center; color: #fff; transform: translateY(-50%); }
+}
