@@ -19,6 +19,7 @@ import workSuren from './assets/work-suren.jpg'
 import workSapss from './assets/work-sapss.jpg'
 import workHackerrank from './assets/work-hackerrank.jpg'
 import workGlobaltap from './assets/work-globaltap.jpg'
+import logoDj from './assets/logo-dj.jpg'
 import heroPhoto from './assets/image.png'
 import quizCertificate from './assets/WhatsApp Image 2026-08-06 at 19.13.23.jpeg'
 import googleCertificate from './assets/Screenshot 2026-09-06 220049.png'
@@ -101,8 +102,13 @@ function VisualField({ mode }) {
   return <div className={`visual-field visual-field--${mode}`} aria-hidden="true">{mode === 'dark' ? <div className="dark-field" /> : <div className="light-field__rings"><i /><i /><i /></div>}</div>
 }
 
+function LogoCube() {
+  const [flipped, setFlipped] = useState(false)
+  return <button className="logo-cube" type="button" aria-label="DJ logo, click to rotate" title="DJ logo, click to rotate" onClick={() => setFlipped(!flipped)}><span className={flipped ? 'logo-cube__inner logo-cube__inner--flipped' : 'logo-cube__inner'}><span className="logo-cube__face logo-cube__face--front"><img src={logoDj} alt="DJ cartoon logo" /></span><span className="logo-cube__face logo-cube__face--back">DJ</span></span></button>
+}
+
 function PageHeader() {
-  return <header className="site-header"><a className="wordmark" href="#top">DHANUNJAY</a><div className="header-tools"><SocialLinks /><AdminIcon /></div></header>
+  return <header className="site-header"><LogoCube /><div className="header-tools"><SocialLinks /><AdminIcon /></div></header>
 }
 
 function Certificates({ mode, onToggle, certificateCopy }) {
@@ -555,7 +561,7 @@ function App() {
 
       <main className={`portfolio huyml-home page-theme--${mode} ${isLoading ? 'portfolio--waiting' : ''}`}>
         <header className="site-header">
-          <a className="wordmark" href="#top" onClick={(e) => { e.preventDefault(); closeMenu(); setShowAbout(false); setShowContact(false); setShowContactPage(false); setSelectedWork(null); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>DHANUNJAY</a>
+                    <LogoCube />
           <nav className={menuOpen ? 'nav nav--open' : 'nav'} aria-label="Main navigation">
             <button className="nav__link-button" type="button" onClick={() => { closeMenu(); setShowAbout(true) }}>About</button>
             <button className="nav__link-button" type="button" onClick={() => scrollToId('work')}>Work</button>
