@@ -725,3 +725,109 @@ h1, h2 { font-family: 'Archivo', sans-serif; }
   .start-loader__person { display: none; }
   .start-loader__mark { left: 0; right: 0; bottom: auto; top: 50%; text-align: center; color: #fff; transform: translateY(-50%); }
 }
+
+/* Desktop photo in middle, pushed down, between REDDY and View My Work / Contact, centred, diagonal cut. Same photo, not changed. */
+.hero__top-photo { position: static; width: 640px; max-width: 90vw; margin: 24px auto 8px; left: auto; right: auto; top: auto; }
+.hero__top-photo img { width: 100%; height: auto; object-fit: contain; clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 88%); }
+.hero__top-photo figcaption { position: static; color: #000; background: none; margin-top: 10px; text-align: center; font-size: 14px; }
+/* Mobile unchanged, perfect as before: photo on top, above name, full width, white caption over it. */
+@media (max-width: 768px) {
+  .huyml-home .hero--huyml .hero__heading { display: flex; flex-direction: column; }
+  .hero__top-photo { order: -1; width: calc(100% + 40px); max-width: none; margin-left: -20px; margin-right: -20px; margin-top: 0; margin-bottom: 20px; position: relative; left: auto; right: auto; top: auto; }
+  .hero__top-photo img { clip-path: none; }
+  .hero__top-photo figcaption { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 36px 16px 14px; color: #fff; background: linear-gradient(transparent, rgba(0, 0, 0, 0.75)); }
+  .huyml-home .hero--huyml .hero__heading .eyebrow { order: 1; }
+  .huyml-home .hero--huyml .hero__heading h1 { order: 2; }
+  .huyml-home .hero--huyml .hero__heading .hero__role { order: 3; }
+  .huyml-home .hero--huyml .hero__heading .hero__intro { order: 4; }
+  .huyml-home .hero--huyml .hero__heading .hero__actions { order: 5; }
+}
+
+/* Desktop middle photo: no old absolute translateY(-50%) push, that would overlap REDDY. Static, in flow, below REDDY. */
+.hero__top-photo { animation: none; }
+
+@media (max-width: 768px) {
+  .hero__top-photo { animation: topPhotoCross 0.9s ease-out both; }
+}
+
+/* CORRECTION 2026-10-27: desktop photo NOT centre, right side only, beside REDDY. Heading is relative, so absolute right/top aligns with REDDY line. */
+.hero__top-photo { position: absolute; right: 0; left: auto; top: 170px; width: 400px; max-width: 90vw; margin: 0; animation: none; }
+.hero__top-photo img { width: 100%; height: auto; object-fit: contain; clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 88%); }
+.hero__top-photo figcaption { position: static; color: #000; background: none; margin-top: 10px; text-align: center; font-size: 14px; }
+@media (max-width: 1300px) {
+  .hero__top-photo { width: 320px; top: 150px; }
+}
+
+/* Mobile unchanged, perfect: photo on top, full width, above name, not right side. */
+@media (max-width: 768px) {
+  .huyml-home .hero--huyml .hero__heading { display: flex; flex-direction: column; }
+  .hero__top-photo { order: -1; position: relative; width: calc(100% + 40px); max-width: none; margin-left: -20px; margin-right: -20px; margin-top: 0; margin-bottom: 20px; left: auto; right: auto; top: auto; animation: topPhotoCross 0.9s ease-out both; }
+  .hero__top-photo img { clip-path: none; }
+  .hero__top-photo figcaption { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 36px 16px 14px; color: #fff; background: linear-gradient(transparent, rgba(0, 0, 0, 0.75)); }
+  .huyml-home .hero--huyml .hero__heading .eyebrow { order: 1; }
+  .huyml-home .hero--huyml .hero__heading h1 { order: 2; }
+  .huyml-home .hero--huyml .hero__heading .hero__role { order: 3; }
+  .huyml-home .hero--huyml .hero__heading .hero__intro { order: 4; }
+  .huyml-home .hero--huyml .hero__heading .hero__actions { order: 5; }
+}
+
+/* CORRECTION 2: desktop photo right side only, beside REDDY, not centre, not overlapping REDDY text. Left offset past centred name, top at REDDY line level. */
+.hero__top-photo { position: absolute; left: calc(50% + 320px); right: auto; top: 32%; width: 380px; max-width: none; margin: 0; animation: none; }
+.hero__top-photo img { width: 100%; height: auto; object-fit: contain; clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 88%); }
+.hero__top-photo figcaption { position: static; color: #000; background: none; margin-top: 10px; text-align: center; font-size: 14px; }
+@media (max-width: 1300px) {
+  .hero__top-photo { left: calc(50% + 260px); width: 320px; }
+}
+/* Mobile unchanged: photo on top, full width, above name. */
+@media (max-width: 768px) {
+  .hero__top-photo { order: -1; position: relative; width: calc(100% + 40px); max-width: none; margin-left: -20px; margin-right: -20px; margin-top: 0; margin-bottom: 20px; left: auto; right: auto; top: auto; animation: topPhotoCross 0.9s ease-out both; }
+  .hero__top-photo img { clip-path: none; }
+  .hero__top-photo figcaption { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 36px 16px 14px; color: #fff; background: linear-gradient(transparent, rgba(0, 0, 0, 0.75)); }
+}
+
+/* MAX width-wise only, not length-wise: width 380 -> 710, height fixed 160, same as before, not taller. Starts just right of REDDY, ends at right edge, REDDY not covered, faces intact via top crop (faces are at top of photo, bottom bodies are cropped, not faces). Caption white over photo, so it does not cover intro text below. */
+.hero__top-photo { position: absolute; left: calc(50% + 10px); right: auto; top: 32%; width: 710px; max-width: none; margin: 0; animation: none; }
+.hero__top-photo img { width: 100%; height: 160px; object-fit: cover; object-position: top center; clip-path: polygon(6% 0, 100% 0, 100% 100%, 0 92%); }
+.hero__top-photo figcaption { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 28px 12px 10px; color: #fff; background: linear-gradient(transparent, rgba(0, 0, 0, 0.75)); text-align: center; }
+@media (max-width: 1300px) {
+  .hero__top-photo { left: calc(50% + 10px); width: 560px; }
+  .hero__top-photo img { height: 150px; }
+}
+
+/* Mobile unchanged: photo on top, full width, above name. */
+@media (max-width: 768px) {
+  .hero__top-photo { order: -1; position: relative; width: calc(100% + 40px); max-width: none; margin-left: -20px; margin-right: -20px; margin-top: 0; margin-bottom: 20px; left: auto; right: auto; top: auto; animation: topPhotoCross 0.9s ease-out both; }
+  .hero__top-photo img { width: 100%; height: auto; object-fit: contain; clip-path: none; }
+  .hero__top-photo figcaption { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 36px 16px 14px; color: #fff; background: linear-gradient(transparent, rgba(0, 0, 0, 0.75)); }
+}
+
+/* 75% full photo: original photo 1200x554, 75% = 900x416, width AND length both increased, full photo, no crop, faces and bodies intact. Previous max-width version kept only 160px height out of 328px full height at 710px width, about 49%, cropped bottom bodies. Now full. */
+.hero__top-photo { position: static; width: 900px; max-width: 90vw; margin: 24px auto 8px; left: auto; right: auto; top: auto; animation: none; }
+.hero__top-photo img { width: 100%; height: auto; object-fit: contain; clip-path: none; }
+.hero__top-photo figcaption { position: static; color: #000; background: none; margin-top: 10px; text-align: center; font-size: 14px; }
+/* Mobile unchanged: photo on top, full width, above name. */
+@media (max-width: 768px) {
+  .huyml-home .hero--huyml .hero__heading { display: flex; flex-direction: column; }
+  .hero__top-photo { order: -1; position: relative; width: calc(100% + 40px); max-width: none; margin-left: -20px; margin-right: -20px; margin-top: 0; margin-bottom: 20px; left: auto; right: auto; top: auto; animation: topPhotoCross 0.9s ease-out both; }
+  .hero__top-photo img { clip-path: none; }
+  .hero__top-photo figcaption { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 36px 16px 14px; color: #fff; background: linear-gradient(transparent, rgba(0, 0, 0, 0.75)); }
+  .huyml-home .hero--huyml .hero__heading .eyebrow { order: 1; }
+  .huyml-home .hero--huyml .hero__heading h1 { order: 2; }
+  .huyml-home .hero--huyml .hero__heading .hero__role { order: 3; }
+  .huyml-home .hero--huyml .hero__heading .hero__intro { order: 4; }
+  .huyml-home .hero--huyml .hero__heading .hero__actions { order: 5; }
+}
+
+/* Right only, NOT centre: desktop photo right side, beside REDDY, full photo, width AND length both increased from 380 version, faces and bodies intact, no crop. */
+.hero__top-photo { position: absolute; left: calc(50% + 220px); right: auto; top: 29%; width: 500px; max-width: none; margin: 0; animation: none; }
+.hero__top-photo img { width: 100%; height: auto; object-fit: contain; clip-path: none; }
+.hero__top-photo figcaption { position: static; color: #000; background: none; margin-top: 10px; text-align: center; font-size: 14px; }
+@media (max-width: 1300px) {
+  .hero__top-photo { left: calc(50% + 180px); width: 420px; }
+}
+/* Mobile unchanged: photo on top, full width, above name. */
+@media (max-width: 768px) {
+  .hero__top-photo { order: -1; position: relative; width: calc(100% + 40px); max-width: none; margin-left: -20px; margin-right: -20px; margin-top: 0; margin-bottom: 20px; left: auto; right: auto; top: auto; animation: topPhotoCross 0.9s ease-out both; }
+  .hero__top-photo img { clip-path: none; }
+  .hero__top-photo figcaption { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 36px 16px 14px; color: #fff; background: linear-gradient(transparent, rgba(0, 0, 0, 0.75)); }
+}
