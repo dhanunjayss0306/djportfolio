@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import { supabase } from './lib/supabase'
 import profilePhoto from './assets/20251129_170634.jpg'
+import cartoonAvatar from './assets/cartoon-pushing-transparent.png'
 import heroPhoto from './assets/image.png'
 import quizCertificate from './assets/WhatsApp Image 2026-08-06 at 19.13.23.jpeg'
 import googleCertificate from './assets/Screenshot 2026-09-06 220049.png'
@@ -317,6 +318,109 @@ function ContactModal({ onClose }) {
   return <div className="modal" onClick={onClose}><div className="modal__panel" onClick={(event) => event.stopPropagation()}><button className="modal__close" type="button" onClick={onClose} aria-label="Close">×</button><h2>Contact<em>.</em></h2><p>Tell me what you&apos;re building.</p><a className="modal__email" href="mailto:dhanunjay905@gmail.com">dhanunjay905@gmail.com <span>↗</span></a><SocialLinks /><p className="modal__note"><a href="#contact" onClick={onClose}>Or use the form below ↓</a></p></div></div>
 }
 
+function ISTClock() {
+  const [now, setNow] = useState('')
+  useEffect(() => {
+    const tick = () => setNow(new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(new Date()))
+    tick()
+    const id = window.setInterval(tick, 1000)
+    return () => window.clearInterval(id)
+  }, [])
+  return <span className="ist-clock">Visakhapatnam, IST {now}</span>
+}
+
+function WorkCarousel({ work, onFocus, onOpen }) {
+  const sectionRef = useRef(null)
+  const [progress, setProgress] = useState(0)
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
+  const reduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const count = work.length
+  const focused = count ? Math.min(count - 1, Math.max(0, Math.round(progress * (count - 1)))) : 0
+  useEffect(() => { onFocus(focused) }, [focused, onFocus])
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+  useEffect(() => {
+    if (reduced || isMobile || !sectionRef.current) return
+    let raf = 0
+    const update = () => {
+      const section = sectionRef.current
+      if (!section) return
+      const total = section.offsetHeight - window.innerHeight
+      const p = total > 0 ? Math.min(1, Math.max(0, -section.getBoundingClientRect().top / total)) : 0
+      setProgress((current) => Math.abs(current - p) < 0.001 ? current : p)
+    }
+    const onScroll = () => { if (!raf) raf = window.requestAnimationFrame(() => { raf = 0; update() }) }
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [reduced, isMobile])
+  const scrollToProject = (index) => {
+    const section = sectionRef.current
+    if (!section || count < 2) return
+    const target = section.offsetTop + (index / (count - 1)) * (section.offsetHeight - window.innerHeight)
+    window.scrollTo({ top: target, behavior: reduced ? 'auto' : 'smooth' })
+  }
+  if (reduced || isMobile) {
+    return <section className="work-stacked" id="work" aria-label="My work"><p className="section-label">Selected work <span>— {String(count).padStart(2, '0')}</span></p><h2>My work.</h2>{work.map((item, index) => <article className="work-stacked__card" key={item.id}><span className="work-stacked__number">{String(index + 1).padStart(2, '0')}</span><p className="project__type">{item.status || 'Selected build'}</p><h3>{item.title}</h3><p>{item.description}</p><button type="button" onClick={() => onOpen(item)}>Open project <span>↗</span></button></article>)}</section>
+  }
+  const span = progress * (count - 1)
+  return (
+    <section className="work-carousel" id="work" ref={sectionRef} style={{ height: `${count * 120}vh` }} aria-label="My work">
+      <div className="work-carousel__sticky">
+        <p className="section-label">Selected work <span>— {String(count).padStart(2, '0')}</span></p>
+        <div className="work-carousel__stage">
+          {work.map((item, index) => {
+            const offset = index - span
+            const style = { transform: `translate(-50%, -50%) translateY(${offset * 52}vh) rotate(${offset * 9}deg) scale(${1 - Math.min(Math.abs(offset) * 0.07, 0.18)})`, opacity: Math.max(0, 1 - Math.abs(offset) * 0.55), zIndex: 10 - Math.round(Math.abs(offset)), pointerEvents: Math.abs(offset) < 1.5 ? 'auto' : 'none' }
+            return <article className={`work-card ${index === focused ? 'work-card--focused' : ''}`} key={item.id} style={style} onClick={() => { if (index === focused) onOpen(item); else scrollToProject(index) }} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') { if (index === focused) onOpen(item); else scrollToProject(index) } }} aria-label={`${item.title}, project ${index + 1} of ${count}`}>
+              <p className="project__type">{item.status || 'Selected build'}</p>
+              <h3>{item.title}</h3>
+              <hr />
+              <p>{item.description}</p>
+              {item.image_url ? <img src={item.image_url} alt={item.title} /> : <div className="work-card__placeholder" aria-hidden="true">{String(index + 1).padStart(2, '0')}</div>}
+              <div className="work-card__links" onClick={(e) => e.stopPropagation()}>{item.github_url && <a href={item.github_url} target="_blank" rel="noreferrer">GitHub <span>↗</span></a>}{item.live_url && <a href={item.live_url} target="_blank" rel="noreferrer">Open project <span>↗</span></a>}</div>
+            </article>
+          })}
+        </div>
+        <div className="work-carousel__list" aria-label="Project list">{work.map((item, index) => <button key={item.id} type="button" className={index === focused ? 'is-focused' : ''} onClick={() => scrollToProject(index)}>{String(index + 1).padStart(2, '0')} {item.title}</button>)}</div>
+      </div>
+    </section>
+  )
+}
+
+function WorkDetail({ item, onBack }) {
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onBack() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onBack])
+  return <div className="work-detail" role="dialog" aria-label={`${item.title} details`}><button className="work-detail__back" type="button" onClick={onBack}>← Back to work</button><h2 className="work-detail__title">{item.title}</h2><div className="work-detail__grid"><aside className="work-detail__meta"><p><span>About</span>{item.description}</p><p><span>Role / Type</span>{item.status || 'Selected build'}</p><p><span>Links</span>{item.github_url ? <a href={item.github_url} target="_blank" rel="noreferrer">GitHub ↗</a> : '—'}{item.live_url ? <a href={item.live_url} target="_blank" rel="noreferrer">Visit site ↗</a> : ''}</p></aside><div className="work-detail__main">{item.image_url ? <img src={item.image_url} alt={item.title} /> : <div className="work-card__placeholder work-card__placeholder--large" aria-hidden="true">{item.title}</div>}<p>{item.description}</p><div className="work-card__links">{item.github_url && <a href={item.github_url} target="_blank" rel="noreferrer">GitHub <span>↗</span></a>}{item.live_url && <a href={item.live_url} target="_blank" rel="noreferrer">Visit site <span>↗</span></a>}</div></div></div></div>
+}
+
+function HomeCertificates({ certificateCopy }) {
+  const [selected, setSelected] = useState(null)
+  useEffect(() => {
+    if (selected === null) return
+    const onKey = (e) => { if (e.key === 'Escape') setSelected(null) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [selected])
+  return <section className="home-certificates" id="home-certificates"><p className="section-label">Selected certificates <span>— {String(certificateCopy.length).padStart(2, '0')}</span></p><h2>Certificates.</h2><div className="home-certificates__grid">{certificateCopy.map((cert, index) => <article key={cert.id || cert.title} className="home-certificate" onClick={() => setSelected(index)} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') setSelected(index) }}><img src={cert.image} alt={cert.alt || cert.title} /><p>{cert.title}</p></article>)}</div>{selected !== null && <div className="modal" onClick={() => setSelected(null)}><div className="modal__panel" onClick={(e) => e.stopPropagation()}><button className="modal__close" type="button" onClick={() => setSelected(null)} aria-label="Close">×</button><h2>{certificateCopy[selected].title}</h2><img src={certificateCopy[selected].image} alt={certificateCopy[selected].alt || certificateCopy[selected].title} /></div></div>}</section>
+}
+
+function HomeJourney({ journey }) {
+  const stages = [
+    { title: journey.schoolTitle, subtitle: journey.schoolSubtitle, text: journey.schoolText, image: journey.schoolImage, alt: 'DePaul School campus in Visakhapatnam', link: ['Visit DePaul School', 'https://depaulsvizag.com'] },
+    { title: journey.collegeTitle, subtitle: journey.collegeSubtitle, text: journey.collegeText, image: journey.collegeImage, alt: 'Mayuri Bhavan, Sri Chaitanya College in Vijayawada', link: null },
+    { title: journey.universityTitle, subtitle: journey.universitySubtitle, text: journey.universityText, image: journey.universityImage, alt: 'Andhra University', link: ['Visit Andhra University', 'https://www.andhrauniversity.edu.in'] },
+    { title: journey.iitTitle, subtitle: journey.iitSubtitle, text: journey.iitText, image: journey.iitImage, alt: 'Indian Institute of Technology Madras campus sign', link: ['Visit IIT Madras BS program', 'https://study.iitm.ac.in/ds/'] },
+  ]
+  return <section className="home-journey" id="home-journey"><p className="section-label">Where I studied <span>— 04</span></p><h2>My journey.</h2><p className="home-journey__intro">{journey.intro}</p><div className="home-journey__timeline">{stages.map((stage, index) => <article key={stage.title} className="home-journey__step"><span className="home-journey__number">{String(index + 1).padStart(2, '0')}</span><div><h3>{stage.title} <em>{stage.subtitle}</em></h3><p>{stage.text}</p>{stage.link && <a href={stage.link[1]} target="_blank" rel="noreferrer">{stage.link[0]} <span>↗</span></a>}</div>{stage.image && <img src={stage.image} alt={stage.alt} />}</article>)}</div></section>
+}
+
 function App() {
   const [isLoading, setIsLoading] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -327,14 +431,36 @@ function App() {
   const [showAdmin, setShowAdmin] = useState(() => window.location.hash === '#admin')
   const [showAbout, setShowAbout] = useState(false)
   const [showContact, setShowContact] = useState(false)
+  const [focusedWork, setFocusedWork] = useState(0)
+  const [selectedWork, setSelectedWork] = useState(null)
+  const [detailTransition, setDetailTransition] = useState(false)
+  const [loaderCount, setLoaderCount] = useState(0)
+  const [showMeta, setShowMeta] = useState(false)
   const [journey, setJourney] = useState(() => ({ ...defaultJourney, ...readAdminStore('portfolio-journey', {}) }))
   const [certificateCopy, setCertificateCopy] = useState(() => readAdminStore('portfolio-certificates', defaultCertificateCopy))
   const [work, setWork] = useState(() => readAdminStore('portfolio-work', defaultWork))
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setIsLoading(false), 1500)
-    return () => window.clearTimeout(timer)
+    const timer = window.setTimeout(() => setIsLoading(false), 1800)
+    const counter = window.setInterval(() => setLoaderCount((c) => Math.min(100, c + 4)), 60)
+    return () => { window.clearTimeout(timer); window.clearInterval(counter) }
   }, [])
+
+  useEffect(() => {
+    const onScroll = () => {
+      const el = document.getElementById('work')
+      if (!el) { setShowMeta(false); return }
+      const rect = el.getBoundingClientRect()
+      setShowMeta(rect.top < window.innerHeight * 0.8 && rect.bottom > 0)
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [isLoading])
+
+  const scrollToId = (id) => { closeMenu(); document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }
+  const openWork = (item) => { setDetailTransition(true); window.setTimeout(() => { setSelectedWork(item); setDetailTransition(false) }, 650) }
+  const closeWork = () => { setSelectedWork(null); document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' }) }
 
   useEffect(() => {
     document.documentElement.dataset.theme = mode
@@ -378,57 +504,48 @@ function App() {
 
   return (
     <>
-      <div className={`loader ${isLoading ? '' : 'loader--done'}`} aria-hidden="true">
+      <div className={`loader loader--huyml ${isLoading ? '' : 'loader--done'}`} aria-hidden="true">
+        <img className="loader__person" src={cartoonAvatar} alt="" />
         <div className="loader__mark">DHANUNJAY<br />REDDY</div>
+        <div className="loader__counter">{loaderCount}</div>
         <div className="loader__line"><i /></div>
         <span className="loader__caption">PORTFOLIO — © 2026</span>
       </div>
+      {detailTransition && <div className="detail-transition" aria-hidden="true"><span>LOADING PROJECT</span></div>}
+      {selectedWork && <WorkDetail item={selectedWork} onBack={closeWork} />}
 
-      <main className={`portfolio page-theme--${mode} ${isLoading ? 'portfolio--waiting' : ''}`}>
+      <div className="huyml-rail" aria-hidden="true"><span>DHANUNJAY © 2026</span><span>Visakhapatnam, India</span></div>
+      <div className="huyml-bottombar" aria-hidden="true"><span>Scroll</span><span>Selected work {String(focusedWork + 1).padStart(2, '0')} / {String(work.length).padStart(2, '0')}</span><span className="huyml-bottombar__numeral">{String(focusedWork + 1).padStart(2, '0')}</span></div>
+      {showMeta && work[focusedWork] && <div className="huyml-meta" aria-hidden="true"><p><span>Role / Type</span>{work[focusedWork].status || 'Selected build'}</p><p><span>Project</span>{work[focusedWork].title}</p><p>{work[focusedWork].github_url && <a href={work[focusedWork].github_url} target="_blank" rel="noreferrer">GitHub ↗</a>} {work[focusedWork].live_url && <a href={work[focusedWork].live_url} target="_blank" rel="noreferrer">Open project ↗</a>}</p></div>}
+
+      <main className={`portfolio huyml-home page-theme--${mode} ${isLoading ? 'portfolio--waiting' : ''}`}>
         <header className="site-header">
           <a className="wordmark" href="#top" onClick={closeMenu}>DHANUNJAY</a>
           <nav className={menuOpen ? 'nav nav--open' : 'nav'} aria-label="Main navigation">
             <button className="nav__link-button" type="button" onClick={() => { closeMenu(); setShowAbout(true) }}>About</button>
-            <a href="#skills" onClick={closeMenu}>Skills</a>
-            <a href="#work" onClick={closeMenu}>Build</a>
-            <a href="#my-work" onClick={closeMenu}>My Work <span className="arrow">↗</span></a>
-            <a href="#certificates" onClick={closeMenu}>Certificates <span className="arrow">↗</span></a>
-            <a href="#journey" onClick={closeMenu}>My Journey <span className="arrow">↗</span></a>
+            <button className="nav__link-button" type="button" onClick={() => scrollToId('work')}>Work</button>
+            <button className="nav__link-button" type="button" onClick={() => scrollToId('home-certificates')}>Certificates</button>
+            <button className="nav__link-button" type="button" onClick={() => scrollToId('home-journey')}>Journey</button>
             <button className="nav__link-button" type="button" onClick={() => { closeMenu(); setShowContact(true) }}>Contact</button>
           </nav>
-          <div className="header-tools"><SocialLinks /><AdminIcon /></div>
+          <div className="header-tools"><ISTClock /><SocialLinks /><AdminIcon /></div>
           <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Toggle navigation"><span /><span /></button>
         </header>
 
-        <section className="hero" id="top">
-          <div className="hero__aside">B.Tech CSE (Core)<br />Software developer<br /><span>Andhra University / 2029</span></div>
-          <div className="hero__heading"><p className="eyebrow">Hello, I&apos;m Dhanunjay.</p><h1>I build <em>bright</em><br />ideas into <span>products.</span></h1><p className="hero__role">AI & product builder · creative technologist</p></div>
-          <figure className="hero__portrait"><img src={heroPhoto} alt="Dhanunjay at a university event" /><figcaption>the person behind the build</figcaption></figure>
-          <div className="hero__stamp">✳<br /><small>curious mind<br />serious maker</small></div>
-          <a className="scroll-cue" href="#about"><span>Scroll to explore</span><b>↓</b></a>
+        <section className="hero hero--huyml" id="top">
+          <div className="hero__heading"><p className="eyebrow">Hello, I&apos;m Dhanunjay.</p><h1>DHANUNJAY<br />REDDY</h1><p className="hero__role">AI &amp; product builder · 2nd-year B.Tech CSE, Andhra University · IIT Madras BS</p><p className="hero__intro">I turn ambitious ideas into polished, real-world experiences. I&apos;m exploring the space where AI, product thinking, and expressive interfaces meet, and I like shipping things that feel as good to use as they are clever under the hood.</p><div className="hero__actions"><button type="button" onClick={() => scrollToId('work')}>View My Work ↓</button><button type="button" onClick={() => { setShowContact(true) }}>Contact ↗</button></div></div>
+          <figure className="hero__portrait"><img src={profilePhoto} alt="Dhanunjay in Visakhapatnam" /><figcaption>creative technologist · visakhapatnam, india</figcaption></figure>
+          <div className="hero__aside">B.Tech CSE (Core)<br />Andhra University / 2029<br /><span>CGPA 8.44 · 2nd year</span></div>
+          <a className="scroll-cue" href="#work" onClick={(e) => { e.preventDefault(); scrollToId('work') }}><span>Scroll to explore</span><b>↓</b></a>
         </section>
 
-        <section className="intro" id="about">
-          <p className="section-label">A little context <span>— 01</span></p>
-          <div className="intro__copy">
-            <div className="intro__lead-wrap"><p className="intro__lead">I turn ambitious ideas into polished, real-world experiences.</p><figure className="portrait-card"><img src={profilePhoto} alt="Dhanunjay at a university event in Visakhapatnam" /><figcaption>creative technologist<br />visakhapatnam, india</figcaption></figure></div>
-            <div className="intro__details"><p>I&apos;m a 2nd-year Computer Science student at Andhra University College of Engineering, exploring the space where AI, product thinking, and expressive interfaces meet.</p><p>I like shipping things that feel as good to use as they are clever under the hood.</p></div>
-          </div>
-        </section>
+        <section className="skills-strip" aria-label="Skills"><p className="section-label">What I work with</p><div className="skills-strip__list">{skills.map(([category, items]) => <div key={category}><h3>{category}</h3><p>{items}</p></div>)}</div></section>
 
-        <section className="skills" id="skills">
-          <div className="work__header"><p className="section-label">What I work with <span>— 02</span></p><p className="work__note">Tools for turning<br />ideas into momentum.</p></div>
-          <div className="skills__list">{skills.map(([category, items], index) => <div className="skill-row" key={category}><span className="skill-row__number">0{index + 1}</span><h2>{category}</h2><p>{items}</p></div>)}</div>
-        </section>
+        <WorkCarousel work={work} onFocus={setFocusedWork} onOpen={openWork} />
 
-        <section className="work" id="work">
-          <div className="work__header"><p className="section-label">Featured build <span>— 03</span></p><p className="work__note">Smart India Hackathon<br />2026 / in progress</p></div>
-          <article className="project project--coral"><div className="project__visual"><div className="project__orb" /><div className="project__label">plan the<br />journey</div><span className="project__number">01</span></div><div className="project__info"><p className="project__type">Virun / YatraSetu</p><h2>AI plans the journey. Locals make it authentic.</h2><p>An AI-powered tourism platform combining personalized itinerary generation with verified local expertise.</p><div className="project__tags"><span>AI product</span><span>Tourism</span><span>Hackathon 2026</span></div><div className="project__links"><a href="https://dhanunjayss0306.github.io/virun-pitch/" target="_blank" rel="noreferrer">Open pitch <span>↗</span></a></div></div></article>
-          <div className="work__header"><p className="section-label">Selected work <span>— 03</span></p><p className="work__note">Gallery</p></div>
-          <div className="gallery">{work.map((item, index) => <article className="gallery-row" key={item.id}><div className="gallery-row__number">{String(index + 1).padStart(2, '0')}</div><div><p className="project__type">{item.status || 'Selected build'}</p><h2>{item.title}</h2><p>{item.description}</p></div><div className="gallery-row__links">{item.github_url && <a href={item.github_url} target="_blank" rel="noreferrer">GitHub <span>↗</span></a>}{item.live_url && <a href={item.live_url} target="_blank" rel="noreferrer">Open project <span>↗</span></a>}</div></article>)}</div>
-        </section>
+        <HomeCertificates certificateCopy={certificateCopy} />
 
-        <section className="education"><p className="section-label">Currently learning <span>— 04</span></p><div className="education__grid"><div className="education__year">2025<br /><em>→</em><br />2029</div><div><p className="education__degree">Bachelor of Technology<br />Computer Science & Engineering (Core)</p><p className="education__school">Andhra University College of Engineering<br />Visakhapatnam</p></div><div className="education__score"><strong>8.44</strong><span>current CGPA / 10</span><small>2nd year</small></div></div></section>
+        <HomeJourney journey={journey} />
 
         <ContactForm />
 
