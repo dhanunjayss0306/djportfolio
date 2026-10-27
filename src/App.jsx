@@ -441,6 +441,8 @@ function App() {
   const [showAdmin, setShowAdmin] = useState(() => window.location.hash === '#admin')
   const [showAbout, setShowAbout] = useState(false)
   const [showContact, setShowContact] = useState(false)
+  const [showContactPage, setShowContactPage] = useState(false)
+  const [transitionText, setTransitionText] = useState('LOADING PROJECT')
   const [focusedWork, setFocusedWork] = useState(0)
   const [selectedWork, setSelectedWork] = useState(null)
   const [detailTransition, setDetailTransition] = useState(false)
@@ -462,8 +464,28 @@ function App() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  const openPageOrScroll = (page) => {
+    const isMobile = window.innerWidth <= 768
+    if (!isMobile) {
+      if (page === 'certificates') scrollToId('home-certificates')
+      else if (page === 'journey') scrollToId('home-journey')
+      else if (page === 'contact') { closeMenu(); setShowContact(true) }
+      return
+    }
+    setMenuOpen(false)
+    setTransitionText('OPENING PAGE')
+    setDetailTransition(true)
+    window.setTimeout(() => {
+      setDetailTransition(false)
+      setTransitionText('LOADING PROJECT')
+      if (page === 'certificates') setShowCertificates(true)
+      else if (page === 'journey') setShowJourney(true)
+      else if (page === 'contact') setShowContactPage(true)
+      window.scrollTo({ top: 0, behavior: 'auto' })
+    }, 650)
+  }
   const scrollToId = (id) => { closeMenu(); document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }
-  const openWork = (item) => { setSelectedWork(item); setDetailTransition(true); window.setTimeout(() => { setDetailTransition(false) }, 650) }
+  const openWork = (item) => { setSelectedWork(item); setTransitionText('LOADING PROJECT'); setDetailTransition(true); window.setTimeout(() => { setDetailTransition(false) }, 650) }
   const closeWork = () => { setSelectedWork(null); document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' }) }
 
   useEffect(() => {
@@ -506,29 +528,33 @@ function App() {
   if (showJourney) return <Journey mode={mode} onToggle={toggleTheme} journey={journey} />
   if (showWork) return <MyWork mode={mode} onToggle={toggleTheme} work={work} />
   if (showAdmin) return <AdminPortal mode={mode} onToggle={toggleTheme} journey={journey} setJourney={setJourney} certificateCopy={certificateCopy} setCertificateCopy={setCertificateCopy} />
+  if (showContactPage) return <main className={`contact-page page-theme--${mode}`}><PageHeader mode={mode} onToggle={onToggle} /><a className="certificates-back certificates-back--floating" href="#top" onClick={(e) => { e.preventDefault(); setShowContactPage(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }}><span>←</span> Back to portfolio</a><ContactForm /></main>
 
   return (
     <>
-      {detailTransition && <div className="detail-transition" aria-hidden="true"><span>LOADING PROJECT</span></div>}
+      {detailTransition && <div className="detail-transition" aria-hidden="true"><span>{transitionText}</span></div>}
       {selectedWork && <WorkDetail item={selectedWork} onBack={closeWork} />}
 
-      <button className={logoSpinning ? 'huyml-rail huyml-rail--spinning' : 'huyml-rail'} type="button" aria-label="Go to home" onClick={() => { setLogoSpinning(true); window.setTimeout(() => { setLogoSpinning(false); closeMenu(); setShowCertificates(false); setShowJourney(false); setShowWork(false); setShowAdmin(false); setShowAbout(false); setShowContact(false); setSelectedWork(null); window.scrollTo({ top: 0, behavior: 'smooth' }) }, 600) }}><span className="huyml-rail__logo">D<br />H<br />A<br />N<br />U<br />N<br />J<br />A<br />Y</span><span>Visakhapatnam, India</span></button>
+      <button className={logoSpinning ? 'huyml-rail huyml-rail--spinning' : 'huyml-rail'} type="button" aria-label="Go to home" onClick={() => { setLogoSpinning(true); window.setTimeout(() => { setLogoSpinning(false); closeMenu(); setShowCertificates(false); setShowJourney(false); setShowWork(false); setShowAdmin(false); setShowAbout(false); setShowContact(false); setShowContactPage(false); setSelectedWork(null); window.scrollTo({ top: 0, behavior: 'smooth' }) }, 600) }}><span className="huyml-rail__logo">D<br />H<br />A<br />N<br />U<br />N<br />J<br />A<br />Y</span><span>Visakhapatnam, India</span></button>
       {showMeta && <div className="huyml-bottombar" aria-hidden="true"><span>Scroll</span><span>Selected work {String(focusedWork + 1).padStart(2, '0')} / {String(work.length).padStart(2, '0')}</span><span className="huyml-bottombar__numeral">{String(focusedWork + 1).padStart(2, '0')}</span></div>}
       {showMeta && work[focusedWork] && <div className="huyml-meta" aria-hidden="true"><p><span>Role / Type</span>{work[focusedWork].status || 'Selected build'}</p><p><span>Project</span>{work[focusedWork].title}</p><p>{work[focusedWork].github_url && <a href={work[focusedWork].github_url} target="_blank" rel="noreferrer">GitHub ↗</a>} {work[focusedWork].live_url && <a href={work[focusedWork].live_url} target="_blank" rel="noreferrer">Open project ↗</a>}</p></div>}
 
       <main className={`portfolio huyml-home page-theme--${mode} ${isLoading ? 'portfolio--waiting' : ''}`}>
         <header className="site-header">
-          <a className="wordmark" href="#top" onClick={(e) => { e.preventDefault(); closeMenu(); setShowAbout(false); setShowContact(false); setSelectedWork(null); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>DHANUNJAY</a>
+          <a className="wordmark" href="#top" onClick={(e) => { e.preventDefault(); closeMenu(); setShowAbout(false); setShowContact(false); setShowContactPage(false); setSelectedWork(null); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>DHANUNJAY</a>
           <nav className={menuOpen ? 'nav nav--open' : 'nav'} aria-label="Main navigation">
             <button className="nav__link-button" type="button" onClick={() => { closeMenu(); setShowAbout(true) }}>About</button>
             <button className="nav__link-button" type="button" onClick={() => scrollToId('work')}>Work</button>
+            <button className="nav__link-button" type="button" onClick={() => openPageOrScroll('certificates')}>Certificates</button>
+            <button className="nav__link-button" type="button" onClick={() => openPageOrScroll('journey')}>Journey</button>
+            <button className="nav__link-button" type="button" onClick={() => openPageOrScroll('contact')}>Contact</button>
           </nav>
           <div className="header-tools"><ISTClock /><SocialLinks /><AdminIcon /></div>
           <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Toggle navigation"><span /><span /></button>
         </header>
 
         <section className="hero hero--huyml" id="top">
-          <figure className="hero__top-photo"><img src={heroTopPhoto} alt="Dhanunjay Reddy in a group photo" /><figcaption>Dhanunjay Reddy · Visakhapatnam, India</figcaption></figure>
+          <figure className="hero__top-photo"><img src={heroTopPhoto} alt="Dhanunjay Reddy in a group photo" /><figcaption>A memorable photo with Mr. Sid Ahmed and my best friend — had a good time</figcaption></figure>
           <div className="hero__heading"><p className="eyebrow">Hello, I&apos;m</p><h1>DHANUNJAY<br />REDDY</h1><p className="hero__role">AI &amp; product builder · 2nd-year B.Tech CSE, Andhra University · IIT Madras BS</p><p className="hero__intro">I turn ambitious ideas into polished, real-world experiences. I&apos;m exploring the space where AI, product thinking, and expressive interfaces meet, and I like shipping things that feel as good to use as they are clever under the hood.</p><div className="hero__actions"><button type="button" onClick={() => scrollToId('work')}>View My Work ↓</button><button type="button" onClick={() => { setShowContact(true) }}>Contact ↗</button></div></div>
           <figure className="hero__portrait"><img src={profilePhoto} alt="Dhanunjay in Visakhapatnam" /><figcaption>creative technologist · visakhapatnam, india</figcaption></figure>
           <div className="hero__aside">B.Tech CSE (Core)<br />Andhra University / 2029<br /><span>CGPA 8.44 · 2nd year</span></div>

@@ -621,9 +621,9 @@ h1, h2 { font-family: 'Archivo', sans-serif; }
   .hero__top-photo { animation: topPhotoPushMobile 0.9s ease-out both; }
 }
 
-/* Test fix: no animation on mobile top photo, so it cannot be stuck invisible. */
+/* Opening push animation restored on mobile: top photo pushes in on load. */
 @media (max-width: 768px) {
-  .hero__top-photo, .hero__top-photo img { animation: none !important; opacity: 1 !important; }
+  .hero__top-photo { animation: topPhotoPushMobile 0.9s ease-out both; }
 }
 
 /* Mobile top photo robust: figure is first in DOM, so it is above the name without flex-order tricks. */
@@ -631,3 +631,26 @@ h1, h2 { font-family: 'Archivo', sans-serif; }
   .huyml-home .hero--huyml .hero__heading { display: block; }
   .hero__top-photo { position: relative; width: 100%; margin: 0 0 20px; }
 }
+
+/* Top ribbon colors, as requested: desktop white links, mobile black links, with readable backgrounds. */
+.huyml-home .site-header { background: #181818; border-bottom: 1px solid #181818; }
+.huyml-home .site-header .wordmark, .huyml-home .nav a, .huyml-home .nav__link-button { color: #fff; }
+.huyml-home .site-header .wordmark:hover, .huyml-home .nav__link-button:hover { color: #ff4949; }
+.huyml-home .social-links a { color: #ccc; }
+.huyml-home .social-links a:hover { color: #ff4949; }
+.huyml-home .menu-button span { background: #fff; }
+.huyml-home .ist-clock { color: #aaa; }
+.huyml-home .admin-icon { color: #ccc; }
+.huyml-home .admin-icon:hover { color: #ff4949; }
+@media (max-width: 900px) {
+  .huyml-home .site-header { background: #f5f5f5; border-bottom: 1px solid #ddd; }
+  .huyml-home .site-header .wordmark, .huyml-home .nav a, .huyml-home .nav__link-button { color: #000; }
+  .huyml-home .site-header .wordmark:hover, .huyml-home .nav__link-button:hover { color: #ff4949; }
+  .huyml-home .nav { background: #f5f5f5; border-bottom: 1px solid #ddd; }
+  .huyml-home .menu-button span { background: #000; }
+  .huyml-home .ist-clock { color: #8a8a8a; }
+  .huyml-home .social-links a { color: #8a8a8a; }
+  .huyml-home .admin-icon { color: #8a8a8a; }
+}
+/* Top photo fits: full image, no cropping, caption fits below on desktop and over the photo on mobile. */
+.hero__top-photo img { object-fit: contain; width: 100%; height: auto; }
