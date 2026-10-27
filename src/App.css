@@ -841,3 +841,12 @@ h1, h2 { font-family: 'Archivo', sans-serif; }
 
 /* Photo pushed down: caption must stay ON photo, not below it, otherwise skills card covers it. Caption white over bottom of photo, faces at top stay clear. */
 .hero__top-photo figcaption { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 36px 16px 14px; color: #fff; background: linear-gradient(transparent, rgba(0, 0, 0, 0.75)); font-size: 14px; text-align: center; }
+
+/* Left portrait photo: slight right, set in middle of its left area, not stuck to left edge. */
+.huyml-home .hero--huyml .hero__portrait { justify-self: center; text-align: center; }
+.huyml-home .hero--huyml .hero__portrait img { margin: 0 auto; }
+.huyml-home .hero--huyml .hero__portrait figcaption { text-align: center; }
+/* Certificate modal: page bigger, certificate smaller, full certificate fits, no horizontal scroll, no cut. */
+.modal__panel--certificate { max-width: 1100px; width: 92vw; max-height: 92vh; padding: 24px; overflow: hidden; }
+.modal__panel--certificate h2 { font-size: 28px; margin: 0 0 16px; padding-right: 40px; }
+.modal__panel--certificate img { width: 100%; height: auto; max-height: calc(92vh - 110px); object-fit: contain; display: block; }
