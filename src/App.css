@@ -864,3 +864,36 @@ h1, h2 { font-family: 'Archivo', sans-serif; }
 .admin-add:hover { background: #000; color: #fff; }
 .admin-remove { background: none; border: 1px solid #ddd; color: #c00; padding: 8px 12px; font-weight: 700; cursor: pointer; margin-top: 12px; }
 .admin-remove:hover { border-color: #c00; }
+
+/* Project detail sections: flat, readable, same style as the rest of the site. */
+.work-detail__sections { margin-top: 32px; border-top: 1px solid #ddd; padding-top: 24px; text-align: left; }
+.work-detail__sections section { margin-bottom: 24px; }
+.work-detail__sections h3 { font-family: 'Archivo', sans-serif; font-size: 20px; font-weight: 900; margin: 0 0 8px; color: #000; }
+.work-detail__sections p { font-size: 16px; line-height: 1.6; margin: 0; color: #222; }
+.work-detail__sections ul { margin: 8px 0 0 20px; padding: 0; font-size: 16px; line-height: 1.6; color: #222; }
+.work-detail__sections li { margin-bottom: 6px; }
+
+/* Scramble mode: everything below the header breaks, falls down, and turns white. Header stays usable so Non-scramble / Refresh always work. */
+.portfolio--scrambled { background: #fff !important; }
+.portfolio--scrambled .hero--huyml, .portfolio--scrambled .work-carousel, .portfolio--scrambled .home-certificates, .portfolio--scrambled .home-journey, .portfolio--scrambled .contact-section, .portfolio--scrambled .footer { background: #fff !important; animation: scrambleFall 0.9s ease forwards; }
+.portfolio--scrambled .hero__heading { transform: rotate(-4deg) translate(30px, 90px) !important; }
+.portfolio--scrambled .hero__portrait { transform: rotate(9deg) translate(-40px, 140px) !important; }
+.portfolio--scrambled .hero__top-photo { transform: rotate(-12deg) translate(60px, 180px) !important; }
+.portfolio--scrambled .skills-strip--hero { transform: rotate(6deg) translate(-50px, 120px) !important; }
+.portfolio--scrambled .work-card { transform: rotate(14deg) translate(70px, 160px) !important; opacity: 0.85 !important; }
+.portfolio--scrambled .work-card:nth-child(2n) { transform: rotate(-11deg) translate(-80px, 220px) !important; }
+.portfolio--scrambled .home-certificate { transform: rotate(-7deg) translate(40px, 100px) !important; }
+.portfolio--scrambled .home-certificate:nth-child(2n) { transform: rotate(10deg) translate(-60px, 160px) !important; }
+.portfolio--scrambled .home-journey__step { transform: rotate(5deg) translate(50px, 110px) !important; }
+.portfolio--scrambled .home-journey__step:nth-child(2n) { transform: rotate(-8deg) translate(-70px, 150px) !important; }
+.portfolio--scrambled h1, .portfolio--scrambled h2, .portfolio--scrambled h3 { transform: rotate(-2deg); }
+@keyframes scrambleFall { from { transform: translateY(0); } to { transform: translateY(40px); } }
+.nav__link-button--scramble { color: #ff4949 !important; font-weight: 900; }
+.scramble-refresh { position: fixed; right: 20px; bottom: 20px; z-index: 500; background: #ff4949; color: #fff; border: 1px solid #000; padding: 14px 20px; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
+
+/* Admin: right edge complete black, no white strip from body or overflow. */
+body:has(.admin-page) { background: #000; }
+#root:has(.admin-page) { background: #000; }
+.admin-page { background: #000 !important; width: 100%; overflow-x: hidden; }
+.admin-page .admin-login, .admin-page .admin-shell { background: #000; }
+.admin-page .site-header { background: #000; }

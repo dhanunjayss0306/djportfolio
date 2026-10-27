@@ -19,6 +19,7 @@ import workSapss from './assets/work-sapss.jpg'
 import workHackerrank from './assets/work-hackerrank.jpg'
 import workGlobaltap from './assets/work-globaltap.jpg'
 import logoDj from './assets/logo-dj.jpg'
+import { projectDetails } from './projectDetails.js'
 import heroPhoto from './assets/image.png'
 import quizCertificate from './assets/WhatsApp Image 2026-08-06 at 19.13.23.jpeg'
 import googleCertificate from './assets/Screenshot 2026-09-06 220049.png'
@@ -71,15 +72,15 @@ const defaultJourney = {
 const defaultCertificateCopy = certificates.map(([title, image, alt], index) => ({ id: `certificate-${index + 1}`, title, image, alt }))
 
 const defaultWork = [
-  { id: 'portfolio', title: 'Dhanunjay Reddy Portfolio', description: 'A playful portfolio and content system for documenting AI, product, and creative technology work.', github_url: 'https://github.com/dhanunjayss0306/djportfolio', live_url: '', image_url: workPortfolio, sort_order: 0 },
+  { id: 'portfolio', title: 'Dhanunjay Reddy Portfolio', description: 'A playful portfolio and content system for documenting AI, product, and creative technology work.', github_url: 'https://github.com/dhanunjayss0306/djportfolio', live_url: 'https://djportfolio1.vercel.app', image_url: workPortfolio, sort_order: 0 },
   { id: 'sasyasakhi', title: 'SasyaSakhi', description: 'AI farming assistant for Indian farmers, in Telugu and English: soil report, crop suitability for paddy, cotton and chilli, fertilizer doses, weather and crop calendar. Team Footprints, AgriTech Summit 2026.', github_url: 'https://github.com/dhanunjayss0306/SasyaSakhi', live_url: '', image_url: workSasyasakhi, sort_order: 1, status: 'Hackathon prototype' },
   { id: 'virun', title: 'Virun', description: 'AI-powered tourism marketplace combining personalized itineraries with verified local expertise.', github_url: 'https://github.com/KinGMssN/virun', live_url: 'https://kingmssn.github.io/virun/', image_url: workVirun, sort_order: 2, status: 'Hackathon build' },
   { id: 'vr-fitness-gym', title: 'VR Fitness Gym', description: 'Website for VR Fitness Gym in Visakhapatnam, with static, dynamic and dynamic-plus-AI options explained for the gym owner.', github_url: '', live_url: '', image_url: workVrgym, sort_order: 3, status: 'Client website' },
-  { id: 'persona', title: 'Persona', description: 'Personal reminder and planner app: calendar, voice-to-calendar, journal, reminders, group tasks and a personal AI from your own data.', github_url: '', live_url: 'https://dhanunjayss0306.github.io/Persona-/', image_url: workPersona, sort_order: 4, status: 'Fullstack app' },
+  { id: 'persona', title: 'Persona', description: 'Personal reminder and planner app: calendar, voice-to-calendar, journal, reminders, group tasks and a personal AI from your own data.', github_url: 'https://github.com/dhanunjayss0306/Persona-', live_url: 'https://dhanunjayss0306.github.io/Persona-/', image_url: workPersona, sort_order: 4, status: 'Fullstack app' },
   { id: 'global-tap', title: 'Global Tap', description: 'Fintech and travel app build, with backend and frontend work in progress.', github_url: 'https://github.com/amruthalakshmipeddireddy-max/Global-Tap', live_url: '', image_url: workGlobaltap, sort_order: 5, status: 'In progress' },
-  { id: 'quantum-routing', title: 'Quantum Geometry Routing', description: 'Hackathon build for quantum geometry routing, with a live frontend and backend.', github_url: '', live_url: 'https://quantum-geometry-routing.pages.dev', image_url: workQuantum, sort_order: 6, status: 'Hackathon build' },
+  { id: 'quantum-routing', title: 'Quantum Geometry Routing', description: 'Hackathon build for quantum geometry routing, with a live frontend and backend.', github_url: 'https://github.com/dhanunjayss0306/quantum-geometry-routing', live_url: 'https://quantum-geometry-routing.pages.dev', image_url: workQuantum, sort_order: 6, status: 'Hackathon build' },
   { id: 'sapss', title: 'SAPSS', description: 'Smart and Automated Public Sanitation System for the Vishwakarma Awards 2026-27 Stage 2, team lead. IoT event-driven auto-cleaning concept for high-traffic public toilets.', github_url: '', live_url: '', image_url: workSapss, sort_order: 7, status: 'Vishwakarma Stage 2' },
-  { id: 'hackerrank-audit', title: 'HackerRank Ghost Data Audit', description: 'Deterministic deletion-audit agent for HackerRank Orchestrate, checking ghost data across cases.', github_url: '', live_url: '', image_url: workHackerrank, sort_order: 8, status: 'Hackathon build' },
+  { id: 'hackerrank-audit', title: 'HackerRank Ghost Data Audit', description: 'Deterministic deletion-audit agent for HackerRank Orchestrate, checking ghost data across cases.', github_url: 'https://github.com/dhanunjayss0306/HackerRank-Ghost-Data-Audit', live_url: '', image_url: workHackerrank, sort_order: 8, status: 'Hackathon build' },
   { id: 'suren-pastries', title: 'Suren Pastries', description: 'A completed pastry ordering website with accounts and ordering flows. Security checks, deployment, and payment integration are still being finalized while testing continues.', github_url: '', live_url: 'https://suren-pastries-754v.onrender.com/home', image_url: workSuren, sort_order: 9, status: 'Completed · testing' },
 ]
 
@@ -102,7 +103,8 @@ function VisualField({ mode }) {
 
 function LogoCube() {
   const [flipped, setFlipped] = useState(false)
-  return <button className="logo-cube" type="button" aria-label="DJ logo, click to rotate" title="DJ logo, click to rotate" onClick={() => setFlipped(!flipped)}><span className={flipped ? 'logo-cube__inner logo-cube__inner--flipped' : 'logo-cube__inner'}><span className="logo-cube__face logo-cube__face--front"><img src={logoDj} alt="DJ cartoon logo" /></span><span className="logo-cube__face logo-cube__face--back">DJ</span></span></button>
+  const goHome = () => { window.location.hash = '#top'; window.scrollTo({ top: 0, behavior: 'smooth' }) }
+  return <button className="logo-cube" type="button" aria-label="DJ logo, click to rotate, double-click to go home" title="DJ logo: click to rotate, double-click to go home" onClick={() => setFlipped(!flipped)} onDoubleClick={(e) => { e.preventDefault(); goHome() }}><span className={flipped ? 'logo-cube__inner logo-cube__inner--flipped' : 'logo-cube__inner'}><span className="logo-cube__face logo-cube__face--front"><img src={logoDj} alt="DJ cartoon logo" /></span><span className="logo-cube__face logo-cube__face--back">DJ</span></span></button>
 }
 
 function PageHeader() {
@@ -459,7 +461,20 @@ function WorkDetail({ item, onBack }) {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [onBack])
-  return <div className="work-detail" role="dialog" aria-label={`${item.title} details`}><button className="work-detail__back" type="button" onClick={onBack}>← Back to work</button><h2 className="work-detail__title">{item.title}</h2><div className="work-detail__grid"><aside className="work-detail__meta"><p><span>About</span>{item.description}</p><p><span>Role / Type</span>{item.status || 'Selected build'}</p><p><span>Links</span>{item.github_url ? <a href={item.github_url} target="_blank" rel="noreferrer">GitHub ↗</a> : '—'}{item.live_url ? <a href={item.live_url} target="_blank" rel="noreferrer">Visit site ↗</a> : ''}</p></aside><div className="work-detail__main">{item.image_url ? <img src={item.image_url} alt={item.title} /> : <div className="work-card__placeholder work-card__placeholder--large" aria-hidden="true">{item.title}</div>}<p>{item.description}</p><div className="work-card__links">{item.github_url && <a href={item.github_url} target="_blank" rel="noreferrer">GitHub <span>↗</span></a>}{item.live_url && <a href={item.live_url} target="_blank" rel="noreferrer">Visit site <span>↗</span></a>}</div></div></div></div>
+  const detail = projectDetails[item.id]
+  return <div className="work-detail" role="dialog" aria-label={`${item.title} details`}><button className="work-detail__back" type="button" onClick={onBack}>← Back to work</button><h2 className="work-detail__title">{item.title}</h2><div className="work-detail__grid"><aside className="work-detail__meta"><p><span>About</span>{item.description}</p><p><span>Role / Type</span>{item.status || 'Selected build'}</p><p><span>Links</span>{item.github_url ? <a href={item.github_url} target="_blank" rel="noreferrer">GitHub ↗</a> : '—'}{item.live_url ? <a href={item.live_url} target="_blank" rel="noreferrer">Visit site ↗</a> : ''}</p></aside><div className="work-detail__main">{item.image_url ? <img src={item.image_url} alt={item.title} /> : <div className="work-card__placeholder work-card__placeholder--large" aria-hidden="true">{item.title}</div>}<p>{item.description}</p><div className="work-card__links">{item.github_url && <a href={item.github_url} target="_blank" rel="noreferrer">GitHub <span>↗</span></a>}{item.live_url && <a href={item.live_url} target="_blank" rel="noreferrer">Visit site <span>↗</span></a>}</div>
+  {detail && <div className="work-detail__sections">
+    <section><h3>What is it?</h3><p>{detail.what}</p></section>
+    <section><h3>Why did I do it?</h3><p>{detail.why}</p></section>
+    <section><h3>What is the innovation in it?</h3><p>{detail.innovation}</p></section>
+    <section><h3>Important things in it</h3><ul>{detail.important.map((line) => <li key={line}>{line}</li>)}</ul></section>
+    <section><h3>Other things I learned</h3><ul>{detail.learned.map((line) => <li key={line}>{line}</li>)}</ul></section>
+    <section><h3>How did I build it?</h3><p>{detail.howBuilt}</p></section>
+    <section><h3>Tech stack</h3><p>{detail.stack}</p></section>
+    <section><h3>Where did I do it?</h3><p>{detail.where}</p></section>
+    <section><h3>Reason</h3><p>{detail.reason}</p></section>
+  </div>}
+  </div></div></div>
 }
 
 function HomeCertificates({ certificateCopy }) {
@@ -504,6 +519,8 @@ function App() {
   const [detailTransition, setDetailTransition] = useState(false)
   const [showMeta, setShowMeta] = useState(false)
   const [logoSpinning, setLogoSpinning] = useState(false)
+  const [scrambled, setScrambled] = useState(false)
+  const [showScrambleConfirm, setShowScrambleConfirm] = useState(false)
   const [journey, setJourney] = useState(() => ({ ...defaultJourney, ...readAdminStore('portfolio-journey', {}) }))
   const [certificateCopy, setCertificateCopy] = useState(() => readAdminStore('portfolio-certificates', defaultCertificateCopy))
   const [work, setWork] = useState(() => readAdminStore('portfolio-work', defaultWork))
@@ -555,6 +572,7 @@ function App() {
       setShowJourney(window.location.hash === '#journey')
       setShowWork(window.location.hash === '#my-work')
       setShowAdmin(window.location.hash === '#admin')
+      if (window.location.hash === '#top' || window.location.hash === '') { setShowContactPage(false); setShowAbout(false); setShowContact(false); setSelectedWork(null) }
     }
     window.addEventListener('hashchange', handleHashChange)
     return () => window.removeEventListener('hashchange', handleHashChange)
@@ -595,11 +613,12 @@ function App() {
       {showMeta && <div className="huyml-bottombar" aria-hidden="true"><span>Scroll</span><span>Selected work {String(focusedWork + 1).padStart(2, '0')} / {String(work.length).padStart(2, '0')}</span><span className="huyml-bottombar__numeral">{String(focusedWork + 1).padStart(2, '0')}</span></div>}
       {showMeta && work[focusedWork] && <div className="huyml-meta" aria-hidden="true"><p><span>Role / Type</span>{work[focusedWork].status || 'Selected build'}</p><p><span>Project</span>{work[focusedWork].title}</p><p>{work[focusedWork].github_url && <a href={work[focusedWork].github_url} target="_blank" rel="noreferrer">GitHub ↗</a>} {work[focusedWork].live_url && <a href={work[focusedWork].live_url} target="_blank" rel="noreferrer">Open project ↗</a>}</p></div>}
 
-      <main className={`portfolio huyml-home page-theme--${mode} ${isLoading ? 'portfolio--waiting' : ''}`}>
+      <main className={`portfolio huyml-home page-theme--${mode} ${isLoading ? 'portfolio--waiting' : ''} ${scrambled ? 'portfolio--scrambled' : ''}`}>
         <header className="site-header">
                     <LogoCube />
           <nav className={menuOpen ? 'nav nav--open' : 'nav'} aria-label="Main navigation">
             <button className="nav__link-button" type="button" onClick={() => { closeMenu(); setShowAbout(true) }}>About</button>
+            <button className="nav__link-button nav__link-button--scramble" type="button" onClick={() => { closeMenu(); if (scrambled) { setScrambled(false); window.scrollTo({ top: 0, behavior: "smooth" }) } else { setShowScrambleConfirm(true) } }}>{scrambled ? "Non-scramble" : "Scramble"}</button>
             <button className="nav__link-button" type="button" onClick={() => scrollToId('work')}>Work</button>
             <button className="nav__link-button" type="button" onClick={() => openPageOrScroll('certificates')}>Certificates</button>
             <button className="nav__link-button" type="button" onClick={() => openPageOrScroll('journey')}>Journey</button>
@@ -609,6 +628,8 @@ function App() {
           <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Toggle navigation"><span /><span /><span /></button>
         </header>
 
+        {showScrambleConfirm && <div className="modal" onClick={() => setShowScrambleConfirm(false)}><div className="modal__panel" onClick={(e) => e.stopPropagation()}><button className="modal__close" type="button" onClick={() => setShowScrambleConfirm(false)} aria-label="Close">×</button><h2>Are you ready to break this website?</h2><p>Everything will scramble, fall down, and turn white. You can bring it back any time with Non-scramble or Refresh.</p><div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}><button className="admin-save" type="button" onClick={() => { setScrambled(true); setShowScrambleConfirm(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>Yes, break it</button><button className="admin-add" type="button" onClick={() => setShowScrambleConfirm(false)}>Cancel</button></div></div></div>}
+        {scrambled && <button className="scramble-refresh" type="button" onClick={() => { setScrambled(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>Refresh</button>}
         <section className="hero hero--huyml" id="top">
           <figure className="hero__top-photo"><img src={heroTopPhoto} alt="Dhanunjay Reddy in a group photo" /><figcaption>A memorable photo with Sid Ahmed and my best friend — had a good time</figcaption></figure>
           <div className="hero__heading"><p className="eyebrow">Hello, I&apos;m</p><h1>DHANUNJAY<br />REDDY</h1><p className="hero__role">AI &amp; product builder · 2nd-year B.Tech CSE, Andhra University · IIT Madras BS</p><p className="hero__intro">Hello, I am Dhanunjay, 18. I turn ambitious ideas into polished, real-world experiences. I&apos;m exploring the space where AI, product thinking, and expressive interfaces meet, and I like shipping things that feel as good to use as they are clever under the hood.</p><div className="hero__actions"><button type="button" onClick={() => scrollToId('work')}>View My Work ↓</button><button type="button" onClick={() => { setShowContact(true) }}>Contact ↗</button></div></div>
