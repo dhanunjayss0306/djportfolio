@@ -689,3 +689,31 @@ h1, h2 { font-family: 'Archivo', sans-serif; }
   @keyframes startPushDown { from { transform: translateY(-20%); } to { transform: translateY(0); } }
   @keyframes startLoaderExitDown { to { transform: translateY(100%); visibility: hidden; } }
 }
+
+/* CORRECTION 2026-10-27: loader face must NOT go into black, loader must be transparent and open site directly, no separate page. */
+.start-loader { background: transparent; }
+.start-loader__person { left: auto; right: 70%; height: 45vh; }
+.start-loader__panel { left: 30%; }
+/* Mobile single page: home page ends with projects. Hide Journey, Certificates and Contact sections on mobile home, they stay reachable as separate pages from the top menu. */
+@media (max-width: 900px) {
+  #home-certificates, #home-journey, #home-contact { display: none !important; }
+  .menu-button span { display: block; width: 24px; height: 2px; margin: 5px 0; }
+}
+/* Desktop top photo: bigger, diagonal shape, cover, fills right space down to View My Work / Contact level. */
+.hero__top-photo { width: 420px; height: auto; top: 20%; left: calc(50% + 260px); }
+.hero__top-photo img { width: 100%; height: auto; object-fit: contain; clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 88%); }
+.hero__top-photo figcaption { margin-top: 10px; }
+@media (max-width: 1300px) {
+  .hero__top-photo { width: 340px; height: auto; left: calc(50% + 200px); }
+}
+/* Mobile top photo stays full-bleed, taller cover, caption white over it. */
+@media (max-width: 768px) {
+  .hero__top-photo { height: auto; }
+  .hero__top-photo img { height: auto; object-fit: contain; clip-path: none; }
+}
+
+/* FIX 2026-10-27: mobile top photo must be on TOP, not shifted right. Desktop left offset must not apply on mobile. */
+@media (max-width: 768px) {
+  .hero__top-photo { width: calc(100% + 40px); max-width: none; margin-left: -20px; margin-right: -20px; left: auto; right: auto; top: auto; position: relative; }
+  .hero__top-photo img { width: 100%; height: auto; object-fit: contain; clip-path: none; }
+}
