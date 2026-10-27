@@ -511,3 +511,52 @@ h1, h2 { font-family: 'Archivo', sans-serif; }
 /* Loader video: user's generated pushing video, full screen. Video already contains the black panel moving right and fading to white, so no CSS panel slide here. */
 .loader--video { background: #fff !important; }
 .loader__video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Hero split v2: name centred on top, photo + degree info completely left, skills to the right as Apple Glass floating cards, red on the right. */
+.huyml-home .hero--huyml { grid-template-columns: 0.85fr 1.15fr; gap: 32px 48px; align-items: start; text-align: left; justify-items: stretch; }
+.huyml-home .hero--huyml .hero__heading { grid-column: 1 / -1; text-align: center; }
+.huyml-home .hero--huyml .hero__portrait { grid-column: 1; grid-row: 2; max-width: none; text-align: left; }
+.huyml-home .hero--huyml .hero__portrait img { margin: 0; }
+.huyml-home .hero--huyml .hero__aside { grid-column: 1; grid-row: 3; text-align: left; margin-top: 16px; }
+.huyml-home .hero--huyml .skills-strip--hero { grid-column: 2; grid-row: 2 / 4; max-width: none; padding: 0; margin: 0; }
+.huyml-home .hero--huyml .scroll-cue { grid-column: 1 / -1; grid-row: 4; justify-content: center; }
+.skills-strip--hero .skills-strip__list { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.skills-strip--hero .glass-card { background: rgba(255, 255, 255, 0.55); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.85); border-radius: 24px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); padding: 22px; animation: glassFloat 4s ease-in-out infinite alternate; }
+.skills-strip--hero .glass-card:nth-child(2) { animation-delay: 0.5s; }
+.skills-strip--hero .glass-card:nth-child(3) { animation-delay: 1s; }
+.skills-strip--hero .glass-card:nth-child(4) { animation-delay: 1.5s; }
+@keyframes glassFloat { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+.skills-strip--hero h3 { color: #FF4949; }
+.skills-strip--hero .section-label { color: #FF4949; }
+@media (max-width: 768px) {
+  .huyml-home .hero--huyml { grid-template-columns: 1fr; }
+  .huyml-home .hero--huyml .hero__heading, .huyml-home .hero--huyml .hero__portrait, .huyml-home .hero--huyml .hero__aside, .huyml-home .hero--huyml .skills-strip--hero, .huyml-home .hero--huyml .scroll-cue { grid-column: auto; grid-row: auto; }
+  .skills-strip--hero .skills-strip__list { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skills-strip--hero .glass-card { animation: none; }
+}
+
+/* Skills cards v2: big, bold, photo beside each, floating, glassy on hover/touch. Top name stays centred, unchanged. */
+.skills-strip--hero .glass-card { display: flex; gap: 18px; align-items: flex-start; padding: 26px; transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease; }
+.skills-strip--hero .glass-card__photo { width: 96px; height: 96px; object-fit: cover; border-radius: 16px; flex-shrink: 0; display: block; }
+.skills-strip--hero .glass-card h3 { font-size: 22px; font-weight: 900; line-height: 1.1; margin: 0 0 8px; }
+.skills-strip--hero .glass-card p { font-size: 15px; line-height: 1.6; }
+.skills-strip--hero .glass-card:hover, .skills-strip--hero .glass-card:focus-within { background: rgba(255, 255, 255, 0.78); -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px); box-shadow: 0 28px 50px rgba(0, 0, 0, 0.14); border-color: rgba(255, 73, 73, 0.45); }
+
+/* Skills cards v3: like project cards, flat, no glass. Overrides the glass version. */
+.skills-strip--hero .glass-card { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; border: 1px solid #ddd; border-radius: 0; box-shadow: none; animation: none; }
+.skills-strip--hero .glass-card__photo { border-radius: 0; }
+.skills-strip--hero .glass-card:hover, .skills-strip--hero .glass-card:focus-within { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: none; border-color: #000; }
+
+/* Skills v4: 1-by-4 vertical, not 2-by-2. Overlay stack, like project cards, flat, numbered 01-04 in vertical order. */
+.skills-strip--hero .skills-strip__list { grid-template-columns: 1fr; gap: 0; }
+.skills-strip--hero .glass-card { margin-top: -14px; position: relative; }
+.skills-strip--hero .glass-card:first-child { margin-top: 0; }
+.skills-strip--hero .glass-card:nth-child(odd) { transform: rotate(-1.2deg); z-index: 1; }
+.skills-strip--hero .glass-card:nth-child(even) { transform: rotate(1.2deg); z-index: 2; }
+.skills-strip--hero .glass-card:hover, .skills-strip--hero .glass-card:focus-within { z-index: 10; transform: rotate(0deg) translateY(-4px); }
+.skills-strip--hero .glass-card__number { font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 28px; line-height: 1; color: #000; flex-shrink: 0; }
+@media (max-width: 768px) {
+  .skills-strip--hero .skills-strip__list { grid-template-columns: 1fr; }
+}

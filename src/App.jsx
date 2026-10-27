@@ -4,6 +4,10 @@ import { supabase } from './lib/supabase'
 import profilePhoto from './assets/20251129_170634.jpg'
 import cartoonAvatar from './assets/cartoon-pushing-transparent.png'
 import cartoonVideo from './assets/cartoon-pushing-video.mp4'
+import skillProgramming from './assets/skill-programming.jpg'
+import skillWeb from './assets/skill-web.jpg'
+import skillAi from './assets/skill-ai.jpg'
+import skillProduct from './assets/skill-product.jpg'
 import heroPhoto from './assets/image.png'
 import quizCertificate from './assets/WhatsApp Image 2026-08-06 at 19.13.23.jpeg'
 import googleCertificate from './assets/Screenshot 2026-09-06 220049.png'
@@ -539,10 +543,9 @@ function App() {
           <div className="hero__heading"><p className="eyebrow">Hello, I&apos;m Dhanunjay.</p><h1>DHANUNJAY<br />REDDY</h1><p className="hero__role">AI &amp; product builder · 2nd-year B.Tech CSE, Andhra University · IIT Madras BS</p><p className="hero__intro">I turn ambitious ideas into polished, real-world experiences. I&apos;m exploring the space where AI, product thinking, and expressive interfaces meet, and I like shipping things that feel as good to use as they are clever under the hood.</p><div className="hero__actions"><button type="button" onClick={() => scrollToId('work')}>View My Work ↓</button><button type="button" onClick={() => { setShowContact(true) }}>Contact ↗</button></div></div>
           <figure className="hero__portrait"><img src={profilePhoto} alt="Dhanunjay in Visakhapatnam" /><figcaption>creative technologist · visakhapatnam, india</figcaption></figure>
           <div className="hero__aside">B.Tech CSE (Core)<br />Andhra University / 2029<br /><span>CGPA 8.44 · 2nd year</span></div>
+          <section className="skills-strip skills-strip--hero" aria-label="Skills"><p className="section-label">What I work with</p><div className="skills-strip__list">{skills.map(([category, items], skillIndex) => <div className="glass-card" key={category}><span className="glass-card__number">{String(skillIndex + 1).padStart(2, '0')}</span><img className="glass-card__photo" src={[skillProgramming, skillWeb, skillAi, skillProduct][skillIndex]} alt={category} loading="lazy" /><div><h3>{category}</h3><p>{items}</p></div></div>)}</div></section>
           <a className="scroll-cue" href="#work" onClick={(e) => { e.preventDefault(); scrollToId('work') }}><span>Scroll to explore</span><b>↓</b></a>
         </section>
-
-        <section className="skills-strip" aria-label="Skills"><p className="section-label">What I work with</p><div className="skills-strip__list">{skills.map(([category, items]) => <div key={category}><h3>{category}</h3><p>{items}</p></div>)}</div></section>
 
         <WorkCarousel work={work} onFocus={setFocusedWork} onOpen={openWork} />
 
