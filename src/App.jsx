@@ -457,7 +457,7 @@ function App() {
       const el = document.getElementById('work')
       if (!el) { setShowMeta(false); return }
       const rect = el.getBoundingClientRect()
-      setShowMeta(rect.top < window.innerHeight * 0.8 && rect.bottom > 0)
+      setShowMeta(rect.top <= 0 && rect.bottom >= window.innerHeight)
     }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -517,7 +517,7 @@ function App() {
       {selectedWork && <WorkDetail item={selectedWork} onBack={closeWork} />}
 
       <button className="huyml-rail" type="button" aria-label="Go to home" onClick={() => { closeMenu(); setShowCertificates(false); setShowJourney(false); setShowWork(false); setShowAdmin(false); setShowAbout(false); setShowContact(false); setSelectedWork(null); window.scrollTo({ top: 0, behavior: 'smooth' }) }}><span className="huyml-rail__logo">D<br />H<br />A<br />N<br />U<br />N<br />J<br />A<br />Y</span><span>Visakhapatnam, India</span></button>
-      <div className="huyml-bottombar" aria-hidden="true"><span>Scroll</span><span>Selected work {String(focusedWork + 1).padStart(2, '0')} / {String(work.length).padStart(2, '0')}</span><span className="huyml-bottombar__numeral">{String(focusedWork + 1).padStart(2, '0')}</span></div>
+      {showMeta && <div className="huyml-bottombar" aria-hidden="true"><span>Scroll</span><span>Selected work {String(focusedWork + 1).padStart(2, '0')} / {String(work.length).padStart(2, '0')}</span><span className="huyml-bottombar__numeral">{String(focusedWork + 1).padStart(2, '0')}</span></div>}
       {showMeta && work[focusedWork] && <div className="huyml-meta" aria-hidden="true"><p><span>Role / Type</span>{work[focusedWork].status || 'Selected build'}</p><p><span>Project</span>{work[focusedWork].title}</p><p>{work[focusedWork].github_url && <a href={work[focusedWork].github_url} target="_blank" rel="noreferrer">GitHub ↗</a>} {work[focusedWork].live_url && <a href={work[focusedWork].live_url} target="_blank" rel="noreferrer">Open project ↗</a>}</p></div>}
 
       <main className={`portfolio huyml-home page-theme--${mode} ${isLoading ? 'portfolio--waiting' : ''}`}>
