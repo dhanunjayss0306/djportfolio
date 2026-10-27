@@ -897,3 +897,22 @@ body:has(.admin-page) { background: #000; }
 .admin-page { background: #000 !important; width: 100%; overflow-x: hidden; }
 .admin-page .admin-login, .admin-page .admin-shell { background: #000; }
 .admin-page .site-header { background: #000; }
+
+/* CORRECTION 2026-10-27 Scramble: fall to the MIDDLE, not to one side, visible down, text wobbles. Later rules win over the earlier scramble rules. */
+.portfolio--scrambled .hero--huyml, .portfolio--scrambled .home-certificates, .portfolio--scrambled .home-journey, .portfolio--scrambled .contact-section, .portfolio--scrambled .footer { animation: scrambleFallDown 0.9s ease forwards; }
+@keyframes scrambleFallDown { from { transform: translateY(0); } to { transform: translateY(70px); } }
+.portfolio--scrambled .hero__heading { transform: translateY(90px) rotate(0deg) !important; }
+.portfolio--scrambled .hero__portrait { transform: translateY(110px) rotate(0deg) !important; }
+.portfolio--scrambled .hero__top-photo { transform: translateY(100px) rotate(0deg) !important; }
+.portfolio--scrambled .skills-strip--hero { transform: translateY(90px) rotate(0deg) !important; }
+.portfolio--scrambled .work-card { transform: translate(-50%, -50%) translateY(28vh) rotate(2deg) !important; opacity: 1 !important; left: 50% !important; }
+.portfolio--scrambled .work-card:nth-child(2n) { transform: translate(-50%, -50%) translateY(38vh) rotate(-2deg) !important; }
+.portfolio--scrambled .work-card:nth-child(3n) { transform: translate(-50%, -50%) translateY(18vh) rotate(1deg) !important; }
+.portfolio--scrambled .home-certificate { transform: translateY(90px) rotate(-2deg) !important; }
+.portfolio--scrambled .home-certificate:nth-child(2n) { transform: translateY(130px) rotate(2deg) !important; }
+.portfolio--scrambled .home-journey__step { transform: translateY(90px) rotate(0deg) !important; }
+.portfolio--scrambled .home-journey__step:nth-child(2n) { transform: translateY(130px) rotate(0deg) !important; }
+/* Text falls and wobbles, in the middle, no sideways jump. */
+.portfolio--scrambled h1, .portfolio--scrambled h2, .portfolio--scrambled h3, .portfolio--scrambled p, .portfolio--scrambled span { animation: scrambleWobbleText 1.1s ease-in-out infinite alternate; }
+@keyframes scrambleWobbleText { from { transform: rotate(-1.5deg) translateX(-4px); } to { transform: rotate(1.5deg) translateX(4px); } }
+.portfolio--scrambled .logo-cube span, .portfolio--scrambled .site-header span { animation: none; }

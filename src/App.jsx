@@ -617,8 +617,8 @@ function App() {
         <header className="site-header">
                     <LogoCube />
           <nav className={menuOpen ? 'nav nav--open' : 'nav'} aria-label="Main navigation">
-            <button className="nav__link-button" type="button" onClick={() => { closeMenu(); setShowAbout(true) }}>About</button>
             <button className="nav__link-button nav__link-button--scramble" type="button" onClick={() => { closeMenu(); if (scrambled) { setScrambled(false); window.scrollTo({ top: 0, behavior: "smooth" }) } else { setShowScrambleConfirm(true) } }}>{scrambled ? "Non-scramble" : "Scramble"}</button>
+            <button className="nav__link-button" type="button" onClick={() => { closeMenu(); setShowAbout(true) }}>About</button>
             <button className="nav__link-button" type="button" onClick={() => scrollToId('work')}>Work</button>
             <button className="nav__link-button" type="button" onClick={() => openPageOrScroll('certificates')}>Certificates</button>
             <button className="nav__link-button" type="button" onClick={() => openPageOrScroll('journey')}>Journey</button>
