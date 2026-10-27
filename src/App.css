@@ -833,8 +833,11 @@ h1, h2 { font-family: 'Archivo', sans-serif; }
 }
 
 /* FIX 2026-10-27: Y must NOT be cut, like my screenshot. Photo pushed up to 29% moved it up into DHANUNJAY line, covering Y. Move photo back down to Reddy level, name stays on top, name slightly smaller so it fits viewport. */
-.hero__top-photo { top: 34%; z-index: 1; }
+.hero__top-photo { top: 42%; z-index: 1; }
 .huyml-home .hero--huyml .hero__heading h1 { position: relative; z-index: 2; font-size: clamp(56px, 9vw, 132px); }
 .huyml-home .hero--huyml { overflow-x: clip; }
 /* Loader mark removed: no DHANUNJAY text at bottom left during loader. */
 .start-loader__mark { display: none !important; }
+
+/* Photo pushed down: caption must stay ON photo, not below it, otherwise skills card covers it. Caption white over bottom of photo, faces at top stay clear. */
+.hero__top-photo figcaption { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 36px 16px 14px; color: #fff; background: linear-gradient(transparent, rgba(0, 0, 0, 0.75)); font-size: 14px; text-align: center; }
