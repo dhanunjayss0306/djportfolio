@@ -465,7 +465,7 @@ function App() {
   }, [isLoading])
 
   const scrollToId = (id) => { closeMenu(); document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }
-  const openWork = (item) => { setDetailTransition(true); window.setTimeout(() => { setSelectedWork(item); setDetailTransition(false) }, 650) }
+  const openWork = (item) => { setSelectedWork(item); setDetailTransition(true); window.setTimeout(() => { setDetailTransition(false) }, 650) }
   const closeWork = () => { setSelectedWork(null); document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' }) }
 
   useEffect(() => {

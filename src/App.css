@@ -500,3 +500,10 @@ h1, h2 { font-family: 'Archivo', sans-serif; }
 .huyml-rail span:last-child { color: #000; }
 .huyml-rail:hover .huyml-rail__logo, .huyml-rail:hover span:last-child, .huyml-rail:focus-visible .huyml-rail__logo, .huyml-rail:focus-visible span:last-child { color: #FF4949; }
 .wordmark:hover { color: #FF4949; }
+
+/* Cartoon push effort: bob + lean while pushing, so it is not a completely static image. A single PNG cannot move its legs separately; true leg walking needs a video/sprite, which the user may send. */
+.loader--pushing .loader__person { animation: cartoonPush 0.6s ease-in-out infinite alternate !important; }
+@keyframes cartoonPush { from { transform: translateX(-100%) translateY(0) rotate(0deg); } to { transform: translateX(-100%) translateY(-8px) rotate(-2deg); } }
+/* Project opening: black screen goes up, then project is revealed underneath (project is mounted under the black transition). */
+.detail-transition { animation: detailUp 0.65s ease forwards; }
+@keyframes detailUp { 0%, 55% { transform: translateY(0); } 100% { transform: translateY(-100%); } }
