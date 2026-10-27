@@ -12,6 +12,13 @@ import workVirun from './assets/work-virun.jpg'
 import workPersona from './assets/work-persona.jpg'
 import workQuantum from './assets/work-quantum.jpg'
 import workSwayansh from './assets/work-swayansh.jpg'
+import workVrgym from './assets/work-vrgym.jpg'
+import workSasyasakhi from './assets/work-sasyasakhi.jpg'
+import workPortfolio from './assets/work-portfolio.jpg'
+import workSuren from './assets/work-suren.jpg'
+import workSapss from './assets/work-sapss.jpg'
+import workHackerrank from './assets/work-hackerrank.jpg'
+import workGlobaltap from './assets/work-globaltap.jpg'
 import heroPhoto from './assets/image.png'
 import quizCertificate from './assets/WhatsApp Image 2026-08-06 at 19.13.23.jpeg'
 import googleCertificate from './assets/Screenshot 2026-09-06 220049.png'
@@ -64,16 +71,16 @@ const defaultJourney = {
 const defaultCertificateCopy = certificates.map(([title, image, alt], index) => ({ id: `certificate-${index + 1}`, title, image, alt }))
 
 const defaultWork = [
-  { id: 'portfolio', title: 'Dhanunjay Reddy Portfolio', description: 'A playful portfolio and content system for documenting AI, product, and creative technology work.', github_url: 'https://github.com/dhanunjayss0306/djportfolio', live_url: '', image_url: '', sort_order: 0 },
-  { id: 'sasyasakhi', title: 'SasyaSakhi', description: 'AI farming assistant for Indian farmers, in Telugu and English: soil report, crop suitability for paddy, cotton and chilli, fertilizer doses, weather and crop calendar. Team Footprints, AgriTech Summit 2026.', github_url: 'https://github.com/dhanunjayss0306/SasyaSakhi', live_url: '', image_url: '', sort_order: 1, status: 'Hackathon prototype' },
+  { id: 'portfolio', title: 'Dhanunjay Reddy Portfolio', description: 'A playful portfolio and content system for documenting AI, product, and creative technology work.', github_url: 'https://github.com/dhanunjayss0306/djportfolio', live_url: '', image_url: workPortfolio, sort_order: 0 },
+  { id: 'sasyasakhi', title: 'SasyaSakhi', description: 'AI farming assistant for Indian farmers, in Telugu and English: soil report, crop suitability for paddy, cotton and chilli, fertilizer doses, weather and crop calendar. Team Footprints, AgriTech Summit 2026.', github_url: 'https://github.com/dhanunjayss0306/SasyaSakhi', live_url: '', image_url: workSasyasakhi, sort_order: 1, status: 'Hackathon prototype' },
   { id: 'virun', title: 'Virun', description: 'AI-powered tourism marketplace combining personalized itineraries with verified local expertise.', github_url: 'https://github.com/KinGMssN/virun', live_url: 'https://kingmssn.github.io/virun/', image_url: workVirun, sort_order: 2, status: 'Hackathon build' },
-  { id: 'vr-fitness-gym', title: 'VR Fitness Gym', description: 'Website for VR Fitness Gym in Visakhapatnam, with static, dynamic and dynamic-plus-AI options explained for the gym owner.', github_url: '', live_url: '', image_url: '', sort_order: 3, status: 'Client website' },
+  { id: 'vr-fitness-gym', title: 'VR Fitness Gym', description: 'Website for VR Fitness Gym in Visakhapatnam, with static, dynamic and dynamic-plus-AI options explained for the gym owner.', github_url: '', live_url: '', image_url: workVrgym, sort_order: 3, status: 'Client website' },
   { id: 'persona', title: 'Persona', description: 'Personal reminder and planner app: calendar, voice-to-calendar, journal, reminders, group tasks and a personal AI from your own data.', github_url: '', live_url: 'https://dhanunjayss0306.github.io/Persona-/', image_url: workPersona, sort_order: 4, status: 'Fullstack app' },
-  { id: 'global-tap', title: 'Global Tap', description: 'Fintech and travel app build, with backend and frontend work in progress.', github_url: 'https://github.com/amruthalakshmipeddireddy-max/Global-Tap', live_url: '', image_url: '', sort_order: 5, status: 'In progress' },
+  { id: 'global-tap', title: 'Global Tap', description: 'Fintech and travel app build, with backend and frontend work in progress.', github_url: 'https://github.com/amruthalakshmipeddireddy-max/Global-Tap', live_url: '', image_url: workGlobaltap, sort_order: 5, status: 'In progress' },
   { id: 'quantum-routing', title: 'Quantum Geometry Routing', description: 'Hackathon build for quantum geometry routing, with a live frontend and backend.', github_url: '', live_url: 'https://quantum-geometry-routing.pages.dev', image_url: workQuantum, sort_order: 6, status: 'Hackathon build' },
-  { id: 'sapss', title: 'SAPSS', description: 'Smart and Automated Public Sanitation System for the Vishwakarma Awards 2026-27 Stage 2, team lead. IoT event-driven auto-cleaning concept for high-traffic public toilets.', github_url: '', live_url: '', image_url: '', sort_order: 7, status: 'Vishwakarma Stage 2' },
-  { id: 'hackerrank-audit', title: 'HackerRank Ghost Data Audit', description: 'Deterministic deletion-audit agent for HackerRank Orchestrate, checking ghost data across cases.', github_url: '', live_url: '', image_url: '', sort_order: 8, status: 'Hackathon build' },
-  { id: 'suren-pastries', title: 'Suren Pastries', description: 'A completed pastry ordering website with accounts and ordering flows. Security checks, deployment, and payment integration are still being finalized while testing continues.', github_url: '', live_url: 'https://suren-pastries-754v.onrender.com/home', image_url: '', sort_order: 9, status: 'Completed · testing' },
+  { id: 'sapss', title: 'SAPSS', description: 'Smart and Automated Public Sanitation System for the Vishwakarma Awards 2026-27 Stage 2, team lead. IoT event-driven auto-cleaning concept for high-traffic public toilets.', github_url: '', live_url: '', image_url: workSapss, sort_order: 7, status: 'Vishwakarma Stage 2' },
+  { id: 'hackerrank-audit', title: 'HackerRank Ghost Data Audit', description: 'Deterministic deletion-audit agent for HackerRank Orchestrate, checking ghost data across cases.', github_url: '', live_url: '', image_url: workHackerrank, sort_order: 8, status: 'Hackathon build' },
+  { id: 'suren-pastries', title: 'Suren Pastries', description: 'A completed pastry ordering website with accounts and ordering flows. Security checks, deployment, and payment integration are still being finalized while testing continues.', github_url: '', live_url: 'https://suren-pastries-754v.onrender.com/home', image_url: workSuren, sort_order: 9, status: 'Completed · testing' },
   { id: 'swayansh-birthday', title: 'Swayansh Birthday Surprise', description: "A playful HTML-only surprise website made for a friend's birthday, designed as a small interactive experience.", github_url: '', live_url: 'https://dhanunjayss0306.github.io/swayansh-birthday/', image_url: workSwayansh, sort_order: 10, status: 'Personal experiment' },
 ]
 
