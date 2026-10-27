@@ -534,7 +534,7 @@ function App() {
 
   return (
     <>
-      {isLoading && <div className="start-loader" aria-hidden="true"><img className="start-loader__person" src={pushingCartoon} alt="" /><div className="start-loader__panel" /><span className="start-loader__mark">DHANUNJAY</span></div>}
+      {isLoading && <div className="start-loader" aria-hidden="true"><img className="start-loader__person" src={pushingCartoon} alt="" /><div className="start-loader__panel" /></div>}
       {detailTransition && <div className="detail-transition" aria-hidden="true"><span>{transitionText}</span></div>}
       {selectedWork && <WorkDetail item={selectedWork} onBack={closeWork} />}
 
