@@ -19,6 +19,7 @@ import workSapss from './assets/work-sapss.jpg'
 import workHackerrank from './assets/work-hackerrank.jpg'
 import workGlobaltap from './assets/work-globaltap.jpg'
 import logoDj from './assets/logo-dj.jpg'
+import logoDjTransparent from './assets/logo-dj-transparent.png'
 import { projectDetails } from './projectDetails.js'
 import heroPhoto from './assets/image.png'
 import quizCertificate from './assets/WhatsApp Image 2026-08-06 at 19.13.23.jpeg'
@@ -107,8 +108,75 @@ function LogoCube() {
   return <button className="logo-cube" type="button" aria-label="DJ logo, click to rotate, double-click to go home" title="DJ logo: click to rotate, double-click to go home" onClick={() => setFlipped(!flipped)} onDoubleClick={(e) => { e.preventDefault(); goHome() }}><span className={flipped ? 'logo-cube__inner logo-cube__inner--flipped' : 'logo-cube__inner'}><span className="logo-cube__face logo-cube__face--front"><img src={logoDj} alt="DJ cartoon logo" /></span><span className="logo-cube__face logo-cube__face--back">DJ</span></span></button>
 }
 
+
+function ThreadCursor() {
+  const ref = useRef(null)
+  useEffect(() => {
+    if (!window.matchMedia('(pointer: fine)').matches) return
+    const canvas = ref.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    let w = canvas.width = window.innerWidth
+    let h = canvas.height = window.innerHeight
+    const onResize = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight }
+    window.addEventListener('resize', onResize)
+    const mouse = { x: w / 2, y: h / 2 }
+    const onMove = (e) => { mouse.x = e.clientX; mouse.y = e.clientY }
+    window.addEventListener('mousemove', onMove)
+    const ripples = []
+    const onDown = (e) => ripples.push({ x: e.clientX, y: e.clientY, r: 0, a: 1 })
+    window.addEventListener('mousedown', onDown)
+    const points = Array.from({ length: 22 }, () => ({ x: mouse.x, y: mouse.y }))
+    let raf = 0
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h)
+      points[0].x += (mouse.x - points[0].x) * 0.35
+      points[0].y += (mouse.y - points[0].y) * 0.35
+      for (let i = 1; i < points.length; i++) {
+        points[i].x += (points[i - 1].x - points[i].x) * 0.45
+        points[i].y += (points[i - 1].y - points[i].y) * 0.45
+      }
+      ctx.beginPath()
+      ctx.moveTo(points[0].x, points[0].y)
+      for (let i = 1; i < points.length - 1; i++) {
+        const mx = (points[i].x + points[i + 1].x) / 2
+        const my = (points[i].y + points[i + 1].y) / 2
+        ctx.quadraticCurveTo(points[i].x, points[i].y, mx, my)
+      }
+      ctx.strokeStyle = '#ff4949'
+      ctx.lineWidth = 2
+      ctx.lineCap = 'round'
+      ctx.stroke()
+      ctx.beginPath()
+      ctx.arc(mouse.x, mouse.y, 5, 0, Math.PI * 2)
+      ctx.fillStyle = '#ff4949'
+      ctx.fill()
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        const r = ripples[i]
+        r.r += 3; r.a -= 0.03
+        if (r.a <= 0) { ripples.splice(i, 1); continue }
+        ctx.beginPath()
+        ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2)
+        ctx.strokeStyle = `rgba(255, 73, 73, ${r.a})`
+        ctx.lineWidth = 2
+        ctx.stroke()
+      }
+      raf = window.requestAnimationFrame(draw)
+    }
+    raf = window.requestAnimationFrame(draw)
+    return () => { window.cancelAnimationFrame(raf); window.removeEventListener('resize', onResize); window.removeEventListener('mousemove', onMove); window.removeEventListener('mousedown', onDown) }
+  }, [])
+  if (typeof window !== 'undefined' && !window.matchMedia('(pointer: fine)').matches) return null
+  return <canvas ref={ref} className="thread-cursor" aria-hidden="true" />
+}
+
+function PetWidget() {
+  const [jump, setJump] = useState(false)
+  return <button className={jump ? 'pet-widget pet-widget--jump' : 'pet-widget'} type="button" aria-label="DJ pet, click to jump" title="DJ pet" onClick={() => { setJump(true); window.setTimeout(() => setJump(false), 600) }}><img src={logoDjTransparent} alt="DJ pet" /></button>
+}
+
 function PageHeader() {
-  return <header className="site-header"><LogoCube /><div className="header-tools"><SocialLinks /><AdminIcon /></div></header>
+  return <><ThreadCursor /><header className="site-header"><LogoCube /><div className="header-tools"><SocialLinks /><AdminIcon /></div></header><PetWidget /></>
 }
 
 function Certificates({ mode, onToggle, certificateCopy }) {
@@ -441,7 +509,7 @@ function WorkCarousel({ work, onFocus, onOpen }) {
         <div className="work-carousel__stage">
           {work.map((item, index) => {
             const offset = index - span
-            const style = { transform: `translate(-50%, -50%) translateY(${offset * 52}vh) rotate(${offset * 9}deg) scale(${1 - Math.min(Math.abs(offset) * 0.07, 0.18)})`, opacity: Math.max(0, 1 - Math.abs(offset) * 0.55), zIndex: 10 - Math.round(Math.abs(offset)), pointerEvents: Math.abs(offset) < 1.5 ? 'auto' : 'none' }
+            const style = { transform: `translate(-50%, -50%) translate(${offset * 18}vw, ${offset * 52}vh) rotate(${offset * 9}deg) scale(${1 - Math.min(Math.abs(offset) * 0.07, 0.18)})`, opacity: Math.max(0, 1 - Math.abs(offset) * 0.55), zIndex: 10 - Math.round(Math.abs(offset)), pointerEvents: Math.abs(offset) < 1.5 ? 'auto' : 'none' }
             return <article className={`work-card ${index === focused ? 'work-card--focused' : ''}`} key={item.id} style={style} onClick={() => { if (index === focused) onOpen(item); else scrollToProject(index) }} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') { if (index === focused) onOpen(item); else scrollToProject(index) } }} aria-label={`${item.title}, project ${index + 1} of ${count}`}>
               {item.image_url ? <img src={item.image_url} alt={item.title} /> : <div className="work-card__placeholder" aria-hidden="true">{String(index + 1).padStart(2, '0')}</div>}
               <h3>{item.title}</h3>
@@ -614,6 +682,7 @@ function App() {
       {showMeta && work[focusedWork] && <div className="huyml-meta" aria-hidden="true"><p><span>Role / Type</span>{work[focusedWork].status || 'Selected build'}</p><p><span>Project</span>{work[focusedWork].title}</p><p>{work[focusedWork].github_url && <a href={work[focusedWork].github_url} target="_blank" rel="noreferrer">GitHub ↗</a>} {work[focusedWork].live_url && <a href={work[focusedWork].live_url} target="_blank" rel="noreferrer">Open project ↗</a>}</p></div>}
 
       <main className={`portfolio huyml-home page-theme--${mode} ${isLoading ? 'portfolio--waiting' : ''} ${scrambled ? 'portfolio--scrambled' : ''}`}>
+        <ThreadCursor /><PetWidget />
         <header className="site-header">
                     <LogoCube />
           <nav className={menuOpen ? 'nav nav--open' : 'nav'} aria-label="Main navigation">
