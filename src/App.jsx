@@ -381,18 +381,15 @@ function WorkCarousel({ work, onFocus, onOpen }) {
         <div className="work-carousel__stage">
           {work.map((item, index) => {
             const offset = index - span
-            const style = { transform: `translate(-50%, -50%) translate(${offset * 18}vw, ${offset * 52}vh) rotate(${offset * 9}deg) scale(${1 - Math.min(Math.abs(offset) * 0.07, 0.18)})`, opacity: Math.max(0, 1 - Math.abs(offset) * 0.55), zIndex: 10 - Math.round(Math.abs(offset)), pointerEvents: Math.abs(offset) < 1.5 ? 'auto' : 'none' }
+            const style = { transform: `translate(-50%, -50%) translateY(${offset * 52}vh) rotate(${offset * 9}deg) scale(${1 - Math.min(Math.abs(offset) * 0.07, 0.18)})`, opacity: Math.max(0, 1 - Math.abs(offset) * 0.55), zIndex: 10 - Math.round(Math.abs(offset)), pointerEvents: Math.abs(offset) < 1.5 ? 'auto' : 'none' }
             return <article className={`work-card ${index === focused ? 'work-card--focused' : ''}`} key={item.id} style={style} onClick={() => { if (index === focused) onOpen(item); else scrollToProject(index) }} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') { if (index === focused) onOpen(item); else scrollToProject(index) } }} aria-label={`${item.title}, project ${index + 1} of ${count}`}>
-              <p className="project__type">{item.status || 'Selected build'}</p>
-              <h3>{item.title}</h3>
-              <hr />
-              <p>{item.description}</p>
               {item.image_url ? <img src={item.image_url} alt={item.title} /> : <div className="work-card__placeholder" aria-hidden="true">{String(index + 1).padStart(2, '0')}</div>}
-              <div className="work-card__links" onClick={(e) => e.stopPropagation()}>{item.github_url && <a href={item.github_url} target="_blank" rel="noreferrer">GitHub <span>↗</span></a>}{item.live_url && <a href={item.live_url} target="_blank" rel="noreferrer">Open project <span>↗</span></a>}</div>
+              <h3>{item.title}</h3>
+              <p className="project__type">{item.status || 'Selected build'}</p>
             </article>
           })}
         </div>
-        <div className="work-carousel__list" aria-label="Project list">{work.map((item, index) => <button key={item.id} type="button" className={index === focused ? 'is-focused' : ''} onClick={() => scrollToProject(index)}>{String(index + 1).padStart(2, '0')} {item.title}</button>)}</div>
+        <div className="work-carousel__list" aria-label="Project list">{work.map((item, index) => Math.abs(index - focused) > 2 ? null : <button key={item.id} type="button" className={index === focused ? 'is-focused' : ''} onClick={() => scrollToProject(index)}><span className="work-list__type">{item.status || 'Selected build'}</span><span className="work-list__title">{String(index + 1).padStart(2, '0')} {item.title}</span><span className="work-list__desc">{item.description}</span><span className="work-list__sep">—</span></button>)}</div>
       </div>
     </section>
   )
@@ -450,8 +447,8 @@ function App() {
   const [work, setWork] = useState(() => readAdminStore('portfolio-work', defaultWork))
 
   useEffect(() => {
-    const t1 = window.setTimeout(() => setLoaderStage(1), 900)
-    const t2 = window.setTimeout(() => setIsLoading(false), 3100)
+    const t1 = window.setTimeout(() => setLoaderStage(1), 500)
+    const t2 = window.setTimeout(() => setIsLoading(false), 7000)
     return () => { window.clearTimeout(t1); window.clearTimeout(t2) }
   }, [])
 
@@ -519,13 +516,13 @@ function App() {
       {detailTransition && <div className="detail-transition" aria-hidden="true"><span>LOADING PROJECT</span></div>}
       {selectedWork && <WorkDetail item={selectedWork} onBack={closeWork} />}
 
-      <div className="huyml-rail" aria-hidden="true"><span>DHANUNJAY © 2026</span><span>Visakhapatnam, India</span></div>
+      <button className="huyml-rail" type="button" aria-label="Go to home" onClick={() => { closeMenu(); setShowCertificates(false); setShowJourney(false); setShowWork(false); setShowAdmin(false); setShowAbout(false); setShowContact(false); setSelectedWork(null); window.scrollTo({ top: 0, behavior: 'smooth' }) }}><span className="huyml-rail__logo">D<br />H<br />A<br />N<br />U<br />N<br />J<br />A<br />Y</span><span>Visakhapatnam, India</span></button>
       <div className="huyml-bottombar" aria-hidden="true"><span>Scroll</span><span>Selected work {String(focusedWork + 1).padStart(2, '0')} / {String(work.length).padStart(2, '0')}</span><span className="huyml-bottombar__numeral">{String(focusedWork + 1).padStart(2, '0')}</span></div>
       {showMeta && work[focusedWork] && <div className="huyml-meta" aria-hidden="true"><p><span>Role / Type</span>{work[focusedWork].status || 'Selected build'}</p><p><span>Project</span>{work[focusedWork].title}</p><p>{work[focusedWork].github_url && <a href={work[focusedWork].github_url} target="_blank" rel="noreferrer">GitHub ↗</a>} {work[focusedWork].live_url && <a href={work[focusedWork].live_url} target="_blank" rel="noreferrer">Open project ↗</a>}</p></div>}
 
       <main className={`portfolio huyml-home page-theme--${mode} ${isLoading ? 'portfolio--waiting' : ''}`}>
         <header className="site-header">
-          <a className="wordmark" href="#top" onClick={closeMenu}>DHANUNJAY</a>
+          <a className="wordmark" href="#top" onClick={(e) => { e.preventDefault(); closeMenu(); setShowAbout(false); setShowContact(false); setSelectedWork(null); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>DHANUNJAY</a>
           <nav className={menuOpen ? 'nav nav--open' : 'nav'} aria-label="Main navigation">
             <button className="nav__link-button" type="button" onClick={() => { closeMenu(); setShowAbout(true) }}>About</button>
             <button className="nav__link-button" type="button" onClick={() => scrollToId('work')}>Work</button>

@@ -467,3 +467,36 @@ h1, h2 { font-family: 'Archivo', sans-serif; }
 /* Loader v7: cartoon on WHITE, at the intersection line, pushing the black panel right. Not on black. */
 .loader--pushing { background: #000 !important; animation: pushSlideFull 2.2s ease forwards; }
 .loader--pushing .loader__person { position: absolute; left: 0; bottom: 15vh; height: 50vh; width: auto; object-fit: contain; transform: translateX(-100%); animation: none; }
+
+/* Loader v8: ~7s total, stepped, not constant. Black empty 0.5s, then push 6.5s with 3 holds. Cartoon is on the panel edge, so it stops and starts with the panel, not constant. */
+.loader--pushing { animation: pushSlideFull 6.5s linear forwards !important; }
+@keyframes pushSlideFull {
+  0% { transform: translateX(0); }
+  12% { transform: translateX(28%); }
+  28% { transform: translateX(28%); }
+  42% { transform: translateX(58%); }
+  58% { transform: translateX(58%); }
+  72% { transform: translateX(88%); }
+  88% { transform: translateX(88%); }
+  100% { transform: translateX(130%); }
+}
+
+/* Work layout v2 from his photo: centre photo/number, left info, right info list, top/bottom light, vertical logo. */
+.work-carousel__list { right: 32px; width: 280px; gap: 18px; }
+.work-carousel__list button { text-align: center; color: #c0c0c0; }
+.work-carousel__list button.is-focused { color: #000; }
+.work-list__type { display: block; font-size: 11px; letter-spacing: 0.12em; color: #8a8a8a; margin-bottom: 4px; }
+.work-list__title { display: block; font-size: 15px; font-weight: 800; letter-spacing: 0.02em; }
+.work-list__desc { display: block; font-size: 12px; line-height: 1.5; text-transform: none; letter-spacing: 0; margin-top: 6px; opacity: 0.8; }
+.work-list__sep { display: block; font-size: 12px; margin-top: 8px; color: #c0c0c0; }
+.work-card__placeholder { height: 320px; font-size: 96px; margin-top: 0; }
+.huyml-rail { writing-mode: horizontal-tb; transform: translateY(-50%); flex-direction: column; align-items: center; gap: 16px; }
+.huyml-rail__logo { font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 20px; line-height: 1.15; letter-spacing: 0; color: #000; text-align: center; }
+.huyml-rail span:last-child { writing-mode: vertical-rl; transform: rotate(180deg); }
+
+/* Vertical logo: black normal, red on hover, click goes home. */
+.huyml-rail { background: none; border: none; cursor: pointer; padding: 0; color: #000; }
+.huyml-rail__logo { color: #000; }
+.huyml-rail span:last-child { color: #000; }
+.huyml-rail:hover .huyml-rail__logo, .huyml-rail:hover span:last-child, .huyml-rail:focus-visible .huyml-rail__logo, .huyml-rail:focus-visible span:last-child { color: #FF4949; }
+.wordmark:hover { color: #FF4949; }
