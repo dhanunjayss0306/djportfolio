@@ -507,3 +507,7 @@ h1, h2 { font-family: 'Archivo', sans-serif; }
 /* Project opening: black screen goes up, then project is revealed underneath (project is mounted under the black transition). */
 .detail-transition { animation: detailUp 0.65s ease forwards; }
 @keyframes detailUp { 0%, 55% { transform: translateY(0); } 100% { transform: translateY(-100%); } }
+
+/* Loader video: user's generated pushing video, full screen. Video already contains the black panel moving right and fading to white, so no CSS panel slide here. */
+.loader--video { background: #fff !important; }
+.loader__video { width: 100%; height: 100%; object-fit: cover; display: block; }

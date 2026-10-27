@@ -3,6 +3,7 @@ import './App.css'
 import { supabase } from './lib/supabase'
 import profilePhoto from './assets/20251129_170634.jpg'
 import cartoonAvatar from './assets/cartoon-pushing-transparent.png'
+import cartoonVideo from './assets/cartoon-pushing-video.mp4'
 import heroPhoto from './assets/image.png'
 import quizCertificate from './assets/WhatsApp Image 2026-08-06 at 19.13.23.jpeg'
 import googleCertificate from './assets/Screenshot 2026-09-06 220049.png'
@@ -448,7 +449,7 @@ function App() {
 
   useEffect(() => {
     const t1 = window.setTimeout(() => setLoaderStage(1), 500)
-    const t2 = window.setTimeout(() => setIsLoading(false), 7000)
+    const t2 = window.setTimeout(() => setIsLoading(false), 9500)
     return () => { window.clearTimeout(t1); window.clearTimeout(t2) }
   }, [])
 
@@ -512,7 +513,7 @@ function App() {
   return (
     <>
       {isLoading && loaderStage === 0 && <div className="loader loader--huyml loader--black-empty" aria-hidden="true" />}
-      {isLoading && loaderStage === 1 && <div className="loader loader--huyml loader--pushing" aria-hidden="true"><img className="loader__person" src={cartoonAvatar} alt="" /></div>}
+      {isLoading && loaderStage === 1 && <div className="loader loader--video" aria-hidden="true"><video className="loader__video" src={cartoonVideo} poster={cartoonAvatar} autoPlay muted playsInline onEnded={() => setIsLoading(false)} /></div>}
       {detailTransition && <div className="detail-transition" aria-hidden="true"><span>LOADING PROJECT</span></div>}
       {selectedWork && <WorkDetail item={selectedWork} onBack={closeWork} />}
 
