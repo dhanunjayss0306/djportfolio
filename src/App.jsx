@@ -56,9 +56,16 @@ const defaultCertificateCopy = certificates.map(([title, image, alt], index) => 
 
 const defaultWork = [
   { id: 'portfolio', title: 'Dhanunjay Reddy Portfolio', description: 'A playful portfolio and content system for documenting AI, product, and creative technology work.', github_url: 'https://github.com/dhanunjayss0306/djportfolio', live_url: '', image_url: '', sort_order: 0 },
-  { id: 'virun-pitch', title: 'Virun / YatraSetu', description: 'A startup presentation for a Smart India Hackathon project: AI-powered tourism combining personalized itineraries with verified local expertise.', github_url: '', live_url: 'https://dhanunjayss0306.github.io/virun-pitch/', image_url: '', sort_order: 1, status: 'Hackathon pitch' },
-  { id: 'suren-pastries', title: 'Suren Pastries', description: 'A completed pastry ordering website with accounts and ordering flows. Security checks, deployment, and payment integration are still being finalized while testing continues.', github_url: '', live_url: 'https://suren-pastries-754v.onrender.com/home', image_url: '', sort_order: 2, status: 'Completed · testing' },
-  { id: 'swayansh-birthday', title: 'Swayansh Birthday Surprise', description: "A playful HTML-only surprise website made for a friend's birthday, designed as a small interactive experience.", github_url: '', live_url: 'https://dhanunjayss0306.github.io/swayansh-birthday/', image_url: '', sort_order: 3, status: 'Personal experiment' },
+  { id: 'sasyasakhi', title: 'SasyaSakhi', description: 'AI farming assistant for Indian farmers, in Telugu and English: soil report, crop suitability for paddy, cotton and chilli, fertilizer doses, weather and crop calendar. Team Footprints, AgriTech Summit 2026.', github_url: 'https://github.com/dhanunjayss0306/SasyaSakhi', live_url: '', image_url: '', sort_order: 1, status: 'Hackathon prototype' },
+  { id: 'virun', title: 'Virun', description: 'AI-powered tourism marketplace combining personalized itineraries with verified local expertise.', github_url: 'https://github.com/KinGMssN/virun', live_url: 'https://kingmssn.github.io/virun/', image_url: '', sort_order: 2, status: 'Hackathon build' },
+  { id: 'vr-fitness-gym', title: 'VR Fitness Gym', description: 'Website for VR Fitness Gym in Visakhapatnam, with static, dynamic and dynamic-plus-AI options explained for the gym owner.', github_url: '', live_url: '', image_url: '', sort_order: 3, status: 'Client website' },
+  { id: 'persona', title: 'Persona', description: 'Personal reminder and planner app: calendar, voice-to-calendar, journal, reminders, group tasks and a personal AI from your own data.', github_url: '', live_url: 'https://dhanunjayss0306.github.io/Persona-/', image_url: '', sort_order: 4, status: 'Fullstack app' },
+  { id: 'global-tap', title: 'Global Tap', description: 'Fintech and travel app build, with backend and frontend work in progress.', github_url: 'https://github.com/amruthalakshmipeddireddy-max/Global-Tap', live_url: '', image_url: '', sort_order: 5, status: 'In progress' },
+  { id: 'quantum-routing', title: 'Quantum Geometry Routing', description: 'Hackathon build for quantum geometry routing, with a live frontend and backend.', github_url: '', live_url: 'https://quantum-geometry-routing.pages.dev', image_url: '', sort_order: 6, status: 'Hackathon build' },
+  { id: 'sapss', title: 'SAPSS', description: 'Smart and Automated Public Sanitation System for the Vishwakarma Awards 2026-27 Stage 2, team lead. IoT event-driven auto-cleaning concept for high-traffic public toilets.', github_url: '', live_url: '', image_url: '', sort_order: 7, status: 'Vishwakarma Stage 2' },
+  { id: 'hackerrank-audit', title: 'HackerRank Ghost Data Audit', description: 'Deterministic deletion-audit agent for HackerRank Orchestrate, checking ghost data across cases.', github_url: '', live_url: '', image_url: '', sort_order: 8, status: 'Hackathon build' },
+  { id: 'suren-pastries', title: 'Suren Pastries', description: 'A completed pastry ordering website with accounts and ordering flows. Security checks, deployment, and payment integration are still being finalized while testing continues.', github_url: '', live_url: 'https://suren-pastries-754v.onrender.com/home', image_url: '', sort_order: 9, status: 'Completed · testing' },
+  { id: 'swayansh-birthday', title: 'Swayansh Birthday Surprise', description: "A playful HTML-only surprise website made for a friend's birthday, designed as a small interactive experience.", github_url: '', live_url: 'https://dhanunjayss0306.github.io/swayansh-birthday/', image_url: '', sort_order: 10, status: 'Personal experiment' },
 ]
 
 function readAdminStore(key, fallback) {
@@ -374,7 +381,7 @@ function WorkCarousel({ work, onFocus, onOpen }) {
         <div className="work-carousel__stage">
           {work.map((item, index) => {
             const offset = index - span
-            const style = { transform: `translate(-50%, -50%) translateY(${offset * 52}vh) rotate(${offset * 9}deg) scale(${1 - Math.min(Math.abs(offset) * 0.07, 0.18)})`, opacity: Math.max(0, 1 - Math.abs(offset) * 0.55), zIndex: 10 - Math.round(Math.abs(offset)), pointerEvents: Math.abs(offset) < 1.5 ? 'auto' : 'none' }
+            const style = { transform: `translate(-50%, -50%) translate(${offset * 18}vw, ${offset * 52}vh) rotate(${offset * 9}deg) scale(${1 - Math.min(Math.abs(offset) * 0.07, 0.18)})`, opacity: Math.max(0, 1 - Math.abs(offset) * 0.55), zIndex: 10 - Math.round(Math.abs(offset)), pointerEvents: Math.abs(offset) < 1.5 ? 'auto' : 'none' }
             return <article className={`work-card ${index === focused ? 'work-card--focused' : ''}`} key={item.id} style={style} onClick={() => { if (index === focused) onOpen(item); else scrollToProject(index) }} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') { if (index === focused) onOpen(item); else scrollToProject(index) } }} aria-label={`${item.title}, project ${index + 1} of ${count}`}>
               <p className="project__type">{item.status || 'Selected build'}</p>
               <h3>{item.title}</h3>
@@ -402,13 +409,15 @@ function WorkDetail({ item, onBack }) {
 
 function HomeCertificates({ certificateCopy }) {
   const [selected, setSelected] = useState(null)
+  const [opening, setOpening] = useState(false)
+  const openCert = (index) => { if (opening) return; setOpening(true); window.setTimeout(() => { setSelected(index); setOpening(false) }, 650) }
   useEffect(() => {
     if (selected === null) return
     const onKey = (e) => { if (e.key === 'Escape') setSelected(null) }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [selected])
-  return <section className="home-certificates" id="home-certificates"><p className="section-label">Selected certificates <span>— {String(certificateCopy.length).padStart(2, '0')}</span></p><h2>Certificates.</h2><div className="home-certificates__grid">{certificateCopy.map((cert, index) => <article key={cert.id || cert.title} className="home-certificate" onClick={() => setSelected(index)} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') setSelected(index) }}><img src={cert.image} alt={cert.alt || cert.title} /><p>{cert.title}</p></article>)}</div>{selected !== null && <div className="modal" onClick={() => setSelected(null)}><div className="modal__panel" onClick={(e) => e.stopPropagation()}><button className="modal__close" type="button" onClick={() => setSelected(null)} aria-label="Close">×</button><h2>{certificateCopy[selected].title}</h2><img src={certificateCopy[selected].image} alt={certificateCopy[selected].alt || certificateCopy[selected].title} /></div></div>}</section>
+  return <section className="home-certificates" id="home-certificates"><p className="section-label">Selected certificates <span>— {String(certificateCopy.length).padStart(2, '0')}</span></p><h2>Certificates.</h2><div className="home-certificates__grid">{certificateCopy.map((cert, index) => <article key={cert.id || cert.title} className="home-certificate" onClick={() => openCert(index)} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') openCert(index) }}><img src={cert.image} alt={cert.alt || cert.title} /><p>{cert.title}</p></article>)}</div>{opening && <div className="detail-transition" aria-hidden="true"><span>OPENING CERTIFICATE</span></div>}{selected !== null && <div className="modal" onClick={() => setSelected(null)}><div className="modal__panel" onClick={(e) => e.stopPropagation()}><button className="modal__close" type="button" onClick={() => setSelected(null)} aria-label="Close">×</button><h2>{certificateCopy[selected].title}</h2><img src={certificateCopy[selected].image} alt={certificateCopy[selected].alt || certificateCopy[selected].title} /></div></div>}</section>
 }
 
 function HomeJourney({ journey }) {
@@ -434,16 +443,17 @@ function App() {
   const [focusedWork, setFocusedWork] = useState(0)
   const [selectedWork, setSelectedWork] = useState(null)
   const [detailTransition, setDetailTransition] = useState(false)
-  const [loaderCount, setLoaderCount] = useState(0)
+  const [loaderStage, setLoaderStage] = useState(0)
   const [showMeta, setShowMeta] = useState(false)
   const [journey, setJourney] = useState(() => ({ ...defaultJourney, ...readAdminStore('portfolio-journey', {}) }))
   const [certificateCopy, setCertificateCopy] = useState(() => readAdminStore('portfolio-certificates', defaultCertificateCopy))
   const [work, setWork] = useState(() => readAdminStore('portfolio-work', defaultWork))
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setIsLoading(false), 1800)
-    const counter = window.setInterval(() => setLoaderCount((c) => Math.min(100, c + 4)), 60)
-    return () => { window.clearTimeout(timer); window.clearInterval(counter) }
+    const t1 = window.setTimeout(() => setLoaderStage(1), 900)
+    const t2 = window.setTimeout(() => setLoaderStage(2), 3100)
+    const t3 = window.setTimeout(() => setIsLoading(false), 4100)
+    return () => { window.clearTimeout(t1); window.clearTimeout(t2); window.clearTimeout(t3) }
   }, [])
 
   useEffect(() => {
@@ -488,7 +498,8 @@ function App() {
       ])
       if (remoteJourney) setJourney({ ...defaultJourney, intro: remoteJourney.intro, schoolTitle: remoteJourney.school_title, schoolSubtitle: remoteJourney.school_subtitle, schoolText: remoteJourney.school_text, schoolImage: remoteJourney.school_image || defaultJourney.schoolImage, collegeTitle: remoteJourney.college_title, collegeSubtitle: remoteJourney.college_subtitle, collegeText: remoteJourney.college_text, collegeImage: remoteJourney.college_image || defaultJourney.collegeImage, universityTitle: remoteJourney.university_title, universitySubtitle: remoteJourney.university_subtitle, universityText: remoteJourney.university_text, universityImage: remoteJourney.university_image || defaultJourney.universityImage, iitTitle: remoteJourney.iit_title, iitSubtitle: remoteJourney.iit_subtitle, iitText: remoteJourney.iit_text, iitImage: remoteJourney.iit_image || defaultJourney.iitImage })
       if (remoteCertificates?.length) setCertificateCopy(remoteCertificates.map(({ id, title, image_url: image, alt_text: alt }) => ({ id, title, image: image || defaultCertificateCopy.find((item) => item.id === id)?.image || '', alt })))
-      if (remoteWork?.length) setWork(remoteWork)
+      // Local work list is the source of truth, so the added projects show live even if Supabase still has the old 4 rows.
+      // if (remoteWork?.length) setWork(remoteWork)
     }
     loadRemoteContent()
   }, [])
@@ -504,13 +515,9 @@ function App() {
 
   return (
     <>
-      <div className={`loader loader--huyml ${isLoading ? '' : 'loader--done'}`} aria-hidden="true">
-        <img className="loader__person" src={cartoonAvatar} alt="" />
-        <div className="loader__mark">DHANUNJAY<br />REDDY</div>
-        <div className="loader__counter">{loaderCount}</div>
-        <div className="loader__line"><i /></div>
-        <span className="loader__caption">PORTFOLIO — © 2026</span>
-      </div>
+      {isLoading && loaderStage === 0 && <div className="loader loader--huyml loader--black-empty" aria-hidden="true" />}
+      {isLoading && loaderStage === 1 && <div className="loader loader--huyml loader--pushing" aria-hidden="true"><img className="loader__person" src={cartoonAvatar} alt="" /></div>}
+      {isLoading && loaderStage === 2 && <div className="loader loader--white" aria-hidden="true"><div className="loader__mark">DHANUNJAY<br />REDDY</div></div>}
       {detailTransition && <div className="detail-transition" aria-hidden="true"><span>LOADING PROJECT</span></div>}
       {selectedWork && <WorkDetail item={selectedWork} onBack={closeWork} />}
 

@@ -444,3 +444,22 @@ h1, h2 { font-family: 'Archivo', sans-serif; }
 
 /* Photo fix v2: portrait first in hero, so the whole photo and face are in the first view, not below the fold. */
 .huyml-home .hero--huyml .hero__portrait { order: -1; }
+
+/* Pushing loader v5: person VISIBLE from the start, at the left edge inside the panel, pushing slowly. */
+.loader--huyml .loader__person { left: 24px; bottom: 0; height: clamp(220px, 45vh, 420px); width: auto; object-fit: contain; animation: pusherInVisible 0.8s ease forwards; }
+@keyframes pusherInVisible { from { transform: translateX(-220%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+.loader--huyml.loader--done { transform: translateX(130%) !important; transition: transform 2.2s ease !important; }
+.loader--huyml.loader--done .loader__person { animation: none; opacity: 1; transition: none; }
+
+/* Loader v6, exact sequence user gave: black empty, then white with red name, person pushes full panel slowly. */
+.loader--black-empty { background: #000 !important; }
+.loader--pushing { background: #000 !important; animation: pushSlideFull 2.2s ease forwards; }
+@keyframes pushSlideFull { from { transform: translateX(0); } to { transform: translateX(130%); } }
+.loader--pushing .loader__person { position: absolute; left: 24px; bottom: 0; height: clamp(220px, 45vh, 420px); width: auto; object-fit: contain; animation: none; }
+.loader--white { background: #F5F5F5 !important; color: #FF4949 !important; display: flex; align-items: center; justify-content: center; }
+.loader--white .loader__mark { color: #FF4949; font-family: 'Archivo', sans-serif; font-weight: 900; font-size: clamp(64px, 12vw, 160px); line-height: 0.9; text-align: center; animation: none; }
+/* Hero order back to heading first, so red name is seen first on the white page, photo below it, face fully visible. */
+.huyml-home .hero--huyml .hero__portrait { order: 1; }
+.huyml-home .hero--huyml .hero__aside { order: 2; }
+
+.huyml-home .hero--huyml .scroll-cue { order: 3; }
