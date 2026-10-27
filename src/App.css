@@ -582,3 +582,52 @@ h1, h2 { font-family: 'Archivo', sans-serif; }
   .huyml-home .hero--huyml .skills-strip--hero { order: 3; }
   .huyml-home .hero--huyml .scroll-cue { order: 4; }
 }
+
+/* Top photo beside the name, with caption in the same Archivo font, push-in starting animation like the old pushing loader. */
+.huyml-home .hero--huyml .hero__heading { position: relative; }
+.hero__top-photo { position: absolute; left: calc(50% + 470px); top: 32%; width: 210px; margin: 0; z-index: 2; animation: topPhotoPush 0.9s ease-out both; }
+.hero__top-photo img { width: 100%; height: auto; display: block; border: 1px solid #ddd; background: #fff; object-fit: contain; }
+.hero__top-photo figcaption { font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; text-align: center; margin-top: 8px; color: #000; }
+@keyframes topPhotoPush { from { opacity: 0; transform: translateY(-50%) translateX(-140px) rotate(-2deg); } to { opacity: 1; transform: translateY(-50%) translateX(0) rotate(0deg); } }
+@media (max-width: 1300px) {
+  .hero__top-photo { left: calc(50% + 380px); width: 160px; }
+}
+@media (max-width: 1100px) {
+  .hero__top-photo { position: static; width: 220px; margin: 20px auto 0; animation: topPhotoPushMobile 0.9s ease-out both; }
+  @keyframes topPhotoPushMobile { from { opacity: 0; transform: translateX(-80px); } to { opacity: 1; transform: translateX(0); } }
+}
+
+/* Mobile menu: links white, because menu panel is dark — black on black was unreadable in your screenshot. */
+@media (max-width: 900px) {
+  .huyml-home .nav a, .huyml-home .nav__link-button { color: #fff; }
+  .huyml-home .nav { background: #181818; }
+}
+/* Mobile top photo: full width, above the name, on top, caption white over the photo. */
+@media (max-width: 768px) {
+  .huyml-home .hero--huyml .hero__heading { display: flex; flex-direction: column; }
+  .huyml-home .hero--huyml .hero__heading .eyebrow { order: 1; }
+  .huyml-home .hero--huyml .hero__heading h1 { order: 2; }
+  .hero__top-photo { order: -1; position: relative; width: 100%; max-width: none; margin: 0 0 20px; }
+  .hero__top-photo img { width: 100%; height: auto; object-fit: contain; }
+  .hero__top-photo figcaption { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 28px 12px 12px; color: #fff; background: linear-gradient(transparent, rgba(0, 0, 0, 0.7)); }
+  .huyml-home .hero--huyml .hero__heading .hero__role { order: 3; }
+  .huyml-home .hero--huyml .hero__heading .hero__intro { order: 4; }
+  .huyml-home .hero--huyml .hero__heading .hero__actions { order: 5; }
+}
+
+/* Fix: mobile push keyframes at top level, so the animation actually runs and the photo is not stuck invisible. */
+@keyframes topPhotoPushMobile { from { opacity: 0; transform: translateX(-80px); } to { opacity: 1; transform: translateX(0); } }
+@media (max-width: 768px) {
+  .hero__top-photo { animation: topPhotoPushMobile 0.9s ease-out both; }
+}
+
+/* Test fix: no animation on mobile top photo, so it cannot be stuck invisible. */
+@media (max-width: 768px) {
+  .hero__top-photo, .hero__top-photo img { animation: none !important; opacity: 1 !important; }
+}
+
+/* Mobile top photo robust: figure is first in DOM, so it is above the name without flex-order tricks. */
+@media (max-width: 768px) {
+  .huyml-home .hero--huyml .hero__heading { display: block; }
+  .hero__top-photo { position: relative; width: 100%; margin: 0 0 20px; }
+}

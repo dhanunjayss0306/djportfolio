@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import { supabase } from './lib/supabase'
 import profilePhoto from './assets/20251129_170634.jpg'
+import heroTopPhoto from './assets/hero-top-photo.jpg'
 import skillProgramming from './assets/skill-programming.jpg'
 import skillWeb from './assets/skill-web.jpg'
 import skillAi from './assets/skill-ai.jpg'
@@ -521,15 +522,13 @@ function App() {
           <nav className={menuOpen ? 'nav nav--open' : 'nav'} aria-label="Main navigation">
             <button className="nav__link-button" type="button" onClick={() => { closeMenu(); setShowAbout(true) }}>About</button>
             <button className="nav__link-button" type="button" onClick={() => scrollToId('work')}>Work</button>
-            <button className="nav__link-button" type="button" onClick={() => scrollToId('home-certificates')}>Certificates</button>
-            <button className="nav__link-button" type="button" onClick={() => scrollToId('home-journey')}>Journey</button>
-            <button className="nav__link-button" type="button" onClick={() => { closeMenu(); setShowContact(true) }}>Contact</button>
           </nav>
           <div className="header-tools"><ISTClock /><SocialLinks /><AdminIcon /></div>
           <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Toggle navigation"><span /><span /></button>
         </header>
 
         <section className="hero hero--huyml" id="top">
+          <figure className="hero__top-photo"><img src={heroTopPhoto} alt="Dhanunjay Reddy in a group photo" /><figcaption>Dhanunjay Reddy · Visakhapatnam, India</figcaption></figure>
           <div className="hero__heading"><p className="eyebrow">Hello, I&apos;m</p><h1>DHANUNJAY<br />REDDY</h1><p className="hero__role">AI &amp; product builder · 2nd-year B.Tech CSE, Andhra University · IIT Madras BS</p><p className="hero__intro">I turn ambitious ideas into polished, real-world experiences. I&apos;m exploring the space where AI, product thinking, and expressive interfaces meet, and I like shipping things that feel as good to use as they are clever under the hood.</p><div className="hero__actions"><button type="button" onClick={() => scrollToId('work')}>View My Work ↓</button><button type="button" onClick={() => { setShowContact(true) }}>Contact ↗</button></div></div>
           <figure className="hero__portrait"><img src={profilePhoto} alt="Dhanunjay in Visakhapatnam" /><figcaption>creative technologist · visakhapatnam, india</figcaption></figure>
           <div className="hero__aside">B.Tech CSE (Core)<br />Andhra University / 2029<br /><span>CGPA 8.44 · 2nd year</span></div>
