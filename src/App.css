@@ -930,3 +930,13 @@ body:has(.admin-page) { background: #000; }
 
 /* Scramble Refresh sits above the pet, so they never overlap. */
 .scramble-refresh { bottom: 20px; right: 20px; }
+
+/* Pet inquiry modal: email first, then question. Not a chatbot. */
+.modal__panel--pet { max-width: 480px; }
+.pet-form__label { display: block; margin: 16px 0; text-align: left; }
+.pet-form__label span { display: block; font-size: 13px; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 6px; }
+.pet-form__input { width: 100%; padding: 12px; border: 1px solid #ddd; font-size: 16px; background: #fff; }
+.pet-form__note { font-size: 14px; color: #666; }
+.pet-form__back { display: block; margin-top: 12px; background: none; border: none; cursor: pointer; font-size: 14px; }
+.pet-form__honeypot { position: absolute; left: -9999px; opacity: 0; }
+.pet-widget__label { display: block; margin-top: 4px; background: #000; color: #fff; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 8px; text-align: center; }

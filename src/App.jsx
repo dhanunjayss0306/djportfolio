@@ -126,27 +126,36 @@ function ThreadCursor() {
     const ripples = []
     const onDown = (e) => ripples.push({ x: e.clientX, y: e.clientY, r: 0, a: 1 })
     window.addEventListener('mousedown', onDown)
-    const points = Array.from({ length: 22 }, () => ({ x: mouse.x, y: mouse.y }))
+    const threads = [
+      { lead: 0.65, follow: 0.78, color: '#ff4949', width: 2.5, dx: 0, dy: 0 },
+      { lead: 0.55, follow: 0.68, color: '#1d1d1f', width: 1.5, dx: -10, dy: 6 },
+      { lead: 0.48, follow: 0.60, color: '#ff8a8a', width: 2, dx: 10, dy: -6 },
+      { lead: 0.38, follow: 0.50, color: '#8a8a8a', width: 1.5, dx: -18, dy: -10 },
+    ].map((cfg) => ({ ...cfg, points: Array.from({ length: 14 }, () => ({ x: mouse.x, y: mouse.y })) }))
     let raf = 0
     const draw = () => {
       ctx.clearRect(0, 0, w, h)
-      points[0].x += (mouse.x - points[0].x) * 0.35
-      points[0].y += (mouse.y - points[0].y) * 0.35
-      for (let i = 1; i < points.length; i++) {
-        points[i].x += (points[i - 1].x - points[i].x) * 0.45
-        points[i].y += (points[i - 1].y - points[i].y) * 0.45
+      for (const th of threads) {
+        const tx = mouse.x + th.dx
+        const ty = mouse.y + th.dy
+        th.points[0].x += (tx - th.points[0].x) * th.lead
+        th.points[0].y += (ty - th.points[0].y) * th.lead
+        for (let i = 1; i < th.points.length; i++) {
+          th.points[i].x += (th.points[i - 1].x - th.points[i].x) * th.follow
+          th.points[i].y += (th.points[i - 1].y - th.points[i].y) * th.follow
+        }
+        ctx.beginPath()
+        ctx.moveTo(th.points[0].x, th.points[0].y)
+        for (let i = 1; i < th.points.length - 1; i++) {
+          const mx = (th.points[i].x + th.points[i + 1].x) / 2
+          const my = (th.points[i].y + th.points[i + 1].y) / 2
+          ctx.quadraticCurveTo(th.points[i].x, th.points[i].y, mx, my)
+        }
+        ctx.strokeStyle = th.color
+        ctx.lineWidth = th.width
+        ctx.lineCap = 'round'
+        ctx.stroke()
       }
-      ctx.beginPath()
-      ctx.moveTo(points[0].x, points[0].y)
-      for (let i = 1; i < points.length - 1; i++) {
-        const mx = (points[i].x + points[i + 1].x) / 2
-        const my = (points[i].y + points[i + 1].y) / 2
-        ctx.quadraticCurveTo(points[i].x, points[i].y, mx, my)
-      }
-      ctx.strokeStyle = '#ff4949'
-      ctx.lineWidth = 2
-      ctx.lineCap = 'round'
-      ctx.stroke()
       ctx.beginPath()
       ctx.arc(mouse.x, mouse.y, 5, 0, Math.PI * 2)
       ctx.fillStyle = '#ff4949'
@@ -171,8 +180,43 @@ function ThreadCursor() {
 }
 
 function PetWidget() {
-  const [jump, setJump] = useState(false)
-  return <button className={jump ? 'pet-widget pet-widget--jump' : 'pet-widget'} type="button" aria-label="DJ pet, click to jump" title="DJ pet" onClick={() => { setJump(true); window.setTimeout(() => setJump(false), 600) }}><img src={logoDjTransparent} alt="DJ pet" /></button>
+  const [open, setOpen] = useState(false)
+  const [step, setStep] = useState(1)
+  const [email, setEmail] = useState('')
+  const [category, setCategory] = useState('')
+  const [question, setQuestion] = useState('')
+  const [honeypot, setHoneypot] = useState('')
+  const [status, setStatus] = useState('')
+  const [sending, setSending] = useState(false)
+  const close = () => { setOpen(false); setStatus('') }
+  const submit = async (event) => {
+    event.preventDefault()
+    if (honeypot) { close(); return }
+    const last = Number(window.localStorage.getItem('pet-inquiry-last') || 0)
+    if (Date.now() - last < 10 * 60 * 1000) { setStatus('Please wait a few minutes before sending another message.'); return }
+    if (!supabase) {
+      window.location.href = `mailto:dhanunjay905@gmail.com?subject=${encodeURIComponent('Pet inquiry: ' + category)}&body=${encodeURIComponent('From: ' + email + '\n\n' + question)}`
+      setStatus('Mail app opened. Send it from there and it will reach dhanunjay905@gmail.com.')
+      return
+    }
+    setSending(true)
+    const form = { name: 'Pet inquiry', email, phone: '', service: category, message: question }
+    const { error } = await supabase.from('contact_submissions').insert(form)
+    if (!error) { try { await supabase.functions.invoke('notify-contact', { body: form }) } catch {} }
+    setSending(false)
+    if (error) { setStatus('Could not send this yet. Please try again.'); return }
+    window.localStorage.setItem('pet-inquiry-last', String(Date.now()))
+    setStatus('Sent. Your question will reach Dhanunjay by mail, and he will reply to your mail ID.')
+    setQuestion(''); setCategory('')
+  }
+  return <>
+    <button className="pet-widget" type="button" aria-label="Ask Dhanunjay a question" title="Ask Dhanunjay" onClick={() => { setOpen(true); setStep(1) }}><img src={logoDjTransparent} alt="DJ pet" /><span className="pet-widget__label">Ask DJ</span></button>
+    {open && <div className="modal" onClick={close}><div className="modal__panel modal__panel--pet" onClick={(event) => event.stopPropagation()}><button className="modal__close" type="button" onClick={close} aria-label="Close">×</button><h2>Ask Dhanunjay<em>.</em></h2><p>This is not a chatbot. Your question goes to his mail, and he replies to your mail ID.</p>
+      {step === 1 ? <form onSubmit={(e) => { e.preventDefault(); if (email.trim()) setStep(2) }}><label className="pet-form__label"><span>Your mail ID</span><input className="pet-form__input" required type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" /></label><button className="admin-submit" type="submit">Next <span>→</span></button></form>
+      : <form onSubmit={submit}><input type="text" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} className="pet-form__honeypot" tabIndex={-1} autoComplete="off" aria-hidden="true" /><label className="pet-form__label"><span>What is this about?</span><select className="pet-form__input" required value={category} onChange={(e) => setCategory(e.target.value)}><option value="">Choose one</option><option>Job</option><option>Internship</option><option>Portfolio feedback</option><option>General inquiry</option><option>Other</option></select></label><label className="pet-form__label"><span>Your question for Dhanunjay</span><textarea className="pet-form__input" rows="4" required minLength={10} value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="Ask your question here..." /></label><p className="pet-form__note">From: {email}</p><button className="admin-submit" type="submit" disabled={sending}>{sending ? 'Sending...' : 'Send question'} <span>↗</span></button><button className="pet-form__back" type="button" onClick={() => setStep(1)}>← Change mail ID</button></form>}
+      {status && <p className="admin-notice">{status}</p>}
+    </div></div>}
+  </>
 }
 
 function PageHeader() {
@@ -509,7 +553,8 @@ function WorkCarousel({ work, onFocus, onOpen }) {
         <div className="work-carousel__stage">
           {work.map((item, index) => {
             const offset = index - span
-            const style = { transform: `translate(-50%, -50%) translate(${offset * 18}vw, ${offset * 52}vh) rotate(${offset * 9}deg) scale(${1 - Math.min(Math.abs(offset) * 0.07, 0.18)})`, opacity: Math.max(0, 1 - Math.abs(offset) * 0.55), zIndex: 10 - Math.round(Math.abs(offset)), pointerEvents: Math.abs(offset) < 1.5 ? 'auto' : 'none' }
+            const isMobileWork = typeof window !== 'undefined' && window.innerWidth <= 768
+            const style = { transform: `translate(-50%, -50%) translate(${isMobileWork ? 0 : offset * 18}vw, ${offset * 52}vh) rotate(${offset * 9}deg) scale(${1 - Math.min(Math.abs(offset) * 0.07, 0.18)})`, opacity: Math.max(0, 1 - Math.abs(offset) * 0.55), zIndex: 10 - Math.round(Math.abs(offset)), pointerEvents: Math.abs(offset) < 1.5 ? 'auto' : 'none' }
             return <article className={`work-card ${index === focused ? 'work-card--focused' : ''}`} key={item.id} style={style} onClick={() => { if (index === focused) onOpen(item); else scrollToProject(index) }} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') { if (index === focused) onOpen(item); else scrollToProject(index) } }} aria-label={`${item.title}, project ${index + 1} of ${count}`}>
               {item.image_url ? <img src={item.image_url} alt={item.title} /> : <div className="work-card__placeholder" aria-hidden="true">{String(index + 1).padStart(2, '0')}</div>}
               <h3>{item.title}</h3>
