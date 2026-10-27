@@ -654,3 +654,38 @@ h1, h2 { font-family: 'Archivo', sans-serif; }
 }
 /* Top photo fits: full image, no cropping, caption fits below on desktop and over the photo on mobile. */
 .hero__top-photo img { object-fit: contain; width: 100%; height: auto; }
+
+/* CORRECTION 2026-10-27: phone nav font WHITE, as user clarified. Dark header + dark menu panel on phone, white links, readable. */
+@media (max-width: 900px) {
+  .huyml-home .site-header { background: #181818; border-bottom: 1px solid #181818; }
+  .huyml-home .site-header .wordmark, .huyml-home .nav a, .huyml-home .nav__link-button { color: #fff; }
+  .huyml-home .site-header .wordmark:hover, .huyml-home .nav__link-button:hover { color: #ff4949; }
+  .huyml-home .nav { background: #181818; border-bottom: 1px solid #181818; }
+  .huyml-home .menu-button span { background: #fff; }
+  .huyml-home .ist-clock { color: #aaa; }
+  .huyml-home .social-links a { color: #ccc; }
+  .huyml-home .admin-icon { color: #ccc; }
+}
+/* CORRECTION: Sid Ahmed photo on mobile — cross in diagonally at opening, and cover the entire width, full-bleed, caption white over it. */
+@keyframes topPhotoCross { from { opacity: 0; transform: translate(-140px, 80px) rotate(-9deg); } to { opacity: 1; transform: translate(0, 0) rotate(0deg); } }
+@media (max-width: 768px) {
+  .hero__top-photo { width: calc(100% + 40px); max-width: none; margin-left: -20px; margin-right: -20px; margin-bottom: 20px; animation: topPhotoCross 0.9s ease-out both; }
+  .hero__top-photo img { width: 100%; height: auto; object-fit: cover; display: block; }
+  .hero__top-photo figcaption { color: #fff; font-size: 13px; padding: 36px 16px 14px; background: linear-gradient(transparent, rgba(0, 0, 0, 0.75)); }
+}
+
+/* Start loader, restored 2026-10-27: desktop cartoon pushes black panel right, phone black screen pushes top-to-bottom, then site appears. Total 2s. */
+.start-loader { position: fixed; inset: 0; z-index: 900; background: #fff; overflow: hidden; animation: startLoaderExit 0.8s ease 1.2s forwards; }
+.start-loader__panel { position: absolute; top: 0; bottom: 0; left: 30%; right: 0; background: #000; animation: startPush 1.2s ease forwards; }
+.start-loader__person { position: absolute; left: calc(30% - 170px); bottom: 0; height: 45vh; width: auto; object-fit: contain; animation: startPush 1.2s ease forwards; }
+.start-loader__mark { position: absolute; left: 24px; bottom: 24px; font-family: 'Archivo', sans-serif; font-weight: 900; letter-spacing: 0.12em; color: #ff4949; font-size: 20px; }
+@keyframes startPush { from { transform: translateX(0); } to { transform: translateX(35vw); } }
+@keyframes startLoaderExit { to { transform: translateX(100%); visibility: hidden; } }
+@media (max-width: 768px) {
+  .start-loader { background: #000; animation: startLoaderExitDown 0.8s ease 1.2s forwards; }
+  .start-loader__panel { left: 0; right: 0; top: 0; bottom: 0; background: #000; animation: startPushDown 1.2s ease forwards; }
+  .start-loader__person { display: none; }
+  .start-loader__mark { left: 0; right: 0; bottom: auto; top: 50%; text-align: center; color: #fff; font-size: 22px; transform: translateY(-50%); }
+  @keyframes startPushDown { from { transform: translateY(-20%); } to { transform: translateY(0); } }
+  @keyframes startLoaderExitDown { to { transform: translateY(100%); visibility: hidden; } }
+}

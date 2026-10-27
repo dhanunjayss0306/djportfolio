@@ -3,6 +3,7 @@ import './App.css'
 import { supabase } from './lib/supabase'
 import profilePhoto from './assets/20251129_170634.jpg'
 import heroTopPhoto from './assets/hero-top-photo.jpg'
+import pushingCartoon from './assets/cartoon-pushing-transparent.png'
 import skillProgramming from './assets/skill-programming.jpg'
 import skillWeb from './assets/skill-web.jpg'
 import skillAi from './assets/skill-ai.jpg'
@@ -432,7 +433,8 @@ function HomeJourney({ journey }) {
 }
 
 function App() {
-  const [isLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  useEffect(() => { const timer = window.setTimeout(() => setIsLoading(false), 2000); return () => window.clearTimeout(timer) }, [])
   const [menuOpen, setMenuOpen] = useState(false)
   const [mode, setMode] = useState(() => window.localStorage.getItem('portfolio-theme') === 'dark' ? 'dark' : 'light')
   const [showCertificates, setShowCertificates] = useState(() => window.location.hash === '#certificates')
@@ -465,7 +467,7 @@ function App() {
   }, [])
 
   const openPageOrScroll = (page) => {
-    const isMobile = window.innerWidth <= 768
+    const isMobile = window.innerWidth <= 900
     if (!isMobile) {
       if (page === 'certificates') scrollToId('home-certificates')
       else if (page === 'journey') scrollToId('home-journey')
@@ -532,6 +534,7 @@ function App() {
 
   return (
     <>
+      {isLoading && <div className="start-loader" aria-hidden="true"><img className="start-loader__person" src={pushingCartoon} alt="" /><div className="start-loader__panel" /><span className="start-loader__mark">DHANUNJAY</span></div>}
       {detailTransition && <div className="detail-transition" aria-hidden="true"><span>{transitionText}</span></div>}
       {selectedWork && <WorkDetail item={selectedWork} onBack={closeWork} />}
 
