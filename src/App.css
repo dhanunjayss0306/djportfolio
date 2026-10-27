@@ -463,3 +463,7 @@ h1, h2 { font-family: 'Archivo', sans-serif; }
 .huyml-home .hero--huyml .hero__aside { order: 2; }
 
 .huyml-home .hero--huyml .scroll-cue { order: 3; }
+
+/* Loader v7: cartoon on WHITE, at the intersection line, pushing the black panel right. Not on black. */
+.loader--pushing { background: #000 !important; animation: pushSlideFull 2.2s ease forwards; }
+.loader--pushing .loader__person { position: absolute; left: 0; bottom: 15vh; height: 50vh; width: auto; object-fit: contain; transform: translateX(-100%); animation: none; }

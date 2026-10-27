@@ -451,9 +451,8 @@ function App() {
 
   useEffect(() => {
     const t1 = window.setTimeout(() => setLoaderStage(1), 900)
-    const t2 = window.setTimeout(() => setLoaderStage(2), 3100)
-    const t3 = window.setTimeout(() => setIsLoading(false), 4100)
-    return () => { window.clearTimeout(t1); window.clearTimeout(t2); window.clearTimeout(t3) }
+    const t2 = window.setTimeout(() => setIsLoading(false), 3100)
+    return () => { window.clearTimeout(t1); window.clearTimeout(t2) }
   }, [])
 
   useEffect(() => {
@@ -517,7 +516,6 @@ function App() {
     <>
       {isLoading && loaderStage === 0 && <div className="loader loader--huyml loader--black-empty" aria-hidden="true" />}
       {isLoading && loaderStage === 1 && <div className="loader loader--huyml loader--pushing" aria-hidden="true"><img className="loader__person" src={cartoonAvatar} alt="" /></div>}
-      {isLoading && loaderStage === 2 && <div className="loader loader--white" aria-hidden="true"><div className="loader__mark">DHANUNJAY<br />REDDY</div></div>}
       {detailTransition && <div className="detail-transition" aria-hidden="true"><span>LOADING PROJECT</span></div>}
       {selectedWork && <WorkDetail item={selectedWork} onBack={closeWork} />}
 
