@@ -922,11 +922,11 @@ body:has(.admin-page) { background: #000; }
 @media (pointer: coarse) { .thread-cursor { display: none; } }
 
 /* DJ pet widget, bottom right, logo with background removed, bobbing, jumps on click. */
-.pet-widget { position: fixed; right: 20px; bottom: 20px; z-index: 400; background: none; border: none; padding: 0; cursor: pointer; animation: petBob 2.2s ease-in-out infinite; }
+.pet-widget { position: fixed; left: 20px; right: auto; bottom: 20px; z-index: 400; background: none; border: none; padding: 0; cursor: pointer; animation: petBob 2.2s ease-in-out infinite; }
 .pet-widget img { width: 64px; height: auto; display: block; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.25)); }
 .pet-widget--jump { animation: petJump 0.6s ease; }
 @keyframes petBob { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-8px) rotate(2deg); } }
 @keyframes petJump { 0% { transform: translateY(0) scale(1); } 40% { transform: translateY(-28px) scale(1.08); } 100% { transform: translateY(0) scale(1); } }
 
 /* Scramble Refresh sits above the pet, so they never overlap. */
-.scramble-refresh { bottom: 120px; }
+.scramble-refresh { bottom: 20px; right: 20px; }
