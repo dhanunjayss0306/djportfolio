@@ -919,20 +919,20 @@ body:has(.admin-page) { background: #000; }
 .work-list__colors i { display: block; width: 14px; height: 14px; }
 
 /* Work number: huge, on the right, diagonal. Desktop only, mobile stays as before. */
-.work-number { position: absolute; right: 32px; bottom: 32px; z-index: 25; font-family: 'Archivo', sans-serif; font-weight: 900; font-size: clamp(72px, 11vw, 150px); line-height: 0.8; color: #000; transform: rotate(-12deg); pointer-events: none; }
-.work-number span { font-size: clamp(18px, 2vw, 28px); vertical-align: top; }
+.work-number { position: absolute; left: 110px; right: auto; bottom: 32px; z-index: 25; font-family: 'Archivo', sans-serif; font-weight: 900; font-size: clamp(48px, 6vw, 84px); line-height: 0.8; color: #000; transform: rotate(-12deg); pointer-events: none; }
+.work-number span { font-size: clamp(14px, 1.5vw, 20px); vertical-align: top; }
 @media (max-width: 768px) { .work-number { display: none; } }
 
 /* Rolling Work number: one strip of 01-10, scrolling smoothly with scroll progress, clipped, diagonal on the right. */
 .work-number { overflow: hidden; height: 0.8em; }
 .work-number__strip { display: flex; flex-direction: column; }
 .work-number__strip span { display: block; height: 0.8em; line-height: 0.8; }
-.work-number__total { position: absolute; top: 0; right: -2px; font-size: clamp(18px, 2vw, 28px); line-height: 1; }
+.work-number__total { position: absolute; top: 0; right: -2px; font-size: clamp(14px, 1.5vw, 20px); line-height: 1; }
 .work-number__strip span { font-size: inherit; vertical-align: baseline; }
 .work-number__total { vertical-align: top; }
 
 /* Phase A, per reference: Work background, numeral blend difference, blur on swap. */
 .work-carousel { background: #EDEDED; }
-.work-number { color: #fff; mix-blend-mode: difference; }
+.work-number { color: #000; mix-blend-mode: normal; }
 .work-number--blur .work-number__strip, .work-number--blur .work-number__total { filter: blur(8px); }
 .work-number__strip, .work-number__total { transition: filter 0.4s ease; }
