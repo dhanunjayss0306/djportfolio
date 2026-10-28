@@ -570,7 +570,7 @@ function WorkCarousel({ work, onFocus, onOpen }) {
           })}
         </div>
         <div className="work-carousel__list" aria-label="Project list">{work.map((item, index) => Math.abs(index - focused) > 2 ? null : <button key={item.id} type="button" className={index === focused ? 'is-focused' : ''} onClick={() => scrollToProject(index)}><span className="work-list__type">{item.status || 'Selected build'}</span><span className="work-list__title">{String(index + 1).padStart(2, '0')} {item.title}</span><span className="work-list__colors">{(palettes[item.id] || []).map((color) => <i key={color} style={{ background: color }} />)}</span><span className="work-list__desc">{item.description}</span><span className="work-list__sep">—</span></button>)}</div>
-        <div className={numBlur ? "work-number work-number--blur" : "work-number"} aria-hidden="true"><div className="work-number__strip" style={{ transform: `translateY(${-span * 0.8}em)` }}>{work.map((_, i) => <span key={i}>{String(i + 1).padStart(2, "0")}</span>)}</div><span className="work-number__total">/{String(count).padStart(2, "0")}</span></div>
+        <div className={numBlur ? "work-number work-number--blur" : "work-number"} aria-hidden="true">{String(focused + 1).padStart(2, "0")}<span className="work-number__total">/{String(count).padStart(2, "0")}</span></div>
       </div>
     </section>
   )

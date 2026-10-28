@@ -924,10 +924,10 @@ body:has(.admin-page) { background: #000; }
 @media (max-width: 768px) { .work-number { display: none; } }
 
 /* Rolling Work number: one strip of 01-10, scrolling smoothly with scroll progress, clipped, diagonal on the right. */
-.work-number { overflow: hidden; height: 0.8em; }
+.work-number { overflow: visible; height: auto; }
 .work-number__strip { display: flex; flex-direction: column; }
 .work-number__strip span { display: block; height: 0.8em; line-height: 0.8; }
-.work-number__total { position: absolute; top: 0; right: -2px; font-size: clamp(14px, 1.5vw, 20px); line-height: 1; }
+.work-number__total { position: static; font-size: clamp(14px, 1.5vw, 20px); line-height: 1; margin-left: 4px; }
 .work-number__strip span { font-size: inherit; vertical-align: baseline; }
 .work-number__total { vertical-align: top; }
 
