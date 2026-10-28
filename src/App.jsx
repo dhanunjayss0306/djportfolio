@@ -512,10 +512,14 @@ function WorkCarousel({ work, onFocus, onOpen }) {
   const sectionRef = useRef(null)
   const [progress, setProgress] = useState(0)
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
+  const [palettes, setPalettes] = useState({})
+  const [numBlur, setNumBlur] = useState(false)
   const reduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
   const count = work.length
   const focused = count ? Math.min(count - 1, Math.max(0, Math.round(progress * (count - 1)))) : 0
   useEffect(() => { onFocus(focused) }, [focused, onFocus])
+  useEffect(() => { setNumBlur(true); const id = window.setTimeout(() => setNumBlur(false), 400); return () => window.clearTimeout(id) }, [focused])
+  useEffect(() => { work.forEach((item) => { if (!item.image_url || palettes[item.id]) return; const img = new Image(); img.onload = () => { try { const cv = document.createElement('canvas'); cv.width = 24; cv.height = 24; const ctx = cv.getContext('2d'); ctx.drawImage(img, 0, 0, 24, 24); const data = ctx.getImageData(0, 0, 24, 24).data; const counts = {}; for (let i = 0; i < data.length; i += 16) { const r = data[i] & 0xE0, g = data[i + 1] & 0xE0, b = data[i + 2] & 0xE0; const key = r + ',' + g + ',' + b; counts[key] = (counts[key] || 0) + 1 }; const top = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => { const [r, g, b] = k.split(',').map(Number); return '#' + [r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('') }); setPalettes((cur) => ({ ...cur, [item.id]: top })) } catch {} }; img.onerror = () => {}; img.src = item.image_url }) }, [work])
   useEffect(() => {
     const onResize = () => setIsMobile(window.innerWidth < 768)
     window.addEventListener('resize', onResize)
@@ -565,8 +569,8 @@ function WorkCarousel({ work, onFocus, onOpen }) {
             </article>
           })}
         </div>
-        <div className="work-carousel__list" aria-label="Project list">{work.map((item, index) => Math.abs(index - focused) > 2 ? null : <button key={item.id} type="button" className={index === focused ? 'is-focused' : ''} onClick={() => scrollToProject(index)}><span className="work-list__type">{item.status || 'Selected build'}</span><span className="work-list__title">{String(index + 1).padStart(2, '0')} {item.title}</span><span className="work-list__colors">{([['#ff4949','#1d1d1f','#8a8a8a'],['#2e7d32','#a5d6a7','#ffca28'],['#1565c0','#90caf9','#ff4949'],['#6a1b9a','#ce93d8','#ffca28'],['#ef6c00','#ffcc80','#1d1d1f'],['#00838f','#80deea','#ff4949'],['#c62828','#ef9a9a','#1d1d1f'],['#283593','#9fa8da','#ffca28'],['#4e342e','#bcaaa4','#ff4949'],['#00695c','#80cbc4','#1d1d1f']][index % 10]).map((color) => <i key={color} style={{ background: color }} />)}</span><span className="work-list__desc">{item.description}</span><span className="work-list__sep">—</span></button>)}</div>
-        <div className="work-number" aria-hidden="true"><div className="work-number__strip" style={{ transform: `translateY(${-span * 0.8}em)` }}>{work.map((_, i) => <span key={i}>{String(i + 1).padStart(2, "0")}</span>)}</div><span className="work-number__total">/{String(count).padStart(2, "0")}</span></div>
+        <div className="work-carousel__list" aria-label="Project list">{work.map((item, index) => Math.abs(index - focused) > 2 ? null : <button key={item.id} type="button" className={index === focused ? 'is-focused' : ''} onClick={() => scrollToProject(index)}><span className="work-list__type">{item.status || 'Selected build'}</span><span className="work-list__title">{String(index + 1).padStart(2, '0')} {item.title}</span><span className="work-list__colors">{(palettes[item.id] || []).map((color) => <i key={color} style={{ background: color }} />)}</span><span className="work-list__desc">{item.description}</span><span className="work-list__sep">—</span></button>)}</div>
+        <div className={numBlur ? "work-number work-number--blur" : "work-number"} aria-hidden="true"><div className="work-number__strip" style={{ transform: `translateY(${-span * 0.8}em)` }}>{work.map((_, i) => <span key={i}>{String(i + 1).padStart(2, "0")}</span>)}</div><span className="work-number__total">/{String(count).padStart(2, "0")}</span></div>
       </div>
     </section>
   )
