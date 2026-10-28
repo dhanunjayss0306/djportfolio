@@ -873,23 +873,6 @@ h1, h2 { font-family: 'Archivo', sans-serif; }
 .work-detail__sections ul { margin: 8px 0 0 20px; padding: 0; font-size: 16px; line-height: 1.6; color: #222; }
 .work-detail__sections li { margin-bottom: 6px; }
 
-/* Scramble mode: everything below the header breaks, falls down, and turns white. Header stays usable so Non-scramble / Refresh always work. */
-.portfolio--scrambled { background: #fff !important; }
-.portfolio--scrambled .hero--huyml, .portfolio--scrambled .work-carousel, .portfolio--scrambled .home-certificates, .portfolio--scrambled .home-journey, .portfolio--scrambled .contact-section, .portfolio--scrambled .footer { background: #fff !important; animation: scrambleFall 0.9s ease forwards; }
-.portfolio--scrambled .hero__heading { transform: rotate(-4deg) translate(30px, 90px) !important; }
-.portfolio--scrambled .hero__portrait { transform: rotate(9deg) translate(-40px, 140px) !important; }
-.portfolio--scrambled .hero__top-photo { transform: rotate(-12deg) translate(60px, 180px) !important; }
-.portfolio--scrambled .skills-strip--hero { transform: rotate(6deg) translate(-50px, 120px) !important; }
-.portfolio--scrambled .work-card { transform: rotate(14deg) translate(70px, 160px) !important; opacity: 0.85 !important; }
-.portfolio--scrambled .work-card:nth-child(2n) { transform: rotate(-11deg) translate(-80px, 220px) !important; }
-.portfolio--scrambled .home-certificate { transform: rotate(-7deg) translate(40px, 100px) !important; }
-.portfolio--scrambled .home-certificate:nth-child(2n) { transform: rotate(10deg) translate(-60px, 160px) !important; }
-.portfolio--scrambled .home-journey__step { transform: rotate(5deg) translate(50px, 110px) !important; }
-.portfolio--scrambled .home-journey__step:nth-child(2n) { transform: rotate(-8deg) translate(-70px, 150px) !important; }
-.portfolio--scrambled h1, .portfolio--scrambled h2, .portfolio--scrambled h3 { transform: rotate(-2deg); }
-@keyframes scrambleFall { from { transform: translateY(0); } to { transform: translateY(40px); } }
-.nav__link-button--scramble { color: #ff4949 !important; font-weight: 900; }
-.scramble-refresh { position: fixed; right: 20px; bottom: 20px; z-index: 500; background: #ff4949; color: #fff; border: 1px solid #000; padding: 14px 20px; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
 
 /* Admin: right edge complete black, no white strip from body or overflow. */
 body:has(.admin-page) { background: #000; }
@@ -898,24 +881,6 @@ body:has(.admin-page) { background: #000; }
 .admin-page .admin-login, .admin-page .admin-shell { background: #000; }
 .admin-page .site-header { background: #000; }
 
-/* CORRECTION 2026-10-27 Scramble: fall to the MIDDLE, not to one side, visible down, text wobbles. Later rules win over the earlier scramble rules. */
-.portfolio--scrambled .hero--huyml, .portfolio--scrambled .home-certificates, .portfolio--scrambled .home-journey, .portfolio--scrambled .contact-section, .portfolio--scrambled .footer { animation: scrambleFallDown 0.9s ease forwards; }
-@keyframes scrambleFallDown { from { transform: translateY(0); } to { transform: translateY(70px); } }
-.portfolio--scrambled .hero__heading { transform: translateY(90px) rotate(0deg) !important; }
-.portfolio--scrambled .hero__portrait { transform: translateY(110px) rotate(0deg) !important; }
-.portfolio--scrambled .hero__top-photo { transform: translateY(100px) rotate(0deg) !important; }
-.portfolio--scrambled .skills-strip--hero { transform: translateY(90px) rotate(0deg) !important; }
-.portfolio--scrambled .work-card { transform: translate(-50%, -50%) translateY(28vh) rotate(2deg) !important; opacity: 1 !important; left: 50% !important; }
-.portfolio--scrambled .work-card:nth-child(2n) { transform: translate(-50%, -50%) translateY(38vh) rotate(-2deg) !important; }
-.portfolio--scrambled .work-card:nth-child(3n) { transform: translate(-50%, -50%) translateY(18vh) rotate(1deg) !important; }
-.portfolio--scrambled .home-certificate { transform: translateY(90px) rotate(-2deg) !important; }
-.portfolio--scrambled .home-certificate:nth-child(2n) { transform: translateY(130px) rotate(2deg) !important; }
-.portfolio--scrambled .home-journey__step { transform: translateY(90px) rotate(0deg) !important; }
-.portfolio--scrambled .home-journey__step:nth-child(2n) { transform: translateY(130px) rotate(0deg) !important; }
-/* Text falls and wobbles, in the middle, no sideways jump. */
-.portfolio--scrambled h1, .portfolio--scrambled h2, .portfolio--scrambled h3, .portfolio--scrambled p, .portfolio--scrambled span { animation: scrambleWobbleText 1.1s ease-in-out infinite alternate; }
-@keyframes scrambleWobbleText { from { transform: rotate(-1.5deg) translateX(-4px); } to { transform: rotate(1.5deg) translateX(4px); } }
-.portfolio--scrambled .logo-cube span, .portfolio--scrambled .site-header span { animation: none; }
 
 /* Threading cursor: red thread trailing the mouse, desktop only, never blocks clicks. */
 .thread-cursor { position: fixed; inset: 0; z-index: 999; pointer-events: none; }
@@ -928,8 +893,6 @@ body:has(.admin-page) { background: #000; }
 @keyframes petBob { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-8px) rotate(2deg); } }
 @keyframes petJump { 0% { transform: translateY(0) scale(1); } 40% { transform: translateY(-28px) scale(1.08); } 100% { transform: translateY(0) scale(1); } }
 
-/* Scramble Refresh sits above the pet, so they never overlap. */
-.scramble-refresh { bottom: 20px; right: 20px; }
 
 /* Pet inquiry modal: email first, then question. Not a chatbot. */
 .modal__panel--pet { max-width: 480px; }
@@ -940,3 +903,22 @@ body:has(.admin-page) { background: #000; }
 .pet-form__back { display: block; margin-top: 12px; background: none; border: none; cursor: pointer; font-size: 14px; }
 .pet-form__honeypot { position: absolute; left: -9999px; opacity: 0; }
 .pet-widget__label { display: block; margin-top: 4px; background: #000; color: #fff; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 8px; text-align: center; }
+
+/* Mobile only: pet hides while its form is open, and on the admin portal. Desktop keeps the pet visible. */
+@media (max-width: 768px) {
+  .pet-widget--open { display: none; }
+  body:has(.admin-page) .pet-widget { display: none; }
+}
+
+/* Work in 3D on desktop: perspective on the stage, cards tilt in depth as they move. */
+.work-carousel__stage { perspective: 1200px; }
+.work-card { transform-style: preserve-3d; }
+
+/* Right list: 3 decorative colour blocks per project, changing as focus moves. */
+.work-list__colors { display: flex; gap: 4px; justify-content: flex-end; margin-top: 6px; }
+.work-list__colors i { display: block; width: 14px; height: 14px; }
+
+/* Work number: huge, on the right, diagonal. Desktop only, mobile stays as before. */
+.work-number { position: absolute; right: 32px; bottom: 32px; z-index: 25; font-family: 'Archivo', sans-serif; font-weight: 900; font-size: clamp(72px, 11vw, 150px); line-height: 0.8; color: #000; transform: rotate(-12deg); pointer-events: none; }
+.work-number span { font-size: clamp(18px, 2vw, 28px); vertical-align: top; }
+@media (max-width: 768px) { .work-number { display: none; } }

@@ -210,7 +210,7 @@ function PetWidget() {
     setQuestion(''); setCategory('')
   }
   return <>
-    <button className="pet-widget" type="button" aria-label="Ask Dhanunjay a question" title="Ask Dhanunjay" onClick={() => { setOpen(true); setStep(1) }}><img src={logoDjTransparent} alt="DJ pet" /><span className="pet-widget__label">Ask DJ</span></button>
+    <button className={open ? "pet-widget pet-widget--open" : "pet-widget"} type="button" aria-label="Ask Dhanunjay a question" title="Ask Dhanunjay" onClick={() => { setOpen(true); setStep(1) }}><img src={logoDjTransparent} alt="DJ pet" /><span className="pet-widget__label">Ask DJ</span></button>
     {open && <div className="modal" onClick={close}><div className="modal__panel modal__panel--pet" onClick={(event) => event.stopPropagation()}><button className="modal__close" type="button" onClick={close} aria-label="Close">×</button><h2>Ask Dhanunjay<em>.</em></h2><p>This is not a chatbot. Your question goes to his mail, and he replies to your mail ID.</p>
       {step === 1 ? <form onSubmit={(e) => { e.preventDefault(); if (email.trim()) setStep(2) }}><label className="pet-form__label"><span>Your mail ID</span><input className="pet-form__input" required type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" /></label><button className="admin-submit" type="submit">Next <span>→</span></button></form>
       : <form onSubmit={submit}><input type="text" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} className="pet-form__honeypot" tabIndex={-1} autoComplete="off" aria-hidden="true" /><label className="pet-form__label"><span>What is this about?</span><select className="pet-form__input" required value={category} onChange={(e) => setCategory(e.target.value)}><option value="">Choose one</option><option>Job</option><option>Internship</option><option>Portfolio feedback</option><option>General inquiry</option><option>Other</option></select></label><label className="pet-form__label"><span>Your question for Dhanunjay</span><textarea className="pet-form__input" rows="4" required minLength={10} value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="Ask your question here..." /></label><p className="pet-form__note">From: {email}</p><button className="admin-submit" type="submit" disabled={sending}>{sending ? 'Sending...' : 'Send question'} <span>↗</span></button><button className="pet-form__back" type="button" onClick={() => setStep(1)}>← Change mail ID</button></form>}
@@ -554,7 +554,7 @@ function WorkCarousel({ work, onFocus, onOpen }) {
           {work.map((item, index) => {
             const offset = index - span
             const isMobileWork = typeof window !== 'undefined' && window.innerWidth <= 768
-            const style = { transform: `translate(-50%, -50%) translate(${isMobileWork ? 0 : offset * 18}vw, ${offset * 52}vh) rotate(${offset * 9}deg) scale(${1 - Math.min(Math.abs(offset) * 0.07, 0.18)})`, opacity: Math.max(0, 1 - Math.abs(offset) * 0.55), zIndex: 10 - Math.round(Math.abs(offset)), pointerEvents: Math.abs(offset) < 1.5 ? 'auto' : 'none' }
+            const style = { transform: `translate(-50%, -50%) translate(${isMobileWork ? 0 : offset * 18}vw, ${offset * 52}vh) rotate(${offset * 9}deg) ${isMobileWork ? '' : `rotateY(${offset * -16}deg) rotateX(${offset * 4}deg)`} scale(${1 - Math.min(Math.abs(offset) * 0.07, 0.18)})`, opacity: Math.max(0, 1 - Math.abs(offset) * 0.55), zIndex: 10 - Math.round(Math.abs(offset)), pointerEvents: Math.abs(offset) < 1.5 ? 'auto' : 'none' }
             return <article className={`work-card ${index === focused ? 'work-card--focused' : ''}`} key={item.id} style={style} onClick={() => { if (index === focused) onOpen(item); else scrollToProject(index) }} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') { if (index === focused) onOpen(item); else scrollToProject(index) } }} aria-label={`${item.title}, project ${index + 1} of ${count}`}>
               {item.image_url ? <img src={item.image_url} alt={item.title} /> : <div className="work-card__placeholder" aria-hidden="true">{String(index + 1).padStart(2, '0')}</div>}
               <h3>{item.title}</h3>
@@ -562,7 +562,8 @@ function WorkCarousel({ work, onFocus, onOpen }) {
             </article>
           })}
         </div>
-        <div className="work-carousel__list" aria-label="Project list">{work.map((item, index) => Math.abs(index - focused) > 2 ? null : <button key={item.id} type="button" className={index === focused ? 'is-focused' : ''} onClick={() => scrollToProject(index)}><span className="work-list__type">{item.status || 'Selected build'}</span><span className="work-list__title">{String(index + 1).padStart(2, '0')} {item.title}</span><span className="work-list__desc">{item.description}</span><span className="work-list__sep">—</span></button>)}</div>
+        <div className="work-carousel__list" aria-label="Project list">{work.map((item, index) => Math.abs(index - focused) > 2 ? null : <button key={item.id} type="button" className={index === focused ? 'is-focused' : ''} onClick={() => scrollToProject(index)}><span className="work-list__type">{item.status || 'Selected build'}</span><span className="work-list__title">{String(index + 1).padStart(2, '0')} {item.title}</span><span className="work-list__colors">{([['#ff4949','#1d1d1f','#8a8a8a'],['#2e7d32','#a5d6a7','#ffca28'],['#1565c0','#90caf9','#ff4949'],['#6a1b9a','#ce93d8','#ffca28'],['#ef6c00','#ffcc80','#1d1d1f'],['#00838f','#80deea','#ff4949'],['#c62828','#ef9a9a','#1d1d1f'],['#283593','#9fa8da','#ffca28'],['#4e342e','#bcaaa4','#ff4949'],['#00695c','#80cbc4','#1d1d1f']][index % 10]).map((color) => <i key={color} style={{ background: color }} />)}</span><span className="work-list__desc">{item.description}</span><span className="work-list__sep">—</span></button>)}</div>
+        <div className="work-number" aria-hidden="true">{String(focused + 1).padStart(2, "0")}<span>/{String(count).padStart(2, "0")}</span></div>
       </div>
     </section>
   )
@@ -632,8 +633,6 @@ function App() {
   const [detailTransition, setDetailTransition] = useState(false)
   const [showMeta, setShowMeta] = useState(false)
   const [logoSpinning, setLogoSpinning] = useState(false)
-  const [scrambled, setScrambled] = useState(false)
-  const [showScrambleConfirm, setShowScrambleConfirm] = useState(false)
   const [journey, setJourney] = useState(() => ({ ...defaultJourney, ...readAdminStore('portfolio-journey', {}) }))
   const [certificateCopy, setCertificateCopy] = useState(() => readAdminStore('portfolio-certificates', defaultCertificateCopy))
   const [work, setWork] = useState(() => readAdminStore('portfolio-work', defaultWork))
@@ -726,12 +725,11 @@ function App() {
       {showMeta && <div className="huyml-bottombar" aria-hidden="true"><span>Scroll</span><span>Selected work {String(focusedWork + 1).padStart(2, '0')} / {String(work.length).padStart(2, '0')}</span><span className="huyml-bottombar__numeral">{String(focusedWork + 1).padStart(2, '0')}</span></div>}
       {showMeta && work[focusedWork] && <div className="huyml-meta" aria-hidden="true"><p><span>Role / Type</span>{work[focusedWork].status || 'Selected build'}</p><p><span>Project</span>{work[focusedWork].title}</p><p>{work[focusedWork].github_url && <a href={work[focusedWork].github_url} target="_blank" rel="noreferrer">GitHub ↗</a>} {work[focusedWork].live_url && <a href={work[focusedWork].live_url} target="_blank" rel="noreferrer">Open project ↗</a>}</p></div>}
 
-      <main className={`portfolio huyml-home page-theme--${mode} ${isLoading ? 'portfolio--waiting' : ''} ${scrambled ? 'portfolio--scrambled' : ''}`}>
+      <main className={`portfolio huyml-home page-theme--${mode} ${isLoading ? 'portfolio--waiting' : ''}`}>
         <ThreadCursor /><PetWidget />
         <header className="site-header">
                     <LogoCube />
           <nav className={menuOpen ? 'nav nav--open' : 'nav'} aria-label="Main navigation">
-            <button className="nav__link-button nav__link-button--scramble" type="button" onClick={() => { closeMenu(); if (scrambled) { setScrambled(false); window.scrollTo({ top: 0, behavior: "smooth" }) } else { setShowScrambleConfirm(true) } }}>{scrambled ? "Non-scramble" : "Scramble"}</button>
             <button className="nav__link-button" type="button" onClick={() => { closeMenu(); setShowAbout(true) }}>About</button>
             <button className="nav__link-button" type="button" onClick={() => scrollToId('work')}>Work</button>
             <button className="nav__link-button" type="button" onClick={() => openPageOrScroll('certificates')}>Certificates</button>
@@ -742,8 +740,6 @@ function App() {
           <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Toggle navigation"><span /><span /><span /></button>
         </header>
 
-        {showScrambleConfirm && <div className="modal" onClick={() => setShowScrambleConfirm(false)}><div className="modal__panel" onClick={(e) => e.stopPropagation()}><button className="modal__close" type="button" onClick={() => setShowScrambleConfirm(false)} aria-label="Close">×</button><h2>Are you ready to break this website?</h2><p>Everything will scramble, fall down, and turn white. You can bring it back any time with Non-scramble or Refresh.</p><div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}><button className="admin-save" type="button" onClick={() => { setScrambled(true); setShowScrambleConfirm(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>Yes, break it</button><button className="admin-add" type="button" onClick={() => setShowScrambleConfirm(false)}>Cancel</button></div></div></div>}
-        {scrambled && <button className="scramble-refresh" type="button" onClick={() => { setScrambled(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>Refresh</button>}
         <section className="hero hero--huyml" id="top">
           <figure className="hero__top-photo"><img src={heroTopPhoto} alt="Dhanunjay Reddy in a group photo" /><figcaption>A memorable photo with Sid Ahmed and my best friend — had a good time</figcaption></figure>
           <div className="hero__heading"><p className="eyebrow">Hello, I&apos;m</p><h1>DHANUNJAY<br />REDDY</h1><p className="hero__role">AI &amp; product builder · 2nd-year B.Tech CSE, Andhra University · IIT Madras BS</p><p className="hero__intro">Hello, I am Dhanunjay, 18. I turn ambitious ideas into polished, real-world experiences. I&apos;m exploring the space where AI, product thinking, and expressive interfaces meet, and I like shipping things that feel as good to use as they are clever under the hood.</p><div className="hero__actions"><button type="button" onClick={() => scrollToId('work')}>View My Work ↓</button><button type="button" onClick={() => { setShowContact(true) }}>Contact ↗</button></div></div>
