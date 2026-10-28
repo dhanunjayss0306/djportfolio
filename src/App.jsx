@@ -554,7 +554,10 @@ function WorkCarousel({ work, onFocus, onOpen }) {
           {work.map((item, index) => {
             const offset = index - span
             const isMobileWork = typeof window !== 'undefined' && window.innerWidth <= 768
-            const style = { transform: `translate(-50%, -50%) translate(${isMobileWork ? 0 : offset * 18}vw, ${offset * 52}vh) rotate(${offset * 9}deg) ${isMobileWork ? '' : `rotateY(${offset * -16}deg) rotateX(${offset * 4}deg)`} scale(${1 - Math.min(Math.abs(offset) * 0.07, 0.18)})`, opacity: Math.max(0, 1 - Math.abs(offset) * 0.55), zIndex: 10 - Math.round(Math.abs(offset)), pointerEvents: Math.abs(offset) < 1.5 ? 'auto' : 'none' }
+            const cardSpeed = 0.92 + (index % 3) * 0.08
+            const cardTilt = (index % 3 - 1) * 2
+            const cardWidth = isMobileWork ? undefined : `${460 + (index % 3) * 20}px`
+            const style = { width: cardWidth, transform: `translate(-50%, -50%) translate(${isMobileWork ? 0 : offset * 18}vw, ${offset * 52 * cardSpeed}vh) rotate(${offset * 9 + cardTilt}deg) ${isMobileWork ? '' : `rotateY(${offset * -16 + cardTilt}deg) rotateX(${offset * 4}deg)`} scale(${1 - Math.min(Math.abs(offset) * 0.07, 0.18)})`, opacity: Math.max(0, 1 - Math.abs(offset) * 0.55), zIndex: 10 - Math.round(Math.abs(offset)), pointerEvents: Math.abs(offset) < 1.5 ? 'auto' : 'none' }
             return <article className={`work-card ${index === focused ? 'work-card--focused' : ''}`} key={item.id} style={style} onClick={() => { if (index === focused) onOpen(item); else scrollToProject(index) }} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') { if (index === focused) onOpen(item); else scrollToProject(index) } }} aria-label={`${item.title}, project ${index + 1} of ${count}`}>
               {item.image_url ? <img src={item.image_url} alt={item.title} /> : <div className="work-card__placeholder" aria-hidden="true">{String(index + 1).padStart(2, '0')}</div>}
               <h3>{item.title}</h3>
@@ -563,7 +566,7 @@ function WorkCarousel({ work, onFocus, onOpen }) {
           })}
         </div>
         <div className="work-carousel__list" aria-label="Project list">{work.map((item, index) => Math.abs(index - focused) > 2 ? null : <button key={item.id} type="button" className={index === focused ? 'is-focused' : ''} onClick={() => scrollToProject(index)}><span className="work-list__type">{item.status || 'Selected build'}</span><span className="work-list__title">{String(index + 1).padStart(2, '0')} {item.title}</span><span className="work-list__colors">{([['#ff4949','#1d1d1f','#8a8a8a'],['#2e7d32','#a5d6a7','#ffca28'],['#1565c0','#90caf9','#ff4949'],['#6a1b9a','#ce93d8','#ffca28'],['#ef6c00','#ffcc80','#1d1d1f'],['#00838f','#80deea','#ff4949'],['#c62828','#ef9a9a','#1d1d1f'],['#283593','#9fa8da','#ffca28'],['#4e342e','#bcaaa4','#ff4949'],['#00695c','#80cbc4','#1d1d1f']][index % 10]).map((color) => <i key={color} style={{ background: color }} />)}</span><span className="work-list__desc">{item.description}</span><span className="work-list__sep">—</span></button>)}</div>
-        <div className="work-number" aria-hidden="true">{String(focused + 1).padStart(2, "0")}<span>/{String(count).padStart(2, "0")}</span></div>
+        <div className="work-number" aria-hidden="true"><div className="work-number__strip" style={{ transform: `translateY(${-span * 0.8}em)` }}>{work.map((_, i) => <span key={i}>{String(i + 1).padStart(2, "0")}</span>)}</div><span className="work-number__total">/{String(count).padStart(2, "0")}</span></div>
       </div>
     </section>
   )
