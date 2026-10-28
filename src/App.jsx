@@ -217,7 +217,7 @@ function PetWidget() {
 }
 
 function PageHeader() {
-  return <><ThreadCursor /><header className="site-header"><LogoCube /><div className="header-tools"><SocialLinks /><AdminIcon /></div></header><PetWidget /></>
+  return <><ThreadCursor /><header className="site-header"><LogoCube /><div className="header-tools"><a className="nav__link-button" href="/dhanunjay-reddy-cv.pdf" target="_blank" rel="noreferrer">CV ↗</a><SocialLinks /><AdminIcon /></div></header><PetWidget /></>
 }
 
 function Certificates({ mode, onToggle, certificateCopy }) {
@@ -738,6 +738,7 @@ function App() {
             <button className="nav__link-button" type="button" onClick={() => openPageOrScroll('certificates')}>Certificates</button>
             <button className="nav__link-button" type="button" onClick={() => openPageOrScroll('journey')}>Journey</button>
             <button className="nav__link-button" type="button" onClick={() => openPageOrScroll('contact')}>Contact</button>
+            <a className="nav__link-button" href="/dhanunjay-reddy-cv.pdf" target="_blank" rel="noreferrer">CV ↗</a>
           </nav>
           <div className="header-tools"><ISTClock /><SocialLinks /><AdminIcon /></div>
           <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Toggle navigation"><span /><span /><span /></button>
