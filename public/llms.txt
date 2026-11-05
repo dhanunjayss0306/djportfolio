@@ -1,0 +1,7 @@
+# Dhanunjay Reddy — AI & Product Builder
+
+> Portfolio of P V N Dhanunjay Reddy, 2nd-year B.Tech CSE at Andhra University, Visakhapatnam, also doing the IIT Madras BS online degree (foundation level).
+
+- [Home](https://djportfolio1.vercel.app/): AI and product builder portfolio, 7 selected projects, 6 certificates.
+- [GitHub](https://github.com/dhanunjayss0306/djportfolio)
+- [LinkedIn](https://www.linkedin.com/in/p-v-n-dhanunjay-reddy-198162365)

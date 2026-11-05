@@ -63,7 +63,7 @@ const defaultJourney = {
   universityText: "I completed my B.Tech first year and now I'm studying my second year in Computer Science and Engineering at Andhra University.",
   iitTitle: 'IIT Madras',
   iitSubtitle: 'BS degree',
-  iitText: "Alongside university, I'm pursuing a BS online degree at IIT Madras, which I'm about to complete.",
+  iitText: "Alongside university, I'm pursuing a BS online degree at IIT Madras, currently in the foundation level.",
   schoolImage: schoolPhoto,
   collegeImage: collegePhoto,
   universityImage: andhraPhoto,
@@ -378,22 +378,18 @@ function AdminPortal({ mode, onToggle, journey, setJourney, certificateCopy, set
 
   const login = async (event) => {
     event.preventDefault()
-    if (supabase) {
-      const { error } = await supabase.auth.signInWithPassword({ email: username, password })
-      if (error) {
-        setNotice('Use the admin email and password created in Supabase Auth.')
-        return
-      }
-      window.sessionStorage.setItem('portfolio-admin-auth', 'true')
-      setAuthenticated(true)
-      setNotice('Welcome back. Your editable content is ready.')
-    } else if (username === 'dhanunjayss1122' && password === 'ammudhanu') {
-      window.sessionStorage.setItem('portfolio-admin-auth', 'true')
-      setAuthenticated(true)
-      setNotice('Welcome back. Your editable content is ready.')
-    } else {
-      setNotice('That username or password does not match.')
+    if (!supabase) {
+      setNotice('Admin login is not linked yet. Set the Supabase keys in Vercel and create your admin user in Supabase Auth.')
+      return
     }
+    const { error } = await supabase.auth.signInWithPassword({ email: username, password })
+    if (error) {
+      setNotice('Use the admin email and password created in Supabase Auth.')
+      return
+    }
+    window.sessionStorage.setItem('portfolio-admin-auth', 'true')
+    setAuthenticated(true)
+    setNotice('Welcome back. Your editable content is ready.')
   }
 
   const saveJourney = async () => {
